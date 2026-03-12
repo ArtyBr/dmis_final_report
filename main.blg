@@ -3,62 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: unsrt.bst
 Database file #1: progress_report_bibliography.bib
-Repeated entry---line 124 of file progress_report_bibliography.bib
- : @article{tang_review_2021
- :                          ,
-I'm skipping whatever remains of this entry
-Repeated entry---line 474 of file progress_report_bibliography.bib
- : @inproceedings{CULane2018
- :                          ,
-I'm skipping whatever remains of this entry
-Repeated entry---line 532 of file progress_report_bibliography.bib
- : @misc{TuSimple2017
- :                   ,
-I'm skipping whatever remains of this entry
-Warning--there's a number but no volume in canny_1986
-Warning--can't use both volume and number fields in pan2018spatial
-Warning--empty booktitle in salma_drive_2024
-Warning--empty publisher in salma_drive_2024
-Warning--can't use both volume and number fields in macqueen1967some
-You've used 44 entries,
+You've used 47 entries,
             1791 wiz_defined-function locations,
-            686 strings with 11775 characters,
-and the built_in function-call counts, 10104 in all, are:
-= -- 848
-> -- 514
-< -- 11
-+ -- 192
-- -- 148
-* -- 584
-:= -- 1539
-add.period$ -- 147
-call.type$ -- 44
-change.case$ -- 43
+            693 strings with 12140 characters,
+and the built_in function-call counts, 11064 in all, are:
+= -- 947
+> -- 541
+< -- 14
++ -- 202
+- -- 155
+* -- 602
+:= -- 1660
+add.period$ -- 155
+call.type$ -- 47
+change.case$ -- 46
 chr.to.int$ -- 0
-cite$ -- 49
-duplicate$ -- 429
-empty$ -- 1036
-format.name$ -- 148
-if$ -- 2304
+cite$ -- 47
+duplicate$ -- 483
+empty$ -- 1140
+format.name$ -- 155
+if$ -- 2553
 int.to.chr$ -- 0
-int.to.str$ -- 44
-missing$ -- 26
-newline$ -- 235
-num.names$ -- 43
-pop$ -- 232
+int.to.str$ -- 47
+missing$ -- 28
+newline$ -- 249
+num.names$ -- 46
+pop$ -- 250
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 227
+skip$ -- 276
 stack$ -- 0
-substring$ -- 496
-swap$ -- 135
-text.length$ -- 11
+substring$ -- 584
+swap$ -- 164
+text.length$ -- 14
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 5
-while$ -- 84
-width$ -- 46
-write$ -- 483
-(There were 3 error messages)
+warning$ -- 0
+while$ -- 93
+width$ -- 49
+write$ -- 516

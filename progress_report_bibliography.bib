@@ -1,135 +1,203 @@
+% =============================================================================
+% Main report bibliography (used by \cite)
+% Spec-only references live in spec_bibliography.bib (used by \citespec)
+% =============================================================================
 
-@article{bouziane_real-time_2025,
-    title = {Real-time lane detection system using {OpenCV} and {Kalman} filter-based path prediction},
-    volume = {6},
-    issn = {2707-8213},
-    url = {https://www.mechanicaljournals.com/ijae/archives/2025.v6.i1.A.51},
-    abstract = {The increasing demand for driver assistance systems and autonomous vehicles has fueled research in real-time lane detection techniques that ensure vehicle positioning and safety. Traditional lane detection algorithms suffer from instability under real-world driving conditions such as poor illumination, occlusions, curved roads, and lane departures. This paper proposes a robust and real-time lane detection system utilizing OpenCV for image processing and computer vision operations, combined with a Kalman Filter for path prediction and lane tracking. The system captures live video frames, processes them using edge detection, region of interest (ROI) masking, and Hough Line Transform to detect lane markers. A Kalman Filter is then employed to smooth lane trajectories and predict the likely path in cases of occlusion or temporary lane loss. The proposed method was tested under varying environmental conditions on standard video datasets and in live driving scenarios. Results demonstrate improved accuracy, reduced jitter, and enhanced predictive reliability compared to static detection models, highlighting the method’s viability for real-time autonomous vehicle applications.},
-    language = {en},
-    number = {1},
-    urldate = {2026-01-02},
-    journal = {International Journal of Automobile Engineering},
-    author = {Bouziane, Amal and Rami, Salma},
-    year = {2025},
-    note = {Publisher: AkiNik Publications},
-    pages = {52--58},
-}
 
-@article{kalman1960new,
-  title={A New Approach to Linear Filtering and Prediction Problems},
-  author={Kalman, Rudolph Emil},
-  journal={Journal of Basic Engineering},
-  volume={82},
-  number={1},
-  pages={35--45},
-  year={1960},
-  publisher={American Society of Mechanical Engineers},
-  doi={10.1115/1.3662552}
+% --- Visual Odometry & SLAM ---
+
+@inproceedings{teed2021droid,
+  title={{DROID-SLAM}: Deep Visual {SLAM} for Monocular, Stereo, and {RGB-D} Cameras},
+  author={Teed, Zachary and Deng, Jia},
+  booktitle={Advances in Neural Information Processing Systems},
+  volume={34},
+  pages={16558--16569},
+  year={2021}
 }
 
-@article{lepetit2009epnp,
-  title={EPnP: An Accurate O(n) Solution to the PnP Problem},
-  author={Lepetit, Vincent and Moreno-Noguer, Francesc and Fua, Pascal},
-  journal={International Journal of Computer Vision},
-  volume={81},
-  number={2},
-  pages={155--166},
-  year={2009},
-  publisher={Springer},
-  doi={10.1007/s11263-008-0152-6}
+@inproceedings{wang2021tartanvo,
+  title={{TartanVO}: A Generalizable Learning-based {VO}},
+  author={Wang, Wenshan and Hu, Yaoyu and Scherer, Sebastian},
+  booktitle={Proceedings of the 5th Conference on Robot Learning (CoRL)},
+  pages={1761--1772},
+  year={2021}
 }
 
-@book{sweller2011cognitive,
-  title={Cognitive Load Theory},
-  author={Sweller, John and Ayres, Paul and Kalyuga, Slava},
-  year={2011},
-  publisher={Springer},
-  address={New York, NY},
-  doi={10.1007/978-1-4419-8126-4}
-}
-@article{zekany_finding_2022,
-    title = {Finding and {Indexing} {Vehicle} {Maneuvers} {From} {Dashboard} {Camera} {Video}},
-    volume = {23},
-    issn = {1558-0016},
-    url = {https://ieeexplore.ieee.org/document/9714215},
-    doi = {10.1109/TITS.2022.3147982},
-    abstract = {A key challenge for self-driving vehicle researchers is to curate massive instrumented vehicle datasets. A common task in their development workflow is to extract video segments that meet particular criteria, such as a particular road scenario or vehicle maneuver. We present a novel approach for detecting vehicle maneuvers from monocular dashboard camera video building upon a deep learning visual odometry model (DeepV2D) to estimate frame-accurate ego-vehicle movement. We leverage image classification and lane line estimation to extend our technique. We classify movement sequences against reference maneuvers using dynamic time warping. We describe, implement, and evaluate classifiers to recognize maneuvers such as turns, lane changes, and deceleration. We show that using deep learning visual odometry to estimate location is superior to consumer-grade high-resolution GPS for this application. We describe and implement a greedy approach to classify maneuvers and evaluate our approach on common road maneuvers. We find an overall AUROC value of 0.91 for turns and 0.84 for all maneuvers in our dataset.},
-    number = {9},
-    urldate = {2025-06-18},
-    journal = {IEEE Transactions on Intelligent Transportation Systems},
-    author = {Zekany, Stephen A. and Larsen, Thomas F. and Dreslinski, Ronald G. and Wenisch, Thomas F.},
-    month = sep,
-    year = {2022},
-    keywords = {Cameras, Deep learning, Global Positioning System, Intelligent systems, Roads, Trajectory, Vehicle dynamics, Visual odometry, intelligent transportation systems, software algorithms},
-    pages = {16098--16109},
-}
-
-@article{korovko2025cuvslam,
-      title={cuVSLAM: CUDA accelerated visual odometry and mapping}, 
-      author={Alexander Korovko and Dmitry Slepichev and Alexander Efitorov and Aigul Dzhumamuratova and Viktor Kuznetsov and Hesam Rabeti and Joydeep Biswas and Soha Pouya},
-      year={2025},
-      eprint={2506.04359},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO},
-      url={https://arxiv.org/abs/2506.04359}, 
-}
 @misc{teed_deepv2d_2020,
-    title = {{DeepV2D}: {Video} to {Depth} with {Differentiable} {Structure} from {Motion}},
-    shorttitle = {{DeepV2D}},
-    url = {http://arxiv.org/abs/1812.04605},
-    doi = {10.48550/arXiv.1812.04605},
-    abstract = {We propose DeepV2D, an end-to-end deep learning architecture for predicting depth from video. DeepV2D combines the representation ability of neural networks with the geometric principles governing image formation. We compose a collection of classical geometric algorithms, which are converted into trainable modules and combined into an end-to-end differentiable architecture. DeepV2D interleaves two stages: motion estimation and depth estimation. During inference, motion and depth estimation are alternated and converge to accurate depth. Code is available https://github.com/princeton-vl/DeepV2D.},
-    urldate = {2025-06-18},
-    publisher = {arXiv},
-    author = {Teed, Zachary and Deng, Jia},
-    month = apr,
-    year = {2020},
-    note = {arXiv:1812.04605 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition},
-}
-@incollection{sankoff1983symmetric,
-  author    = {Sankoff, David and Kruskal, Joseph B.},
-  title     = {The symmetric time-warping problem: From continuous to discrete},
-  booktitle = {Time Warps, String Edits, and Macromolecules: The Theory and Practice of Sequence Comparison},
-  editor    = {Sankoff, David and Kruskal, Joseph B.},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA, USA},
-  pages     = {125--161},
-  year      = {1983}
-}
-@article{tang_review_2021,
-    title = {A review of lane detection methods based on deep learning},
-    volume = {111},
-    issn = {00313203},
-    url = {https://linkinghub.elsevier.com/retrieve/pii/S003132032030426X},
-    doi = {10.1016/j.patcog.2020.107623},
-    abstract = {Lane detection is an application of environmental perception, which aims to detect lane areas or lane lines by camera or lidar. In recent years, gratifying progress has been made in detection accuracy. To the best of our knowledge, this paper is the ﬁrst attempt to make a comprehensive review of visionbased lane detection methods. First, we introduce the background of lane detection, including traditional lane detection methods and related deep learning methods. Second, we group the existing lane detection methods into two categories: two-step and one-step methods. Around the above summary, we introduce lane detection methods from the following two perspectives: (1) network architectures, including classiﬁcation and object detection-based methods, end-to-end image-segmentation based methods, and some optimization strategies; (2) related loss functions. For each method, its contributions and weaknesses are introduced. Then, a brief comparison of representative methods is presented. Finally, we conclude this survey with some current challenges, such as expensive computation and the lack of generalization. And we point out some directions to be further explored in the future, that is, semi-supervised learning, meta-learning and neural architecture search, etc.},
-    language = {en},
-    urldate = {2025-05-11},
-    journal = {Pattern Recognition},
-    author = {Tang, Jigang and Li, Songbin and Liu, Peng},
-    month = mar,
-    year = {2021},
-    pages = {107623},
+  title={{DeepV2D}: {Video} to {Depth} with {Differentiable} {Structure} from {Motion}},
+  url={http://arxiv.org/abs/1812.04605},
+  doi={10.48550/arXiv.1812.04605},
+  publisher={arXiv},
+  author={Teed, Zachary and Deng, Jia},
+  year={2020},
+  note={arXiv:1812.04605 [cs]}
 }
 
-@misc{mathworks_cnn,
-  author       = {{The MathWorks, Inc.}},
-  title        = {What Is a Convolutional Neural Network?},
-  year         = {2024},
-  url          = {https://uk.mathworks.com/discovery/convolutional-neural-network.html},
-  note         = {Accessed: 2026-01-09}
+
+% --- Lane Detection Models ---
+
+@inproceedings{tabelini2021keep,
+  title={Keep your eyes on the lane: Real-time attention-guided lane detection},
+  author={Tabelini, Lucas and Berriel, Rodrigo and Paixao, Thiago M and Badue, Claudine and De Souza, Alberto F and Oliveira-Santos, Thiago},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={294--302},
+  year={2021}
 }
+
+@misc{tabelini_polylanenet_2020,
+  title={{PolyLaneNet}: {Lane} {Estimation} via {Deep} {Polynomial} {Regression}},
+  url={http://arxiv.org/abs/2004.10924},
+  doi={10.48550/arXiv.2004.10924},
+  publisher={arXiv},
+  author={Tabelini, Lucas and Berriel, Rodrigo and Paix\~{a}o, Thiago M. and Badue, Claudine and Souza, Alberto F. De and Oliveira-Santos, Thiago},
+  year={2020},
+  note={arXiv:2004.10924 [cs]}
+}
+
+@misc{wang_lanenet_2018,
+  title={{LaneNet}: {Real}-{Time} {Lane} {Detection} {Networks} for {Autonomous} {Driving}},
+  url={http://arxiv.org/abs/1807.01726},
+  doi={10.48550/arXiv.1807.01726},
+  publisher={arXiv},
+  author={Wang, Ze and Ren, Weiqiang and Qiu, Qiang},
+  year={2018},
+  note={arXiv:1807.01726 [cs]}
+}
+
+@inproceedings{pan2018spatial,
+  title={Spatial as deep: Spatial {CNN} for traffic scene understanding},
+  author={Pan, Xingang and Shi, Jianping and Luo, Ping and Wang, Xiaogang and Tang, Xiaoou},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={32},
+  year={2018}
+}
+
+@inproceedings{zheng2022clrnet,
+  title={{CLRNet}: Cross layer refinement network for lane detection},
+  author={Zheng, Tu and Huang, Yifei and Liu, Yang and Tang, Wenjian and Yang, Zheng and Cai, Deng and He, Xiaofei},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={898--907},
+  year={2022}
+}
+
+@inproceedings{qin2020ultra,
+  title={Ultra fast structure-aware deep lane detection},
+  author={Qin, Zequn and Wang, Huayu and Li, Xi},
+  booktitle={European Conference on Computer Vision},
+  pages={276--291},
+  year={2020},
+  organization={Springer}
+}
+
+@inproceedings{liu2021condlanenet,
+  title={{CondLaneNet}: a top-to-down lane detection framework based on conditional convolution},
+  author={Liu, Lizhe and Chen, Xiaohao and Zhu, Siyu and Tan, Ping},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={3773--3782},
+  year={2021}
+}
+
+@misc{jin_recursive_2023,
+  title={Recursive {Video} {Lane} {Detection}},
+  url={http://arxiv.org/abs/2308.11106},
+  doi={10.48550/arXiv.2308.11106},
+  publisher={arXiv},
+  author={Jin, Dongkwon and Kim, Dahyun and Kim, Chang-Su},
+  year={2023},
+  note={arXiv:2308.11106 [cs]}
+}
+
+@article{wu_yolop_2022,
+  title={{YOLOP}: {You} {Only} {Look} {Once} for {Panoptic} {Driving} {Perception}},
+  volume={19},
+  doi={10.1007/s11633-022-1339-y},
+  journal={Machine Intelligence Research},
+  author={Wu, Dong and Liao, Manwen and Zhang, Weitian and Wang, Xinggang and Bai, Xiang and Cheng, Wenqing and Liu, Wenyu},
+  year={2022},
+  pages={550--562}
+}
+
+@misc{chen_level_2022,
+  title={Level 2 {Autonomous} {Driving} on a {Single} {Device}: {Diving} into the {Devils} of {Openpilot}},
+  url={http://arxiv.org/abs/2206.08176},
+  doi={10.48550/arXiv.2206.08176},
+  publisher={arXiv},
+  author={Chen, Li and Tang, Tutian and Cai, Zhitian and Li, Yang and Wu, Penghao and Li, Hongyang and Shi, Jianping and Yan, Junchi and Qiao, Yu},
+  year={2022},
+  note={arXiv:2206.08176 [cs]}
+}
+
+@misc{redmon_you_2016,
+  title={You {Only} {Look} {Once}: {Unified}, {Real}-{Time} {Object} {Detection}},
+  url={http://arxiv.org/abs/1506.02640},
+  doi={10.48550/arXiv.1506.02640},
+  publisher={arXiv},
+  author={Redmon, Joseph and Divvala, Santosh and Girshick, Ross and Farhadi, Ali},
+  year={2016},
+  note={arXiv:1506.02640 [cs]}
+}
+
+
+% --- Lane Detection Surveys & Reviews ---
 
 @article{tang_review_2021,
   title={A review of lane detection methods based on deep learning},
-  author={Tang, Jigang and Li, Song and Liu, Peng},
-  journal={Pattern Recognition},
   volume={111},
-  pages={107623},
+  doi={10.1016/j.patcog.2020.107623},
+  journal={Pattern Recognition},
+  author={Tang, Jigang and Li, Songbin and Liu, Peng},
   year={2021},
-  publisher={Elsevier}
+  pages={107623}
 }
+
+@article{hillel_2014,
+  title={Recent progress in road and lane detection: a survey},
+  author={Bar Hillel, Aharon and Lerner, Reuven and Levi, Dan and Raz, Guy},
+  journal={Machine Vision and Applications},
+  volume={25},
+  number={3},
+  pages={727--745},
+  year={2014},
+  publisher={Springer}
+}
+
+@article{yurtsever2020survey,
+  title={A survey of autonomous driving: Common practices and emerging technologies},
+  author={Yurtsever, Ekim and Lambert, Jacob and Carballo, Alexander and Takeda, Kazuya},
+  journal={IEEE Access},
+  volume={8},
+  pages={58443--58469},
+  year={2020},
+  publisher={IEEE}
+}
+
+
+% --- Face Analysis & Gaze Estimation ---
+
+@inproceedings{deng2019arcface,
+  title={{ArcFace}: Additive Angular Margin Loss for Deep Face Recognition},
+  author={Deng, Jiankang and Guo, Jia and Xue, Niannan and Zafeiriou, Stefanos},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={4690--4699},
+  year={2019}
+}
+
+@article{lugaresi2019mediapipe,
+  title={{MediaPipe}: A Framework for Building Perception Pipelines},
+  author={Lugaresi, Camillo and Tang, Jiuqiang and Nash, Hadon and McClanahan, Chris and Uboweja, Esha and Hays, Michael and Zhang, Fan and Chang, Chuo-Ling and Yong, Ming Guang and Lee, Juhyun and others},
+  journal={arXiv preprint arXiv:1906.08172},
+  year={2019}
+}
+
+@misc{opencv_pnp,
+  title={{OpenCV: Perspective-n-Point (PnP) pose computation}},
+  year={2026},
+  note={[Online; accessed 11. Jan. 2026]},
+  url={https://docs.opencv.org/3.4/d5/d1f/calib3d_solvePnP.html}
+}
+
+
+% --- Classical Image Processing ---
 
 @inproceedings{sobel_1968,
   title={A 3x3 isotropic gradient operator for image processing},
@@ -142,6 +210,7 @@
   title={A computational approach to edge detection},
   author={Canny, John},
   journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume={8},
   number={6},
   pages={679--698},
   year={1986},
@@ -159,16 +228,8 @@
   publisher={ACM New York, NY, USA}
 }
 
-@article{hillel_2014,
-  title={Recent progress in road and lane detection: a survey},
-  author={Bar Hillel, Aharon and Lerner, Reuven and Levi, Dan and Raz, Guy},
-  journal={Machine Vision and Applications},
-  volume={25},
-  number={3},
-  pages={727--745},
-  year={2014},
-  publisher={Springer}
-}
+
+% --- Machine Learning Foundations ---
 
 @article{lecun_1998,
   title={Gradient-based learning applied to document recognition},
@@ -188,187 +249,16 @@
   year={2016},
   address={Cambridge, MA, USA}
 }
-@misc{wang_lanenet_2018,
-    title = {{LaneNet}: {Real}-{Time} {Lane} {Detection} {Networks} for {Autonomous} {Driving}},
-    shorttitle = {{LaneNet}},
-    url = {http://arxiv.org/abs/1807.01726},
-    doi = {10.48550/arXiv.1807.01726},
-    abstract = {Lane detection is to detect lanes on the road and provide the accurate location and shape of each lane. It severs as one of the key techniques to enable modern assisted and autonomous driving systems. However, several unique properties of lanes challenge the detection methods. The lack of distinctive features makes lane detection algorithms tend to be confused by other objects with similar local appearance. Moreover, the inconsistent number of lanes on a road as well as diverse lane line patterns, e.g. solid, broken, single, double, merging, and splitting lines further hamper the performance. In this paper, we propose a deep neural network based method, named LaneNet, to break down the lane detection into two stages: lane edge proposal and lane line localization. Stage one uses a lane edge proposal network for pixel-wise lane edge classification, and the lane line localization network in stage two then detects lane lines based on lane edge proposals. Please note that the goal of our LaneNet is built to detect lane line only, which introduces more difficulties on suppressing the false detections on the similar lane marks on the road like arrows and characters. Despite all the difficulties, our lane detection is shown to be robust to both highway and urban road scenarios method without relying on any assumptions on the lane number or the lane line patterns. The high running speed and low computational cost endow our LaneNet the capability of being deployed on vehicle-based systems. Experiments validate that our LaneNet consistently delivers outstanding performances on real world traffic scenarios.},
-    urldate = {2026-01-09},
-    publisher = {arXiv},
-    author = {Wang, Ze and Ren, Weiqiang and Qiu, Qiang},
-    month = jul,
-    year = {2018},
-    note = {arXiv:1807.01726 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition},
-}
-@misc{redmon_you_2016,
-    title = {You {Only} {Look} {Once}: {Unified}, {Real}-{Time} {Object} {Detection}},
-    shorttitle = {You {Only} {Look} {Once}},
-    url = {http://arxiv.org/abs/1506.02640},
-    doi = {10.48550/arXiv.1506.02640},
-    abstract = {We present YOLO, a new approach to object detection. Prior work on object detection repurposes classifiers to perform detection. Instead, we frame object detection as a regression problem to spatially separated bounding boxes and associated class probabilities. A single neural network predicts bounding boxes and class probabilities directly from full images in one evaluation. Since the whole detection pipeline is a single network, it can be optimized end-to-end directly on detection performance. Our unified architecture is extremely fast. Our base YOLO model processes images in real-time at 45 frames per second. A smaller version of the network, Fast YOLO, processes an astounding 155 frames per second while still achieving double the mAP of other real-time detectors. Compared to state-of-the-art detection systems, YOLO makes more localization errors but is far less likely to predict false detections where nothing exists. Finally, YOLO learns very general representations of objects. It outperforms all other detection methods, including DPM and R-CNN, by a wide margin when generalizing from natural images to artwork on both the Picasso Dataset and the People-Art Dataset.},
-    urldate = {2026-01-09},
-    publisher = {arXiv},
-    author = {Redmon, Joseph and Divvala, Santosh and Girshick, Ross and Farhadi, Ali},
-    month = may,
-    year = {2016},
-    note = {arXiv:1506.02640 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition},
-}
-@misc{tabelini_polylanenet_2020,
-    title = {{PolyLaneNet}: {Lane} {Estimation} via {Deep} {Polynomial} {Regression}},
-    shorttitle = {{PolyLaneNet}},
-    url = {http://arxiv.org/abs/2004.10924},
-    doi = {10.48550/arXiv.2004.10924},
-    abstract = {One of the main factors that contributed to the large advances in autonomous driving is the advent of deep learning. For safer self-driving vehicles, one of the problems that has yet to be solved completely is lane detection. Since methods for this task have to work in real-time (+30 FPS), they not only have to be effective (i.e., have high accuracy) but they also have to be efficient (i.e., fast). In this work, we present a novel method for lane detection that uses as input an image from a forward-looking camera mounted in the vehicle and outputs polynomials representing each lane marking in the image, via deep polynomial regression. The proposed method is shown to be competitive with existing state-of-the-art methods in the TuSimple dataset while maintaining its efficiency (115 FPS). Additionally, extensive qualitative results on two additional public datasets are presented, alongside with limitations in the evaluation metrics used by recent works for lane detection. Finally, we provide source code and trained models that allow others to replicate all the results shown in this paper, which is surprisingly rare in state-of-the-art lane detection methods. The full source code and pretrained models are available at https://github.com/lucastabelini/PolyLaneNet.},
-    urldate = {2025-09-26},
-    publisher = {arXiv},
-    author = {Tabelini, Lucas and Berriel, Rodrigo and Paixão, Thiago M. and Badue, Claudine and Souza, Alberto F. De and Oliveira-Santos, Thiago},
-    month = jul,
-    year = {2020},
-    note = {arXiv:2004.10924 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition},
-}
 
-@inproceedings{tabelini2021keep,
-  title={Keep your eyes on the lane: Real-time attention-guided lane detection},
-  author={Tabelini, Lucas and Berriel, Rodrigo and Paixao, Thiago M and Badue, Claudine and De Souza, Alberto F and Oliveira-Santos, Thiago},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages={294--302},
-  year={2021}
-}
-
-@inproceedings{neven2018towards,
-  title={Towards end-to-end lane detection: an instance segmentation approach},
-  author={Neven, Davy and De Brabandere, Bert and Georgoulis, Stamatios and Proesmans, Marc and Van Gool, Luc},
-  booktitle={2018 IEEE intelligent vehicles symposium (IV)},
-  pages={286--291},
-  year={2018},
-  organization={IEEE}
-}
-
-@inproceedings{tabelini2020polylanenet,
-  title={Polylanenet: Lane estimation via deep polynomial regression},
-  author={Tabelini, Lucas and Berriel, Rodrigo and Paixao, Thiago M and Badue, Claudine and De Souza, Alberto F and Oliveira-Santos, Thiago},
-  booktitle={2020 25th International Conference on Pattern Recognition (ICPR)},
-  pages={6150--6156},
-  year={2021},
-  organization={IEEE}
-}
-
-@inproceedings{pan2018spatial,
-  title={Spatial as deep: Spatial cnn for traffic scene understanding},
-  author={Pan, Xingang and Shi, Jianping and Luo, Ping and Wang, Xiaogang and Tang, Xiaoou},
-  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
-  volume={32},
-  number={1},
-  year={2018}
-}
-
-@inproceedings{zheng2022clrnet,
-  title={Clrnet: Cross layer refinement network for lane detection},
-  author={Zheng, Tu and Huang, Yifei and Liu, Yang and Tang, Wenjian and Yang, Zheng and Cai, Deng and He, Xiaofei},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages={898--907},
-  year={2022}
-}
-
-@inproceedings{qin2020ultra,
-  title={Ultra fast structure-aware deep lane detection},
-  author={Qin, Zequn and Wang, Huayu and Li, Xi andDescription},
-  booktitle={European Conference on Computer Vision},
-  pages={276--291},
-  year={2020},
-  organization={Springer}
-}
-
-@inproceedings{liu2021condlanenet,
-  title={Condlanenet: a top-to-down lane detection framework based on conditional convolution},
-  author={Liu, Lizhe and Chen, Xiaohao and Zhu, Siyu and Tan, Ping},
-  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
-  pages={3773--3782},
-  year={2021}
-}
-
-@inproceedings{CULane2018,
-  author       = {Pan, Xingang and Shi, Jianping and Luo, Ping and Wang, Xin and Tang, Xiaoou},
-  title        = {Spatial As Deep: Spatial CNN for Traffic Scene Understanding},
-  booktitle    = {Proceedings of the AAAI Conference on Artificial Intelligence},
-  year         = {2018},
-  howpublished = {\url{https://xingangpan.github.io/projects/CULane.html}}
-}
-
-@misc{TuSimple2017,
-  author       = {{TuSimple}},
-  title        = {TuSimple Benchmark Datasets},
-  booktitle    = {CVPR 2017 Workshop on Autonomous Driving},
-  year         = {2017},
-  howpublished = {\url{https://github.com/TuSimple/tusimple-benchmark}},
-  note         = {GitHub Repository}
-}
-@misc{jin_recursive_2023,
-    title = {Recursive {Video} {Lane} {Detection}},
-    url = {http://arxiv.org/abs/2308.11106},
-    doi = {10.48550/arXiv.2308.11106},
-    abstract = {A novel algorithm to detect road lanes in videos, called recursive video lane detector (RVLD), is proposed in this paper, which propagates the state of a current frame recursively to the next frame. RVLD consists of an intra-frame lane detector (ILD) and a predictive lane detector (PLD). First, we design ILD to localize lanes in a still frame. Second, we develop PLD to exploit the information of the previous frame for lane detection in a current frame. To this end, we estimate a motion field and warp the previous output to the current frame. Using the warped information, we refine the feature map of the current frame to detect lanes more reliably. Experimental results show that RVLD outperforms existing detectors on video lane datasets. Our codes are available at https://github.com/dongkwonjin/RVLD.},
-    urldate = {2026-01-10},
-    publisher = {arXiv},
-    author = {Jin, Dongkwon and Kim, Dahyun and Kim, Chang-Su},
-    month = aug,
-    year = {2023},
-    note = {arXiv:2308.11106 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition},
-}
-@article{wu_yolop_2022,
-    title = {{YOLOP}: {You} {Only} {Look} {Once} for {Panoptic} {Driving} {Perception}},
-    volume = {19},
-    issn = {2731-538X, 2731-5398},
-    shorttitle = {{YOLOP}},
-    url = {http://arxiv.org/abs/2108.11250},
-    doi = {10.1007/s11633-022-1339-y},
-    abstract = {A panoptic driving perception system is an essential part of autonomous driving. A high-precision and real-time perception system can assist the vehicle in making the reasonable decision while driving. We present a panoptic driving perception network (YOLOP) to perform traffic object detection, drivable area segmentation and lane detection simultaneously. It is composed of one encoder for feature extraction and three decoders to handle the specific tasks. Our model performs extremely well on the challenging BDD100K dataset, achieving state-of-the-art on all three tasks in terms of accuracy and speed. Besides, we verify the effectiveness of our multi-task learning model for joint training via ablative studies. To our best knowledge, this is the first work that can process these three visual perception tasks simultaneously in real-time on an embedded device Jetson TX2(23 FPS) and maintain excellent accuracy. To facilitate further research, the source codes and pre-trained models are released at https://github.com/hustvl/YOLOP.},
-    number = {6},
-    urldate = {2026-01-10},
-    journal = {Machine Intelligence Research},
-    author = {Wu, Dong and Liao, Manwen and Zhang, Weitian and Wang, Xinggang and Bai, Xiang and Cheng, Wenqing and Liu, Wenyu},
-    month = dec,
-    year = {2022},
-    note = {arXiv:2108.11250 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition},
-    pages = {550--562},
-}
-@misc{chen_level_2022,
-    title = {Level 2 {Autonomous} {Driving} on a {Single} {Device}: {Diving} into the {Devils} of {Openpilot}},
-    shorttitle = {Level 2 {Autonomous} {Driving} on a {Single} {Device}},
-    url = {http://arxiv.org/abs/2206.08176},
-    doi = {10.48550/arXiv.2206.08176},
-    abstract = {Equipped with a wide span of sensors, predominant autonomous driving solutions are becoming more modular-oriented for safe system design. Though these sensors have laid a solid foundation, most massive-production solutions up to date still fall into L2 phase. Among these, Comma.ai comes to our sight, claiming one \$999 aftermarket device mounted with a single camera and board inside owns the ability to handle L2 scenarios. Together with open-sourced software of the entire system released by Comma.ai, the project is named Openpilot. Is it possible? If so, how is it made possible? With curiosity in mind, we deep-dive into Openpilot and conclude that its key to success is the end-to-end system design instead of a conventional modular framework. The model is briefed as Supercombo, and it can predict the ego vehicle's future trajectory and other road semantics on the fly from monocular input. Unfortunately, the training process and massive amount of data to make all these work are not publicly available. To achieve an intensive investigation, we try to reimplement the training details and test the pipeline on public benchmarks. The refactored network proposed in this work is referred to as OP-Deepdive. For a fair comparison of our version to the original Supercombo, we introduce a dual-model deployment scheme to test the driving performance in the real world. Experimental results on nuScenes, Comma2k19, CARLA, and in-house realistic scenarios verify that a low-cost device can indeed achieve most L2 functionalities and be on par with the original Supercombo model. In this report, we would like to share our latest findings, shed some light on the new perspective of end-to-end autonomous driving from an industrial product-level side, and potentially inspire the community to continue improving the performance. Our code, benchmarks are at https://github.com/OpenPerceptionX/Openpilot-Deepdive.},
-    urldate = {2026-01-10},
-    publisher = {arXiv},
-    author = {Chen, Li and Tang, Tutian and Cai, Zhitian and Li, Yang and Wu, Penghao and Li, Hongyang and Shi, Jianping and Yan, Junchi and Qiao, Yu},
-    month = jun,
-    year = {2022},
-    note = {arXiv:2206.08176 [cs]},
-    keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Robotics},
-}
-
-@misc{opencv_pnp,
-	title = {{OpenCV: Perspective-n-Point (PnP) pose computation}},
-	year = {2026},
-	month = jan,
-	note = {[Online; accessed 11. Jan. 2026]},
-	url = {https://docs.opencv.org/3.4/d5/d1f/calib3d_solvePnP.html}
-}
-
-@article{yurtsever2020survey,
-  title={A survey of autonomous driving: Common practices and emerging technologies},
-  author={Yurtsever, Ekim and Lambert, Jacob and Carballo, Alexander and Takeda, Kazuya},
-  journal={IEEE Access},
-  volume={8},
-  pages={58443--58469},
-  year={2020},
-  publisher={IEEE}
+@article{cortes1995support,
+  title={Support-vector networks},
+  author={Cortes, Corinna and Vapnik, Vladimir},
+  journal={Machine Learning},
+  volume={20},
+  number={3},
+  pages={273--297},
+  year={1995},
+  publisher={Springer}
 }
 
 @book{jolliffe2016principal,
@@ -382,27 +272,29 @@
 @inproceedings{macqueen1967some,
   title={Some methods for classification and analysis of multivariate observations},
   author={MacQueen, James},
-  booktitle={Proceedings of the fifth Berkeley symposium on mathematical statistics and probability},
+  booktitle={Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability},
   volume={1},
-  number={14},
   pages={281--297},
   year={1967},
-  organization={Oakland, CA, USA}
+  organization={University of California Press}
 }
 
-@article{cortes1995support,
-  title={Support-vector networks},
-  author={Cortes, Corinna and Vapnik, Vladimir},
-  journal={Machine learning},
-  volume={20},
-  number={3},
-  pages={273--297},
-  year={1995},
-  publisher={Springer}
+@article{kuhn1955hungarian,
+  title={The {Hungarian} method for the assignment problem},
+  author={Kuhn, Harold W},
+  journal={Naval Research Logistics Quarterly},
+  volume={2},
+  number={1-2},
+  pages={83--97},
+  year={1955},
+  publisher={Wiley}
 }
+
+
+% --- Deep Learning Frameworks ---
 
 @inproceedings{paszke2019pytorch,
-  title={PyTorch: An Imperative Style, High-Performance Deep Learning Library},
+  title={{PyTorch}: An Imperative Style, High-Performance Deep Learning Library},
   author={Paszke, Adam and Gross, Sam and Massa, Francisco and Lerer, Adam and Bradbury, James and Chanan, Gregory and Killeen, Trevor and Lin, Zeming and Gimelshein, Natalia and Antiga, Luca and others},
   booktitle={Advances in Neural Information Processing Systems},
   volume={32},
@@ -410,265 +302,144 @@
 }
 
 @inproceedings{abadi2016tensorflow,
-  title={Tensorflow: A system for large-scale machine learning},
+  title={{TensorFlow}: A system for large-scale machine learning},
   author={Abadi, Mart{\'\i}n and Barham, Paul and Chen, Jianmin and Chen, Zhifeng and Davis, Andy and Dean, Jeffrey and Devin, Matthieu and Ghemawat, Sanjay and Irving, Geoffrey and Isard, Michael and others},
-  booktitle={12th USENIX symposium on operating systems design and implementation (OSDI 16)},
+  booktitle={12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16)},
   pages={265--283},
   year={2016}
 }
 
-@inproceedings{deng2019arcface,
-  title={ArcFace: Additive Angular Margin Loss for Deep Face Recognition},
-  author={Deng, Jiankang and Guo, Jia and Xue, Niannan and Zafeiriou, Stefanos},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages={4690--4699},
-  year={2019}
+@misc{mathworks_cnn,
+  author={{The MathWorks, Inc.}},
+  title={What Is a Convolutional Neural Network?},
+  year={2024},
+  url={https://uk.mathworks.com/discovery/convolutional-neural-network.html},
+  note={Accessed: 2026-01-09}
 }
 
-@article{lugaresi2019mediapipe,
-  title={MediaPipe: A Framework for Building Perception Pipelines},
-  author={Lugaresi, Camillo and Tang, Jiuqiang and Nash, Hadon and McClanahan, Chris and Uboweja, Esha and Hays, Michael and Zhang, Fan and Chang, Chuo-Ling and Yong, Ming Guang and Lee, Juhyun and others},
-  journal={arXiv preprint arXiv:1906.08172},
-  year={2019}
-}
 
-@article{zhang2000flexible,
-  title={A flexible new technique for camera calibration},
-  author={Zhang, Zhengyou},
-  journal={IEEE Transactions on pattern analysis and machine intelligence},
-  volume={22},
-  number={11},
-  pages={1330--1334},
-  year={2000},
-  publisher={IEEE}
-}
-
-% --- ACADEMIC PAPERS & PREPRINTS ---
-
-@inproceedings{datasetComparison,
-  author    = {Hou, Yuenan and Ma, Zheng and Liu, Chunxiao and Loy, Chen Change},
-  title     = {Learning Lightweight Lane Detection CNNs by Self Attention Distillation},
-  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-  year      = {2019},
-  pages     = {1001--1010},
-  doi       = {10.1109/ICCV.2019.00110}
-}
-
-@article{BDD100K,
-  author       = {Yu, Fisher and Xian, Wenqi and Chen, Yingying and Liu, Fangchen and Liao, Mike and Madhavan, Vashisht and Darrell, Trevor},
-  title        = {{BDD100K}: A Diverse Driving Video Database with Scalable Annotation Tooling},
-  journal      = {arXiv preprint arXiv:1805.04687},
-  year         = {2018},
-  howpublished = {\url{https://arxiv.org/abs/1805.04687}},
-  eprint       = {1805.04687}
-}
-
-@inproceedings{DMD2020,
-  author    = {Feng, Shun and Wang, Lixu and Song, Yi-Zhe and Zhang, Jifei and Liu, Xibin and Ma, Cong and Liu, Tian},
-  title     = {Driver Monitoring: A Large-Scale Benchmark for Attention and Alertness Analysis},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year      = {2020},
-  note      = {Driver Monitoring Dataset (DMD)}
-}
+% --- Datasets ---
 
 @inproceedings{CULane2018,
-  author       = {Pan, Xingang and Shi, Jianping and Luo, Ping and Wang, Xin and Tang, Xiaoou},
-  title        = {Spatial As Deep: Spatial CNN for Traffic Scene Understanding},
-  booktitle    = {Proceedings of the AAAI Conference on Artificial Intelligence},
-  year         = {2018},
-  howpublished = {\url{https://xingangpan.github.io/projects/CULane.html}}
-}
-
-@inproceedings{PolyLaneNet2020,
-  author    = {Tabelini, Lucas and Berriel, Rodrigo and Paixao, Thiago M. and Badue, Claudine and De Souza, Alberto F. and Oliveira-Santos, Thiago},
-  title     = {PolyLaneNet: Lane Estimation via Deep Polynomial Regression},
-  booktitle = {2020 25th International Conference on Pattern Recognition (ICPR)},
-  year      = {2020},
-  doi       = {10.1109/ICPR48806.2021.9412558}
-}
-
-@inproceedings{UNet2015,
-  author    = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
-  title     = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
-  booktitle = {Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
-  year      = {2015}
-}
-
-@article{gaze_no_eyes,
-  author       = {Fridman, Lex and Langhans, Philipp and Lee, Joonbum and Reimer, Bryan},
-  title        = {Driver Gaze Region Estimation Without Using Eye Movement},
-  journal      = {arXiv preprint arXiv:1507.04760},
-  year         = {2016},
-  howpublished = {\url{https://arxiv.org/abs/1507.04760}},
-  doi          = {10.48550/arXiv.1507.04760}
-}
-
-% --- SOFTWARE & DATASET REPOSITORIES ---
-
-@misc{commaai_openpilot,
-  author       = {{Comma.ai}},
-  title        = {Openpilot: An Open Source Driver Assistance System},
-  year         = {2025},
-  howpublished = {\url{https://github.com/commaai/openpilot}},
-  note         = {GitHub Repository. (Accessed on 2025-09-09)}
-}
-
-@misc{parai_dms,
-  author       = {Parai},
-  title        = {dms: Driver Monitor System Based on Deep Learning},
-  year         = {2023},
-  howpublished = {\url{https://github.com/parai/dms}},
-  note         = {GitHub Repository. (Accessed on 2025-09-09)}
-}
-
-@misc{zenroad_app,
-  author       = {{The Zenroad Team}},
-  title        = {Zenroad: An Open-Source Tracking and Safe Driving App},
-  year         = {2022},
-  howpublished = {\url{https://github.com/zenroad/zenroad-app}},
-  note         = {GitHub Repository. (Accessed on 2025-09-09)}
+  author={Pan, Xingang and Shi, Jianping and Luo, Ping and Wang, Xin and Tang, Xiaoou},
+  title={Spatial As Deep: Spatial {CNN} for Traffic Scene Understanding},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  year={2018}
 }
 
 @misc{TuSimple2017,
-  author       = {{TuSimple}},
-  title        = {TuSimple Benchmark Datasets},
-  booktitle    = {CVPR 2017 Workshop on Autonomous Driving},
-  year         = {2017},
-  howpublished = {\url{https://github.com/TuSimple/tusimple-benchmark}},
-  note         = {GitHub Repository}
+  author={{TuSimple}},
+  title={TuSimple Benchmark Datasets},
+  year={2017},
+  howpublished={\url{https://github.com/TuSimple/tusimple-benchmark}},
+  note={GitHub Repository}
 }
 
 
-% --- ORGANIZATIONAL & GOVERNMENT REPORTS ---
+% --- Driver Safety & Related Work ---
 
-@misc{govuk_casualties_2024,
-  author       = {{Department for Transport}},
-  title        = {Reported Road Casualties in Great Britain, Provisional Estimates: 2024},
-  institution  = {GOV.UK},
-  year         = {2024},
-  howpublished = {\url{https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-provisional-results-2024/reported-road-casualties-in-great-britain-provisional-estimates-2024}},
-  note         = {(Accessed on 2025-09-09)}
-}
-
-@misc{eurlex_2019_2144,
-  author       = {{The European Parliament and the Council of the European Union}},
-  title        = {Regulation (EU) 2019/2144 on Type-Approval Requirements for Motor Vehicles and Their Trailers},
-  year         = {2019},
-  journal      = {Official Journal of the European Union},
-  howpublished = {\url{https://eur-lex.europa.eu/eli/reg/2019/2144/oj}},
-  note         = {(Accessed on 2025-09-09)}
-}
-
-
-% --- WEBSITES & ONLINE ARTICLES ---
-
-@misc{dia_collisions,
-  author       = {{Driving Instructors Association}},
-  title        = {UK’s Top Causes of Road Collisions},
-  howpublished = {\url{https://www.driving.org/the-uks-top-causes-of-road-collisions/}},
-  note         = {(Accessed on 2025-09-09)}
-}
-
-@misc{road_accident_data,
-  author       = {{Collingwood Insurance Services}},
-  title        = {Main Causes of Road Accidents in the UK},
-  howpublished = {\url{https://www.collingwood.co.uk/insight/main-causes-of-road-accidents-uk/}},
-  note         = {(Accessed on 2025-09-29)}
-}
-
-@misc{jlr_dms_news,
-  author       = {{Jaguar Land Rover}},
-  title        = {Jaguar Land Rover Unveil New Driver Monitor System that is Set to Revolutionise Road Safety},
-  year         = {2019},
-  howpublished = {\url{https://media.landrover.com/en-gb/news/2019/05/jaguar-land-rover-unveil-new-driver-monitor-system-set-revolutionise-road-safety}},
-  note         = {(Accessed on 2025-09-29)}
-}
-
-@misc{nauto_platform,
-  author       = {{Nauto Inc.}},
-  title        = {AI-Powered Fleet and Driver Safety Platform},
-  howpublished = {\url{https://www.nauto.com/}},
-  note         = {(Accessed on 2025-09-29)}
-}
-
-@misc{smarteye_ai,
-  author       = {{Smart Eye}},
-  title        = {The World Leader in Human Insight AI},
-  howpublished = {\url{https://www.smarteye.se/}},
-  note         = {(Accessed on 2025-09-29)}
-}
-
-@misc{toyota_tmate,
-  author       = {{Toyota Europe}},
-  title        = {Toyota T-Mate Driving Assistance},
-  howpublished = {\url{https://www.toyota-europe.com/brands-and-services/toyota/t-mate-driving-assistance}},
-  note         = {(Accessed on 2025-09-29)}
-}
-
-@misc{statistaMostUsed,
-  author       = {{Statista}},
-  title        = {Most Used Web Frameworks Among Developers Worldwide in 2024},
-  year         = {2024},
-  howpublished = {\url{https://www.statista.com/statistics/1124699/worldwide-developer-survey-most-used-frameworks-web/}},
-  note         = {(Accessed on 2025-09-30)}
-}
-
-@misc{stor_limit_principle,
-  author       = {{Information Commissioner's Office}},
-  title        = {Principle (e): Storage Limitation},
-  howpublished = {\url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/storage-limitation/}},
-  note         = {(Accessed on 2025-09-30)}
-}
-
-@misc{minim_principle,
-  author       = {{Information Commissioner's Office}},
-  title        = {Principle (c): Data Minimisation},
-  howpublished = {\url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/data-minimisation/}},
-  note         = {(Accessed on 2025-09-30)}
-}
-
-@misc{lawful_principle,
-  author       = {{Information Commissioner's Office}},
-  title        = {Principle (a): Lawfulness, Fairness and Transparency},
-  howpublished = {\url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/lawfulness-fairness-and-transparency/}},
-  note         = {(Accessed on 2025-09-30)}
-}
-
-@misc{2nd2nonedrivingschoolLearningDrive,
-  author       = {{2nd 2 None Driving School}},
-  title        = {Learning to Drive with your Parents},
-  howpublished = {\url{https://www.2nd2nonedrivingschool.co.uk/learning-to-drive-with-your-parents.html}},
-  note         = {(Accessed on 2025-10-08)}
+@incollection{salma_drive_2024,
+  title={Drive {Sense}: {An} {Integrated} {System} for {Driver} {Safety}},
+  author={Salma, S. and Rani, P. and Madhuri, D. and Rakesh, B. and Krishna, B. and Rao, B.},
+  booktitle={Proceedings of the International Conference on Intelligent Computing and Networking},
+  year={2024},
+  doi={10.2991/978-94-6463-471-6_78},
+  pages={813--823},
+  publisher={Atlantis Press}
 }
 
 @misc{MachineLearningTV2021Jun,
-	author = {{Machine Learning TV}},
-	title = {{Kalman Filter - Part 1}},
-	journal = {YouTube},
-	year = {2021},
-	month = jun,
-	publisher = {Youtube},
-	note = {[Online; accessed 15. Jan. 2026]},
-	url = {https://www.youtube.com/watch?v=LioOvUZ1MiM}
-}
-@incollection{salma_drive_2024,
-    title = {Drive {Sense}: {An} {Integrated} {System} for {Driver} {Safety}},
-    isbn = {978-94-6463-470-9},
-    shorttitle = {Drive {Sense}},
-    author = {Salma, S. and Rani, P. and Madhuri, D. and Rakesh, B. and Krishna, B. and Rao, B.},
-    month = jul,
-    year = {2024},
-    doi = {10.2991/978-94-6463-471-6_78},
-    pages = {813--823},
+  author={{Machine Learning TV}},
+  title={{Kalman Filter -- Part 1}},
+  year={2021},
+  url={https://www.youtube.com/watch?v=LioOvUZ1MiM},
+  note={YouTube. [Online; accessed 15. Jan. 2026]}
 }
 
-@article{kuhn1955hungarian,
-  title={The Hungarian method for the assignment problem},
-  author={Kuhn, Harold W},
-  journal={Naval Research Logistics Quarterly},
-  volume={2},
-  number={1-2},
-  pages={83--97},
-  year={1955},
-  publisher={Wiley Online Library}
+
+% --- Software, Products & Organisations ---
+
+@misc{commaai_openpilot,
+  author={{Comma.ai}},
+  title={Openpilot: An Open Source Driver Assistance System},
+  year={2025},
+  howpublished={\url{https://github.com/commaai/openpilot}},
+  note={GitHub Repository. (Accessed on 2025-09-09)}
+}
+
+@misc{zenroad_app,
+  author={{The Zenroad Team}},
+  title={Zenroad: An Open-Source Tracking and Safe Driving App},
+  year={2022},
+  howpublished={\url{https://github.com/zenroad/zenroad-app}},
+  note={GitHub Repository. (Accessed on 2025-09-09)}
+}
+
+@misc{jlr_dms_news,
+  author={{Jaguar Land Rover}},
+  title={Jaguar Land Rover Unveil New Driver Monitor System that is Set to Revolutionise Road Safety},
+  year={2019},
+  howpublished={\url{https://media.landrover.com/en-gb/news/2019/05/jaguar-land-rover-unveil-new-driver-monitor-system-set-revolutionise-road-safety}},
+  note={(Accessed on 2025-09-29)}
+}
+
+@misc{nauto_platform,
+  author={{Nauto Inc.}},
+  title={AI-Powered Fleet and Driver Safety Platform},
+  howpublished={\url{https://www.nauto.com/}},
+  note={(Accessed on 2025-09-29)}
+}
+
+@misc{smarteye_ai,
+  author={{Smart Eye}},
+  title={The World Leader in Human Insight AI},
+  howpublished={\url{https://www.smarteye.se/}},
+  note={(Accessed on 2025-09-29)}
+}
+
+@misc{toyota_tmate,
+  author={{Toyota Europe}},
+  title={Toyota {T-Mate} Driving Assistance},
+  howpublished={\url{https://www.toyota-europe.com/brands-and-services/toyota/t-mate-driving-assistance}},
+  note={(Accessed on 2025-09-29)}
+}
+
+
+% --- Government & Policy ---
+
+@misc{govuk_casualties_2024,
+  author={{Department for Transport}},
+  title={Reported Road Casualties in Great Britain, Provisional Estimates: 2024},
+  year={2024},
+  howpublished={\url{https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-provisional-results-2024/reported-road-casualties-in-great-britain-provisional-estimates-2024}},
+  note={(Accessed on 2025-09-09)}
+}
+
+@misc{eurlex_2019_2144,
+  author={{The European Parliament and the Council of the European Union}},
+  title={Regulation ({EU}) 2019/2144 on Type-Approval Requirements for Motor Vehicles and Their Trailers},
+  year={2019},
+  howpublished={\url{https://eur-lex.europa.eu/eli/reg/2019/2144/oj}},
+  note={(Accessed on 2025-09-09)}
+}
+
+@misc{dia_collisions,
+  author={{Driving Instructors Association}},
+  title={UK's Top Causes of Road Collisions},
+  howpublished={\url{https://www.driving.org/the-uks-top-causes-of-road-collisions/}},
+  note={(Accessed on 2025-09-09)}
+}
+
+@misc{road_accident_data,
+  author={{Collingwood Insurance Services}},
+  title={Main Causes of Road Accidents in the {UK}},
+  howpublished={\url{https://www.collingwood.co.uk/insight/main-causes-of-road-accidents-uk/}},
+  note={(Accessed on 2025-09-29)}
+}
+
+@misc{2nd2nonedrivingschoolLearningDrive,
+  author={{2nd 2 None Driving School}},
+  title={Learning to Drive with your Parents},
+  howpublished={\url{https://www.2nd2nonedrivingschool.co.uk/learning-to-drive-with-your-parents.html}},
+  note={(Accessed on 2025-10-08)}
 }

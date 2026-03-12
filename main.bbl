@@ -11,27 +11,27 @@
 
 \bibitem{road_accident_data}
 {Collingwood Insurance Services}.
-\newblock Main causes of road accidents in the uk.
+\newblock Main causes of road accidents in the {UK}.
 \newblock
   \url{https://www.collingwood.co.uk/insight/main-causes-of-road-accidents-uk/}.
 \newblock (Accessed on 2025-09-29).
 
 \bibitem{dia_collisions}
 {Driving Instructors Association}.
-\newblock Uk’s top causes of road collisions.
+\newblock Uk's top causes of road collisions.
 \newblock \url{https://www.driving.org/the-uks-top-causes-of-road-collisions/}.
 \newblock (Accessed on 2025-09-09).
 
 \bibitem{eurlex_2019_2144}
 {The European Parliament and the Council of the European Union}.
-\newblock Regulation (eu) 2019/2144 on type-approval requirements for motor
+\newblock Regulation ({EU}) 2019/2144 on type-approval requirements for motor
   vehicles and their trailers.
 \newblock \url{https://eur-lex.europa.eu/eli/reg/2019/2144/oj}, 2019.
 \newblock (Accessed on 2025-09-09).
 
 \bibitem{toyota_tmate}
 {Toyota Europe}.
-\newblock Toyota t-mate driving assistance.
+\newblock Toyota {T-Mate} driving assistance.
 \newblock
   \url{https://www.toyota-europe.com/brands-and-services/toyota/t-mate-driving-assistance}.
 \newblock (Accessed on 2025-09-29).
@@ -79,7 +79,7 @@
 \bibitem{tang_review_2021}
 Jigang Tang, Songbin Li, and Peng Liu.
 \newblock A review of lane detection methods based on deep learning.
-\newblock {\em Pattern Recognition}, 111:107623, March 2021.
+\newblock {\em Pattern Recognition}, 111:107623, 2021.
 
 \bibitem{sobel_1968}
 Irwin Sobel and Gary Feldman.
@@ -91,7 +91,7 @@ Irwin Sobel and Gary Feldman.
 John Canny.
 \newblock A computational approach to edge detection.
 \newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  (6):679--698, 1986.
+  8(6):679--698, 1986.
 
 \bibitem{duda_1972}
 Richard~O Duda and Peter~E Hart.
@@ -122,20 +122,20 @@ Ian Goodfellow, Yoshua Bengio, and Aaron Courville.
 \bibitem{wang_lanenet_2018}
 Ze~Wang, Weiqiang Ren, and Qiang Qiu.
 \newblock {LaneNet}: {Real}-{Time} {Lane} {Detection} {Networks} for
-  {Autonomous} {Driving}, July 2018.
+  {Autonomous} {Driving}, 2018.
 \newblock arXiv:1807.01726 [cs].
 
 \bibitem{redmon_you_2016}
 Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi.
 \newblock You {Only} {Look} {Once}: {Unified}, {Real}-{Time} {Object}
-  {Detection}, May 2016.
+  {Detection}, 2016.
 \newblock arXiv:1506.02640 [cs].
 
 \bibitem{tabelini_polylanenet_2020}
-Lucas Tabelini, Rodrigo Berriel, Thiago~M. Paixão, Claudine Badue, Alberto
+Lucas Tabelini, Rodrigo Berriel, Thiago~M. Paix\~{a}o, Claudine Badue, Alberto
   F.~De Souza, and Thiago Oliveira-Santos.
 \newblock {PolyLaneNet}: {Lane} {Estimation} via {Deep} {Polynomial}
-  {Regression}, July 2020.
+  {Regression}, 2020.
 \newblock arXiv:2004.10924 [cs].
 
 \bibitem{TuSimple2017}
@@ -146,18 +146,18 @@ Lucas Tabelini, Rodrigo Berriel, Thiago~M. Paixão, Claudine Badue, Alberto
 
 \bibitem{CULane2018}
 Xingang Pan, Jianping Shi, Ping Luo, Xin Wang, and Xiaoou Tang.
-\newblock Spatial as deep: Spatial cnn for traffic scene understanding.
+\newblock Spatial as deep: Spatial {CNN} for traffic scene understanding.
 \newblock In {\em Proceedings of the AAAI Conference on Artificial
   Intelligence}, 2018.
 
 \bibitem{pan2018spatial}
 Xingang Pan, Jianping Shi, Ping Luo, Xiaogang Wang, and Xiaoou Tang.
-\newblock Spatial as deep: Spatial cnn for traffic scene understanding.
+\newblock Spatial as deep: Spatial {CNN} for traffic scene understanding.
 \newblock In {\em Proceedings of the AAAI Conference on Artificial
   Intelligence}, volume~32, 2018.
 
 \bibitem{qin2020ultra}
-Zequn Qin, Huayu Wang, and Xi~andDescription Li.
+Zequn Qin, Huayu Wang, and Xi~Li.
 \newblock Ultra fast structure-aware deep lane detection.
 \newblock In {\em European Conference on Computer Vision}, pages 276--291.
   Springer, 2020.
@@ -172,7 +172,7 @@ Lucas Tabelini, Rodrigo Berriel, Thiago~M Paixao, Claudine Badue, Alberto~F
 
 \bibitem{liu2021condlanenet}
 Lizhe Liu, Xiaohao Chen, Siyu Zhu, and Ping Tan.
-\newblock Condlanenet: a top-to-down lane detection framework based on
+\newblock {CondLaneNet}: a top-to-down lane detection framework based on
   conditional convolution.
 \newblock In {\em Proceedings of the IEEE/CVF International Conference on
   Computer Vision}, pages 3773--3782, 2021.
@@ -180,13 +180,13 @@ Lizhe Liu, Xiaohao Chen, Siyu Zhu, and Ping Tan.
 \bibitem{zheng2022clrnet}
 Tu~Zheng, Yifei Huang, Yang Liu, Wenjian Tang, Zheng Yang, Deng Cai, and
   Xiaofei He.
-\newblock Clrnet: Cross layer refinement network for lane detection.
+\newblock {CLRNet}: Cross layer refinement network for lane detection.
 \newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
   Pattern Recognition}, pages 898--907, 2022.
 
 \bibitem{jin_recursive_2023}
 Dongkwon Jin, Dahyun Kim, and Chang-Su Kim.
-\newblock Recursive {Video} {Lane} {Detection}, August 2023.
+\newblock Recursive {Video} {Lane} {Detection}, 2023.
 \newblock arXiv:2308.11106 [cs].
 
 \bibitem{wu_yolop_2022}
@@ -194,14 +194,13 @@ Dong Wu, Manwen Liao, Weitian Zhang, Xinggang Wang, Xiang Bai, Wenqing Cheng,
   and Wenyu Liu.
 \newblock {YOLOP}: {You} {Only} {Look} {Once} for {Panoptic} {Driving}
   {Perception}.
-\newblock {\em Machine Intelligence Research}, 19(6):550--562, December 2022.
-\newblock arXiv:2108.11250 [cs].
+\newblock {\em Machine Intelligence Research}, 19:550--562, 2022.
 
 \bibitem{chen_level_2022}
 Li~Chen, Tutian Tang, Zhitian Cai, Yang Li, Penghao Wu, Hongyang Li, Jianping
   Shi, Junchi Yan, and Yu~Qiao.
 \newblock Level 2 {Autonomous} {Driving} on a {Single} {Device}: {Diving} into
-  the {Devils} of {Openpilot}, June 2022.
+  the {Devils} of {Openpilot}, 2022.
 \newblock arXiv:2206.08176 [cs].
 
 \bibitem{yurtsever2020survey}
@@ -212,16 +211,17 @@ Ekim Yurtsever, Jacob Lambert, Alexander Carballo, and Kazuya Takeda.
 
 \bibitem{MachineLearningTV2021Jun}
 {Machine Learning TV}.
-\newblock {Kalman Filter - Part 1}, June 2021.
-\newblock [Online; accessed 15. Jan. 2026].
+\newblock {Kalman Filter -- Part 1}, 2021.
+\newblock YouTube. [Online; accessed 15. Jan. 2026].
 
 \bibitem{salma_drive_2024}
 S.~Salma, P.~Rani, D.~Madhuri, B.~Rakesh, B.~Krishna, and B.~Rao.
 \newblock Drive {Sense}: {An} {Integrated} {System} for {Driver} {Safety}.
-\newblock pages 813--823. July 2024.
+\newblock In {\em Proceedings of the International Conference on Intelligent
+  Computing and Networking}, pages 813--823. Atlantis Press, 2024.
 
 \bibitem{opencv_pnp}
-{OpenCV: Perspective-n-Point (PnP) pose computation}, January 2026.
+{OpenCV: Perspective-n-Point (PnP) pose computation}, 2026.
 \newblock [Online; accessed 11. Jan. 2026].
 
 \bibitem{jolliffe2016principal}
@@ -233,44 +233,64 @@ Ian~T Jolliffe and Jorge Cadima.
 James MacQueen.
 \newblock Some methods for classification and analysis of multivariate
   observations.
-\newblock In {\em Proceedings of the fifth Berkeley symposium on mathematical
-  statistics and probability}, volume~1, pages 281--297. Oakland, CA, USA,
-  1967.
+\newblock In {\em Proceedings of the Fifth Berkeley Symposium on Mathematical
+  Statistics and Probability}, volume~1, pages 281--297. University of
+  California Press, 1967.
 
 \bibitem{cortes1995support}
 Corinna Cortes and Vladimir Vapnik.
 \newblock Support-vector networks.
-\newblock {\em Machine learning}, 20(3):273--297, 1995.
+\newblock {\em Machine Learning}, 20(3):273--297, 1995.
 
 \bibitem{paszke2019pytorch}
 Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory
   Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et~al.
-\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock {PyTorch}: An imperative style, high-performance deep learning
+  library.
 \newblock In {\em Advances in Neural Information Processing Systems},
   volume~32, 2019.
 
 \bibitem{abadi2016tensorflow}
 Mart{\'\i}n Abadi, Paul Barham, Jianmin Chen, Zhifeng Chen, Andy Davis, Jeffrey
   Dean, Matthieu Devin, Sanjay Ghemawat, Geoffrey Irving, Michael Isard, et~al.
-\newblock Tensorflow: A system for large-scale machine learning.
-\newblock In {\em 12th USENIX symposium on operating systems design and
-  implementation (OSDI 16)}, pages 265--283, 2016.
+\newblock {TensorFlow}: A system for large-scale machine learning.
+\newblock In {\em 12th USENIX Symposium on Operating Systems Design and
+  Implementation (OSDI 16)}, pages 265--283, 2016.
 
 \bibitem{kuhn1955hungarian}
 Harold~W Kuhn.
-\newblock The hungarian method for the assignment problem.
+\newblock The {Hungarian} method for the assignment problem.
 \newblock {\em Naval Research Logistics Quarterly}, 2(1-2):83--97, 1955.
+
+\bibitem{teed2021droid}
+Zachary Teed and Jia Deng.
+\newblock {DROID-SLAM}: Deep visual {SLAM} for monocular, stereo, and {RGB-D}
+  cameras.
+\newblock In {\em Advances in Neural Information Processing Systems},
+  volume~34, pages 16558--16569, 2021.
+
+\bibitem{wang2021tartanvo}
+Wenshan Wang, Yaoyu Hu, and Sebastian Scherer.
+\newblock {TartanVO}: A generalizable learning-based {VO}.
+\newblock In {\em Proceedings of the 5th Conference on Robot Learning (CoRL)},
+  pages 1761--1772, 2021.
+
+\bibitem{teed_deepv2d_2020}
+Zachary Teed and Jia Deng.
+\newblock {DeepV2D}: {Video} to {Depth} with {Differentiable} {Structure} from
+  {Motion}, 2020.
+\newblock arXiv:1812.04605 [cs].
 
 \bibitem{deng2019arcface}
 Jiankang Deng, Jia Guo, Niannan Xue, and Stefanos Zafeiriou.
-\newblock Arcface: Additive angular margin loss for deep face recognition.
+\newblock {ArcFace}: Additive angular margin loss for deep face recognition.
 \newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
   Pattern Recognition}, pages 4690--4699, 2019.
 
 \bibitem{lugaresi2019mediapipe}
 Camillo Lugaresi, Jiuqiang Tang, Hadon Nash, Chris McClanahan, Esha Uboweja,
   Michael Hays, Fan Zhang, Chuo-Ling Chang, Ming~Guang Yong, Juhyun Lee, et~al.
-\newblock Mediapipe: A framework for building perception pipelines.
+\newblock {MediaPipe}: A framework for building perception pipelines.
 \newblock {\em arXiv preprint arXiv:1906.08172}, 2019.
 
 \end{thebibliography}

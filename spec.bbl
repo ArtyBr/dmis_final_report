@@ -1,0 +1,143 @@
+\begin{thebibliography}{10}
+
+\bibitem{govuk_casualties_2024}
+{Department for Transport}.
+\newblock Reported road casualties in great britain, provisional estimates:
+  2024.
+\newblock
+  \url{https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-provisional-results-2024/reported-road-casualties-in-great-britain-provisional-estimates-2024},
+  2024.
+\newblock (Accessed on 2025-09-09).
+
+\bibitem{road_accident_data}
+{Collingwood Insurance Services}.
+\newblock Main causes of road accidents in the uk.
+\newblock
+  \url{https://www.collingwood.co.uk/insight/main-causes-of-road-accidents-uk/}.
+\newblock (Accessed on 2025-09-29).
+
+\bibitem{dia_collisions}
+{Driving Instructors Association}.
+\newblock Uk’s top causes of road collisions.
+\newblock \url{https://www.driving.org/the-uks-top-causes-of-road-collisions/}.
+\newblock (Accessed on 2025-09-09).
+
+\bibitem{eurlex_2019_2144}
+{The European Parliament and the Council of the European Union}.
+\newblock Regulation (eu) 2019/2144 on type-approval requirements for motor
+  vehicles and their trailers.
+\newblock \url{https://eur-lex.europa.eu/eli/reg/2019/2144/oj}, 2019.
+\newblock (Accessed on 2025-09-09).
+
+\bibitem{toyota_tmate}
+{Toyota Europe}.
+\newblock Toyota t-mate driving assistance.
+\newblock
+  \url{https://www.toyota-europe.com/brands-and-services/toyota/t-mate-driving-assistance}.
+\newblock (Accessed on 2025-09-29).
+
+\bibitem{jlr_dms_news}
+{Jaguar Land Rover}.
+\newblock Jaguar land rover unveil new driver monitor system that is set to
+  revolutionise road safety.
+\newblock
+  \url{https://media.landrover.com/en-gb/news/2019/05/jaguar-land-rover-unveil-new-driver-monitor-system-set-revolutionise-road-safety},
+  2019.
+\newblock (Accessed on 2025-09-29).
+
+\bibitem{smarteye_ai}
+{Smart Eye}.
+\newblock The world leader in human insight ai.
+\newblock \url{https://www.smarteye.se/}.
+\newblock (Accessed on 2025-09-29).
+
+\bibitem{nauto_platform}
+{Nauto Inc.}
+\newblock Ai-powered fleet and driver safety platform.
+\newblock \url{https://www.nauto.com/}.
+\newblock (Accessed on 2025-09-29).
+
+\bibitem{commaai_openpilot}
+{Comma.ai}.
+\newblock Openpilot: An open source driver assistance system.
+\newblock \url{https://github.com/commaai/openpilot}, 2025.
+\newblock GitHub Repository. (Accessed on 2025-09-09).
+
+\bibitem{zenroad_app}
+{The Zenroad Team}.
+\newblock Zenroad: An open-source tracking and safe driving app.
+\newblock \url{https://github.com/zenroad/zenroad-app}, 2022.
+\newblock GitHub Repository. (Accessed on 2025-09-09).
+
+\bibitem{2nd2nonedrivingschoolLearningDrive}
+{2nd 2 None Driving School}.
+\newblock Learning to drive with your parents.
+\newblock
+  \url{https://www.2nd2nonedrivingschool.co.uk/learning-to-drive-with-your-parents.html}.
+\newblock (Accessed on 2025-10-08).
+
+\bibitem{CULane2018}
+Xingang Pan, Jianping Shi, Ping Luo, Xin Wang, and Xiaoou Tang.
+\newblock Spatial as deep: Spatial cnn for traffic scene understanding.
+\newblock In {\em Proceedings of the AAAI Conference on Artificial
+  Intelligence}, 2018.
+
+\bibitem{TuSimple2017}
+{TuSimple}.
+\newblock Tusimple benchmark datasets.
+\newblock \url{https://github.com/TuSimple/tusimple-benchmark}, 2017.
+\newblock GitHub Repository.
+
+\bibitem{BDD100K}
+Fisher Yu, Wenqi Xian, Yingying Chen, Fangchen Liu, Mike Liao, Vashisht
+  Madhavan, and Trevor Darrell.
+\newblock {BDD100K}: A diverse driving video database with scalable annotation
+  tooling.
+\newblock {\em arXiv preprint arXiv:1805.04687}, 2018.
+
+\bibitem{datasetComparison}
+Yuenan Hou, Zheng Ma, Chunxiao Liu, and Chen~Change Loy.
+\newblock Learning lightweight lane detection cnns by self attention
+  distillation.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on
+  Computer Vision (ICCV)}, pages 1001--1010, 2019.
+
+\bibitem{DMD2020}
+Shun Feng, Lixu Wang, Yi-Zhe Song, Jifei Zhang, Xibin Liu, Cong Ma, and Tian
+  Liu.
+\newblock Driver monitoring: A large-scale benchmark for attention and
+  alertness analysis.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, 2020.
+\newblock Driver Monitoring Dataset (DMD).
+
+\bibitem{statistaMostUsed}
+{Statista}.
+\newblock Most used web frameworks among developers worldwide in 2024.
+\newblock
+  \url{https://www.statista.com/statistics/1124699/worldwide-developer-survey-most-used-frameworks-web/},
+  2024.
+\newblock (Accessed on 2025-09-30).
+
+\bibitem{lawful_principle}
+{Information Commissioner's Office}.
+\newblock Principle (a): Lawfulness, fairness and transparency.
+\newblock
+  \url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/lawfulness-fairness-and-transparency/}.
+\newblock (Accessed on 2025-09-30).
+
+\bibitem{stor_limit_principle}
+{Information Commissioner's Office}.
+\newblock Principle (e): Storage limitation.
+\newblock
+  \url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/storage-limitation/}.
+\newblock (Accessed on 2025-09-30).
+
+\bibitem{minim_principle}
+{Information Commissioner's Office}.
+\newblock Principle (c): Data minimisation.
+\newblock
+  \url{https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/data-minimisation/}.
+\newblock (Accessed on 2025-09-30).
+
+\end{thebibliography}

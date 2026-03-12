@@ -13,6 +13,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, shapes.arrows, positioning, fit, backgrounds, arrows.meta, calc}
 \usepackage{float}
+\usepackage{url}
 \usepackage{listings}
 \usepackage{xcolor}
 \lstdefinestyle{pythonstyle}{
@@ -271,7 +272,49 @@ class LaneTracker:
 The lane tracker stores the position of each lane relative to the image centre. Lane change detection is performed by checking whether a tracked lane crosses the centre of the frame, with lane velocity used to determine direction and reduce false positives caused by old or faded lane markings. Detected lane change events are stored in the \texttt{Safety Monitor} class' buffer.
 
 \subsection{Turn Detection (FR3.1.1)}
-Describe the work done in developing the visual odometry process, going from trying open-source solutions such as DROID-Slam, TartanVO and DeepV2D, to creating my own VO process, since this was easier to debug and adjust to my needs. Show results of iterations of VO via graphs and describe how and why each iteration improved the output.
+Turn detection is necessary to extend mistake identification beyond lane changes to include failures to check mirrors before turning at junctions, a common fault on driving tests. Since the project does not have access to vehicle telemetry (steering angle, GPS waypoints), the only available signal is the road-facing video itself. This motivated the use of Visual Odometry (VO) to estimate the vehicle's heading change over time.\\
+
+Several established open-source VO and Visual SLAM systems were evaluated. DROID-SLAM \cite{teed2021droid} produced high-quality reconstructions on benchmark datasets but required a specific CUDA toolkit version incompatible with the project's CUDA 12.0 environment, and its dense bundle adjustment was prohibitively slow for the real-time-adjacent processing required by the web application pipeline. TartanVO \cite{wang2021tartanvo}, a learning-based approach, generalised poorly to dash-cam footage, likely because its training data (TartanAir) consists of synthetic indoor and outdoor scenes with very different visual characteristics to UK road footage. DeepV2D \cite{teed_deepv2d_2020} suffered from similar dependency conflicts and, like the others, operated as a monolithic system whose internal parameters were difficult to tune for the specific failure modes observed (e.g.\ drift during stops at traffic lights, erratic estimates when large vehicles fill the frame).\\
+
+Because the project only requires yaw-based turn detection rather than metrically accurate 3D reconstruction, a custom lightweight VO pipeline was developed instead. This offered full control over each processing stage, making it straightforward to diagnose and fix failure modes as they arose, an advantage that proved critical during iterative development.\\
+
+The pipeline operates frame-by-frame on a centre crop (75\%) of the road video. The crop removes the image periphery where radial lens distortion is strongest, avoiding the need for a full undistortion step that would add latency and introduce interpolation artefacts. For each frame, a Mask R-CNN (ResNet-50 FPN V2) instance segmentation model identifies dynamic objects (cars, pedestrians, cyclists, buses and trucks) and produces a binary mask. This masking step is essential because optical flow from moving vehicles would otherwise be interpreted as camera ego-motion, causing large errors in the estimated rotation. Early iterations without dynamic masking produced frequent false turn detections when vehicles overtook or braked ahead, as the dominant flow from these objects overwhelmed the static background signal.\\
+
+Features are detected only on the unmasked (static) regions using a grid-based bucketing strategy (Listing \ref{lst:vo-grid}), which divides the image into a $4 \times 6$ grid and runs \texttt{goodFeaturesToTrack} independently in each cell. Without bucketing, features clustered heavily in high-texture areas such as roadside hedges or building facades, leaving large portions of the frame, particularly the road surface, untracked. This caused pose estimates to be dominated by a small image region, making them sensitive to localised noise. Grid-based detection ensures even spatial coverage and significantly improved the stability of the essential matrix estimation.\\
+
+\begin{lstlisting}[
+    style=pythonstyle,
+    caption={Grid-based feature detection for spatially uniform keypoint distribution},
+    label={lst:vo-grid}
+]
+def detect_features(self, image, mask=None):
+    grid_rows, grid_cols = 4, 6
+    h, w = image.shape[:2]
+    cell_h, cell_w = h // grid_rows, w // grid_cols
+    all_kps = []
+    target_per_cell = self.feature_params['maxCorners'] // (grid_rows * grid_cols)
+    local_params = self.feature_params.copy()
+    local_params['maxCorners'] = target_per_cell
+
+    for r in range(grid_rows):
+        for c in range(grid_cols):
+            y0, y1 = r * cell_h, (r + 1) * cell_h
+            x0, x1 = c * cell_w, (c + 1) * cell_w
+            cell_img = image[y0:y1, x0:x1]
+            cell_mask = mask[y0:y1, x0:x1] if mask is not None else None
+            kps = cv2.goodFeaturesToTrack(cell_img, mask=cell_mask, **local_params)
+            if kps is not None:
+                kps[:, 0, 0] += x0
+                kps[:, 0, 1] += y0
+                all_kps.append(kps)
+    return np.vstack(all_kps) if all_kps else None
+\end{lstlisting}
+
+Features are tracked between consecutive frames using Lucas-Kanade optical flow. A forward-backward consistency check is applied: points are tracked forward to the current frame, then backward to the previous frame, and only matches with a re-projection error below 0.5 pixels are retained. This eliminates poorly tracked points that would otherwise introduce noise into the pose estimate, particularly important near the edges of the dynamic object mask, where partial occlusions cause ambiguous flow. The essential matrix is then estimated via RANSAC, and the relative rotation and translation are recovered using \texttt{cv2.recoverPose}. Frames with insufficient inliers (below 40\%) or physically implausible rotation (above $\sim$28\textdegree\ per frame) are rejected, as these typically indicate degenerate configurations such as pure forward motion or tracking failures.\\
+
+Raw pose estimates are accumulated and fused through a 12-state Kalman filter tracking position ($x, y, z$), orientation (roll, pitch, yaw) and their velocities. The Kalman filter serves two purposes: it smooths the noisy frame-to-frame VO estimates into a coherent trajectory, and it maintains a reasonable state estimate during periods where VO measurements are unreliable. To achieve the latter, the measurement noise covariance is adjusted dynamically based on tracking confidence. When the vehicle is moving and tracking is successful, standard noise is applied. When the vehicle is stationary (low optical flow), higher confidence is placed on the prediction to prevent drift from noisy near-zero estimates. When the segmentation mask covers most of the frame (a ``blind'' condition occurring in heavy traffic), the filter almost entirely trusts its own prediction, as there are insufficient static features to produce a meaningful VO measurement.\\
+
+Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetector} class. An early approach decomposed Euler angles from the accumulated rotation matrix, but this produced sign flips in long videos where the total rotation grew large, causing left turns to be misclassified as right turns and vice versa. Instead, yaw is now integrated directly from each frame's small relative rotation, where the Euler decomposition is always well-conditioned. A turn event is triggered under one of three conditions: (1) the accumulated yaw exceeds 30\textdegree\ and at least one frame exhibited sharp rotation ($>$0.6\textdegree/frame), distinguishing genuine intersection turns from gradual road curvature; (2) the accumulated yaw exceeds 80\textdegree\ regardless of sharpness, to capture long sweeping turns such as roundabout exits; or (3) the accumulated yaw exceeds 15\textdegree\ combined with a sudden spike ($>$8\textdegree\ in a single frame), catching aggressive manoeuvres. A straightness reset clears the accumulator if rotation remains below 0.1\textdegree/frame for 30 consecutive frames ($\sim$1 second), preventing slow drift from eventually triggering a false detection. A 60-frame cooldown after each detection prevents duplicate events from the same turn. Detected turns are classified as \texttt{LEFT} or \texttt{RIGHT} and fed into the Safety Monitor, which validates them against the driver's gaze history using the same 5-second look-back window and mirror-check rules as lane changes.
 
 \subsection{Face Analysis (FR1.4)}
 Facial landmark extraction was implemented using the InsightFace \cite{deng2019arcface} library, which was selected due to its robustness under varying lighting conditions and large face rotations. Google’s MediaPipe \cite{lugaresi2019mediapipe} was also tested, however it frequently failed to maintain landmark tracking when the face rotated too far, making it unsuitable for this application. Using the landmarks extracted by InsightFace, head pose angles were calculated using the PnP algorithm.\\
@@ -398,7 +441,7 @@ The web application allows users to upload synchronised road-facing and cabin-fa
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{analysis_submission.png}
+    \includegraphics[width=0.8\linewidth]{website_images/analysis_submission.png}
     \caption{Screenshot of the video submission page.}
     \label{fig:video_submission}
 \end{figure}
@@ -413,6 +456,46 @@ After analysis is complete, the application presents the detected results to the
     \caption{Web application design with sample video clip.}
     \label{fig:web_app_design}
 \end{figure}
+
+\subsection{Extensions Since Initial Development}
+Following the completion of the core pipeline described above, several extensions were developed to address Should-Have requirements, improve usability for real users, and harden the system for deployment on the university's shared infrastructure.
+
+\subsubsection{User Authentication and Account System (FR2.2)}
+The initial prototype operated without user accounts: anyone with the URL could upload videos and view all results. This was acceptable during development but inadequate for real-world use, where analysis results contain sensitive footage and users need to manage their own history. A user account system was therefore added, with registration, login, and per-user access control over uploaded videos and results.\\
+
+Authentication is handled via JSON Web Tokens (JWT) with a 7-day expiry, chosen over session-based authentication because the stateless nature of JWTs avoids the need for server-side session storage and simplifies the deployment of multiple backend instances. Tokens are generated by the FastAPI backend using \texttt{python-jose} and verified on each protected request. Passwords are hashed using bcrypt via \texttt{passlib}, selected for its resistance to brute-force attacks through configurable work factors. An optional email verification flow was also implemented. This account system was a prerequisite for the per-user calibration and admin features described below, as both require associating data with specific users.
+
+\subsubsection{Per-User Gaze Calibration (FR3.2)}
+The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person's data frequently misclassified another's gaze directions. For example, one tester's ``looking ahead'' yaw angle fell within the region the default model classified as ``left mirror'', because their camera was mounted at a different angle. Since the gaze classifier is the foundation of all safety judgements, poor classification accuracy renders the entire system unreliable. This motivated the development of a per-user calibration system as a high-priority extension.\\
+
+Users create calibration profiles through the web interface, where they mark time segments in their previously analysed videos and label them with the corresponding gaze direction (e.g.\ ``Left Mirror'', ``Looking Ahead''). The system extracts the stored head pose angles (yaw, pitch, roll) from the existing analysis results for the marked segments, avoiding the need to re-run face detection. Once sufficient samples are collected (a minimum of 3 per mandatory class: Left Mirror, Right Mirror, Looking Ahead; with Rear Mirror optional since not all vehicles have a visible interior rear-view mirror), the user triggers model training, which fits a new PCA transformer and SVM classifier on their personal data. Diagnostic plots (head pose scatter, PCA projection, and SVM decision boundary) are generated and displayed so the user can visually verify that the class regions correspond to their actual gaze directions before using the model.\\
+
+A key design challenge was enabling re-analysis with a new calibration without re-running the full video pipeline, which takes several minutes per video and requires GPU resources. Since the head pose angles (yaw, pitch, roll) are already stored per-frame in the analysis results, a lightweight \texttt{recalibrate\_headless} script was developed that loads the user's PCA and SVM models, batch-classifies all stored frames, and replays the safety monitor logic against the updated gaze labels. This completes in seconds on CPU alone, making it practical for users to iterate on their calibration, adjusting training samples and immediately seeing how the changes affect their safety results.\\
+
+The calibration UI includes an interactive point editor where users can review, add, or remove individual training samples, which was found to be important because automated segment extraction occasionally includes frames where the driver is mid-transition between gaze directions. The interface also supports ``Save As'' (duplicating a calibration to experiment with different training sets without losing the original) and renaming.
+
+\subsubsection{Privacy: Non-Driver Face Blurring (FR3.3)}
+The driver-facing camera inevitably captures passengers and, depending on the camera's field of view, potentially pedestrians or other bystanders visible through windows. Distributing or displaying this footage without consent raises ethical and legal concerns, particularly under GDPR. Since the system's analysis only requires the driver's face, all other faces can be obscured without any loss of functionality.\\
+
+During analysis, the \texttt{FaceAnalyzer} identifies the driver using a heuristic: in landscape-oriented footage (the typical dash-cam configuration), the driver is the largest face on the left side of the frame (corresponding to the right-hand-drive UK vehicles used in testing). In portrait orientation, as may occur with a phone-based camera, the largest face overall is selected, as spatial position is less reliable. All other detected faces are blurred using a Gaussian kernel sized proportionally to the face bounding box, ensuring sufficient obscuration regardless of distance from the camera. The blurred frames are written as the output video, so the original unblurred footage is never stored on the server. Gaussian blurring was chosen over pixelation because it is less visually jarring while still being irreversible, and over full-frame blurring because retaining the driver's face allows manual verification of gaze classifications during evaluation.
+
+\subsubsection{Adaptive Video Quality and Transcoding}
+During user testing on mobile devices, it was observed that loading the full-resolution output videos (1920$\times$1080) over the university's Wi-Fi caused significant buffering, particularly when both road and driver-facing streams needed to be loaded simultaneously. Since two concurrent video streams double the bandwidth requirement compared to a single-video application, adaptive quality selection was particularly important. To address this, the system now generates multiple quality variants of both output videos after analysis completes. FFmpeg (via \texttt{imageio-ffmpeg}, chosen over direct subprocess calls for cross-platform reliability) transcodes the outputs into 720p and 480p variants in addition to the original resolution. Upscaling is avoided: variants are only generated when the source resolution exceeds the target. All variants use H.264 encoding with web-compatible settings (\texttt{libx264}, \texttt{yuv420p} pixel format, \texttt{faststart} flag for progressive loading). The frontend estimates the user's effective bandwidth and automatically selects an appropriate resolution, with the option to manually override.
+
+\subsubsection{User Error Reporting and Re-Analysis}
+Evaluating the accuracy of the system's safety judgements requires ground truth, which is difficult to obtain at scale. Rather than relying solely on the author's own labelling, a user error reporting mechanism was integrated into the results page. When viewing an analysis, users can flag events they believe are incorrect (either false positives where events are flagged as unsafe that were actually safe, or false negatives where unsafe events were missed), with the report automatically capturing the current video timestamp for context. These reports are stored in the database and surfaced to administrators, providing a continuous stream of labelled feedback that can inform future improvements to detection thresholds and classification models. The system also supports re-analysis of previously uploaded videos with an updated calibration profile, without requiring the user to re-upload footage, since the original video files are retained on the server.
+
+\subsubsection{Admin Dashboard}
+As the system was deployed for user testing with multiple participants, it became necessary to monitor usage, review reported errors, and manage jobs centrally. An administrator dashboard was developed, restricted to users with an admin role (enforced via a claim in the JWT token). The dashboard provides per-user safety event analytics (aggregated counts of safe and unsafe events across all of a user's analyses), job management capabilities including reassignment between users and batch monitoring for SLURM-submitted jobs, and access to user-submitted error reports displayed inline alongside the corresponding analysis results and video playback. Administrators can also download 15-second video clips centred around specific events, which was found to be useful for quickly reviewing reported errors without loading the full video.
+
+\subsubsection{Deployment and Infrastructure Hardening}
+Several practical issues emerged when deploying the system on the university's DCS shared servers for multi-user testing, requiring targeted fixes across the pipeline.\\
+
+Dash-cam systems typically use loop recording, producing many short video files rather than one long file per session. The initial upload endpoint accepted only single files, forcing users to manually concatenate their footage before uploading. To resolve this, a chunked multi-part upload protocol was implemented: files are uploaded in segments and spliced server-side using FFmpeg's concat demuxer, handling the common case of multiple sequential recordings transparently.\\
+
+For computationally intensive analyses, particularly those involving long videos or multiple concurrent users, the server's single GPU became a bottleneck. SLURM cluster integration was added via SSH tunnelling (\texttt{paramiko}), allowing analysis and recalibration jobs to be submitted to the university's \texttt{kudu} GPU cluster. The backend manages job submission, monitors SLURM job status, and retrieves results from the shared filesystem, abstracting the cluster interaction entirely from the user.\\
+
+Error handling was hardened across the upload, synchronisation and analysis pipeline to gracefully handle oversized files, network interruptions, malformed video codecs and out-of-memory conditions on the GPU. A ``Getting Started'' guide page was added to the frontend to help new users understand the required dual-camera setup and upload process, reducing support requests during the evaluation phase.
 
 \section{Evaluation Methodology}
 Explain the process(es) that I have gone through in order to evaluate the project. Justify that they are objective (or as much as I can make them), and help prove the technical contribution of the project.\\
@@ -580,7 +663,7 @@ Development will be carried out using an Agile methodology, tracked with a Kanba
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{Kanban_board_v1.png}
+    \includegraphics[width=0.8\linewidth]{project_management_images/Kanban_board_v1.png}
     \caption{Example kanban board with current project tasks.}
     \label{fig:kanban}
 \end{figure}
@@ -593,14 +676,14 @@ The timeline for term 2 is likely to be less accurate, but the general plan is t
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\linewidth]{Timeline1_V2_Key.png}
+    \includegraphics[width=1\linewidth]{project_management_images/Timeline1_V2_Key.png}
     \caption{Timeline up to Progress Report.}
     \label{fig:term1_timeline}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\linewidth]{Timeline2_V2.png}
+    \includegraphics[width=0.6\linewidth]{project_management_images/Timeline2_V2.png}
     \caption{Timeline from MVP to Viva.}
     \label{fig:term2_timeline}
 \end{figure}
