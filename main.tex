@@ -1,0 +1,631 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+% \usepackage{biblatex}
+% \addbibresource{bibliography.bib}
+\usepackage{natbib}
+\usepackage{multibib}
+\newcites{spec}{Project Specification References} % Creates a new citation command \citespecspec
+\bibliographystyle{unsrt}
+\bibliographystylespec{unsrt}
+\usepackage{wrapfig}
+\usepackage{subfigure}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, shapes.arrows, positioning, fit, backgrounds, arrows.meta, calc}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray}\itshape,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    captionpos=b
+}
+% \AtEveryBibitem{%
+%   \clearfield{year}%
+% }
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+
+\title{CS310 Final Report:\\ Application for Identifying Driving Mistakes Using Computer Vision}
+\author{Artemiy Brukhno}
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Abstract}
+Learning to drive has become a necessary process for the majority of people in the modern world. According to the Driver and Vehicle Standards Agency (DVSA), it takes people "on average 45 hours of driving lessons with a driving instructor plus 22 hours of private practice", and "people who combine their driving lessons with private practice are 50\% more likely to pass the driving test". Driving lessons aim to 
+\begin{enumerate}
+    \item teach the student \textit{how to drive} the vehicle (pedals, steering etc.), and 
+    \item teach them how to \textit{behave} in order to drive \textit{safely} (checking mirrors, assessing hazards on and around the road, etc.).  
+\end{enumerate}
+In this project we focus on the second goal. \\
+
+It is often difficult to track which behavioural mistakes are most common during driving lessons and to identify patterns and specific areas for improvement from session to session. This is especially true during private practice with family and friends who do not have teaching experience - and may have subjective biases. To this end, the proposed mobile application aims to objectively identify faults and track progress through consecutive driving sessions. The application will use computer vision, including deep learning, to analyse synchronised footage from a cabin-facing camera (e.g. mobile phone front camera) and an external dashcam in order to assess the driver's behaviour corresponding to the vehicle's movement and road environment. After each session, the app will provide feedback on the driver's actions and habits, helping them by identifying mistakes, tracking their progress and guiding improvement. The application will allow users to reduce their tendency to make common mistakes faster, decreasing the number of driving lessons needed for learning to drive safely and passing the test.
+
+\section{Introduction}
+\begin{comment}
+The report should be a self-contained document, so you should provide an introduction to the problem or area the work is addressing. You may wish to include some comments on your motivation for this such as the importance/timeliness of the investigation.
+
+You should include a copy of the original Project Specification as an appendix and can refer to this when appropriate.
+
+Make sure the objectives of your project are clear and clarify why this is a significant undertaking of suitable level for a third year project in your subject.
+\end{comment}
+
+% ... TODO
+Driving is an essential task for the majority of people in the modern world. Whether for work or leisure, almost everyone in the UK either drives a vehicle or must interact with drivers in one way or another. However, the concerning reality is that driving remains dangerous for both the occupants of the vehicle and those around it. In the UK, around five people are killed and 80 are injured every day due to driving-related incidents \cite{govuk_casualties_2024}. The vast majority of driving accidents occur due to driver error - most often stemming not from a fundamental inability to operate the vehicle, but from behavioural mistakes, namely lack of awareness \cite{road_accident_data, dia_collisions}.\\
+
+Driver Monitoring Systems (DMS) are a technology aimed at tracking driver behaviour using a variety of sensors, including in-cabin video footage. Initially a premium feature, they are now designated as an essential safety component in modern vehicles \cite{eurlex_2019_2144}. Most current DMS’ are proprietary - either made by traditional car companies (Toyota \cite{toyota_tmate}, JLR \cite{jlr_dms_news}) or by companies selling hardware/software packages (SmartEye \cite{smarteye_ai}, Nauto \cite{nauto_platform}). While some open-source projects, such as OpenPilot \cite{commaai_openpilot} and ZenRoad \cite{zenroad_app}, also exist, both proprietary and open-source solutions focus on two distinct areas: driver distraction, using in-cabin footage; or the car’s movement, using dash-cam footage. However, no system combines the two sources of data.\\
+
+The central idea for this project is that a truly comprehensive understanding of driver behaviour cannot be determined solely from observing either the driver or the car’s movement in isolation. Instead, our objective is to implement a multi-modal approach, synchronising the driver’s state with the external road environment and the movement of the vehicle. As such, the aim of this project is to create a system capable of identifying driving mistakes, namely failure to check mirrors before manoeuvres, by processing synchronised dash-cam footage and in-cabin footage. The project will leverage computer vision techniques, such as head pose estimation from in-cabin footage to establish driver gaze direction, as well as neural networks or optical flow from dash-cam footage to identify car manoeuvres, such as lane changes and turns.\\
+
+A system capable of objectively identifying driver errors has numerous potential applications, such as:
+\begin{itemize}
+    \item A feedback tool for learner drivers.
+    \item Improving usage-based car insurance analytics.
+    \item In-car accident prevention/alert systems.
+\end{itemize}
+
+In order to establish a clear goal and evaluation criteria, this project will focus on the learner driver use-case. The minimum viable product (MVP) is a web application for post-hoc analysis, processing synchronised dash-cam and in-cabin footage to identify and timestamp specific driving errors. The application aims to improve the quality of driving sessions with friends and family, who are less likely to spot subtle mistakes like mirror-checks \cite{2nd2nonedrivingschoolLearningDrive}. The system's performance will be evaluated by addressing the research question: `Can the system identify driving errors with greater accuracy than a non-professional supervisor?' To this end, a user study will be conducted to quantitatively compare the application's error-detection performance against that of people who are not formally trained as driving instructors.
+\newpage
+
+\section{Background}
+\begin{comment}
+You will have done a good deal of finding out about the project area by reading articles, books, websites, technical manuals and so on. You may have tested other related systems to provide ideas. You need to show that you have a good understanding of the background area and how your project fits into the existing landscape.
+
+There may be no room for a full literature review in the Progress Report, but you should give an indication of how you have gained background information. It would be appropriate to mention just a few citations which you view as key sources for your project. References should be provided as a formal reference list at the end of your report. Check if your supervisor has a preferred format. If not, you can choose your own style, but be consistent.
+\end{comment}
+
+This section reviews the key computer vision techniques used in the project, covering lane detection, temporal tracking, gaze estimation and visual odometry as the three core components of the proposed system.
+
+\subsection{Lane Detection}
+Lane detection is a well-researched topic within Computer Vision (CV). It is an essential tool for many modern vehicle features, from lane assist to full self-driving systems. Lane detection aims to detect lane lines or lane areas by either camera or lidar \cite{tang_review_2021}. This project focuses on camera-based perception, due to the cost and scope constraints of using lidar. Classical lane detection methods involved image processing techniques such as Sobel \cite{sobel_1968} and Canny \cite{canny_1986} filters, followed by Hough transform \cite{duda_1972} and curve fitting. However, these methods suffered from poor performance and consistency in varying lighting conditions and faded or obscured lane lines \cite{hillel_2014}. Since the project aims to work on urban roads in different lighting and weather conditions, these methods are not suitable. \\
+
+The modern development of lane detection systems focuses on deep learning to create more robust and adaptable models, specifically using Convolutional Neural Networks (CNNs). CNNs are an advancement of traditional Neural Networks (NNs), with Convolutional and Pooling layers added to the beginning of the architecture \cite{lecun_1998}, generalising NNs to work on images (Figure \ref{fig:cnn_vis}). These layers use convolutions \cite{goodfellow_2016} to extract relevant features from the input, which are then flattened and passed to traditional, fully connected layers for classification. \\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{research_images/cnn_explanation.png}
+    \caption{Visualisation of CNN architecture. Source: \cite{mathworks_cnn}.}
+    \label{fig:cnn_vis}
+\end{figure}
+
+Existing deep learning-based lane detection methods can be grouped into two categories: two-step and one-step methods \cite{tang_review_2021}. Two-step methods first perform feature extraction using heuristic recognition-based methods and deep learning, followed by post-processing with clustering and fitting. An example of this is LaneNet \cite{wang_lanenet_2018}, which generates a binary segmentation map and per-pixel embeddings, requiring a subsequent clustering step to distinguish individual lane instances. On the other hand, one-step methods can get the detection and clustering results directly from the image. Inspired by single-stage object detectors such as YOLO \cite{redmon_you_2016}, architectures like PolyLaneNet \cite{tabelini_polylanenet_2020} obtain lane curve parameters directly, bypassing the need for heuristic post-processing.\\
+
+Table \ref{tab:lane_model_comparison} details the performance results of several state-of-the-art models on the two primary benchmarks: TuSimple \cite{TuSimple2017} and CULane \cite{CULane2018}. The data for TuSimple is limited to US highways and intersections, while CULane features a range of environments, including urban streets and rural roads, and was collected under more challenging weather conditions such as rain and fog. For this reason, the CULane benchmark is the more relevant one to our project. 
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l l c c}
+    \hline
+    \textbf{Model} & \textbf{Backbone} & \textbf{Architecture} & \textbf{TuSimple (Acc \%)} & \textbf{CULane (F1 \%)} \\
+    \hline
+    SCNN~\cite{pan2018spatial} & VGG-16 & Two-step & 96.53 & 71.60 \\
+    LaneNet~\cite{wang_lanenet_2018} & ENet/VGG & Two-step & 96.38 & 51.99 \\
+    UFLD~\cite{qin2020ultra} & ResNet-18 & One-step & 95.82 & 68.40 \\
+    PolyLaneNet~\cite{tabelini_polylanenet_2020} & EfficientNet-B0 & One-step & 93.36 & 61.79 \\
+    LaneATT~\cite{tabelini2021keep} & ResNet-34 & One-step & 95.63 & 76.68 \\
+    CondLaneNet~\cite{liu2021condlanenet} & ResNet-101 & One-step & 96.54 & 77.85 \\
+    CLRNet~\cite{zheng2022clrnet} & ResNet-101 & One-step & 97.62 & 79.73 \\
+    \hline
+    \end{tabular}
+    
+    \caption{Performance comparison of modern lane detection models.}
+    \label{tab:lane_model_comparison}
+\end{table}
+
+
+In order to establish if these models would generalise to British streets and consumer hardware (dash-cams), they were also qualitatively tested on the author's self-collected driving dataset (Figure \ref{fig:drive_examples}). The LaneATT model was found to perform the most accurately and reliably. A quantitative benchmark was infeasible for the project, as this would require extensive manual labelling, taking time away from feature development. 
+
+\begin{figure}[H]
+    \centering
+    \subfigure[]{\includegraphics[width=0.329\textwidth]{driving_images/poly_drive.png}}
+    \subfigure[]{\includegraphics[width=0.329\textwidth]{driving_images/ufld_drive.png}} 
+    \subfigure[]{\includegraphics[width=0.329\textwidth]{driving_images/laneatt_drive.png}} 
+    \caption{Examples of model performance on a British road: (a) PolyLaneNet. (b) UFLD. (c) LaneATT.}
+    \label{fig:drive_examples}
+\end{figure}
+
+\subsection{Temporal Tracking}
+Lane detection is a per-image process, meaning that for each image a new set of lanes is detected. This means that lane information is forgotten on each new frame, which is not useful for the constraints of the project. Lane tracking aims to store, remember or predict the position and movement of lanes in time-series driving data. \\
+
+State-of-the-art research on this subject focuses on directly training NNs, such as Transformers, with video data as input (rather than images). Models such as RVLD (Recursive Video Lane Detection) \cite{jin_recursive_2023}, which propagates the state of the current frame to subsequent frames, show high-performing results. Another modern approach, used by YOLOP \cite{wu_yolop_2022} and Openpilot \cite{chen_level_2022}, is to train an all-in-one model, which learns lane detection and tracking as well as movement/position estimation, road surface segmentation and object detection all at once. While such methods are currently at the academic frontier, the industry standard remains focused on more classical methods, such as the Kalman Filter. Recent reviews \cite{yurtsever2020survey} confirm that for safety-critical ADAS, separating `perception' (deep learning) from `state estimation' (Kalman filtering) is preferred due to its explainability, whereas the former methods act as a black box once trained. For this reason, the Kalman Filter approach was chosen for the project. \\
+
+The Kalman Filter is a temporal method which works in two phases: prediction and update (Figure \ref{fig:kalman_vis}). The filter stores the last known location and velocity of a lane in a ‘state vector’. It uses the current velocity to predict where the lane should be in the next frame. Next, it observes the actual detection from the model to update this prediction. If a lane is obscured or faded, the filter uses the prediction to `remember' the lane. This makes the system robust to per-frame fluctuations and lighting anomalies, ensuring consistency even when detections are missed.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{research_images/kalman_vis.png}
+    \caption{Visualisation of Kalman Filter for storing vehicle state. Source: \cite{MachineLearningTV2021Jun}.}
+    \label{fig:kalman_vis}
+\end{figure}
+
+\subsection{Gaze Estimation}
+
+Gaze estimation is a process used to determine the direction of a person's head. This is achieved through face analysis, which stores the facial orientation and pose. Modern systems, such as Drive Sense \cite{salma_drive_2024}, typically use landmark detectors to extract key points (mouth, eyes, nose) from an image. To establish the angle of the 2D points, the Perspective-n-Point (PnP) algorithm is commonly used. PnP calculates the matrix required to transform a `canonical' 3D face shape to the detected location of the tracked points (Figure \ref{fig:pnpvis}). The matrix consists of the $3\times3$ rotation matrix $R$, followed by a $3\times1$ translation vector $t$, allowing the angles (yaw, pitch, roll) to be calculated.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{research_images/pnp.png}
+    \caption{Visualisation of the PnP problem. Source: \cite{opencv_pnp}.}
+    \label{fig:pnpvis}
+\end{figure}
+
+Once angles are extracted, they must be classified into discrete gaze directions (e.g. mirrors or forward). Dimensionality reduction techniques, such as Principal Component Analysis (PCA) \cite{jolliffe2016principal}, are often used to transform the data, for example, from three angles to two, to make clusters of points corresponding to each gaze classification more well-defined.\\
+
+For the final classification step, a choice exists between unsupervised clustering (e.g. K-Means \cite{macqueen1967some}) and supervised learning (e.g. Support Vector Machines or SVM \cite{cortes1995support}). While K-Means can show the quality of clusters without labels, it often struggles with outliers or classes that occupy narrow areas of the feature space. SVM is preferred for safety-critical applications due to its robustness with small amounts of training data and its explainability. Unlike NNs, which can be a black box, SVMs offer high reliability and consistency, which is desirable when the situation allows for simpler models.
+
+\subsection{Motion Estimation}
+\begin{comment}Describe the research conducted into pose/motion estimation techniques, including Visual Odometry and SLAM, and why VO was chosen (we only need local/relative motion, rather than global for our use-case/project and task description). Describe existing solutions and how they work - key-point matching, orb selectors, essential matrix etc. 
+
+FOR TESTING/EVALUATION
+Create some sort of ground truth benchmark - using GPS from car??
+Then compare results from VO model with/without various features to show addition helps.
+\end{comment}
+
+Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is used to detect left and right turns (FR3.1.1). Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM). \\
+
+VO analyses sequential camera frames in order to estimate the local motion incrementally between consecutive frames. This is usually done by detecting and tracking keypoints between frames, and using sparse Optical Flow to calculate how the motion of these keypoints implies that the camera has moved between frames. Since this project is limited to just one dash-cam, the variant of VO that we use is monocular. This naturally faces scale ambiguity, meaning it can only obtain relative motion estimates, and the motion estimate is likely to drift over time. \\
+
+vSLAM, by contrast, is a technique used for constructing a persistent map of the environment that the camera is in. vSLAM algorithms can be broadly classified into sparse and semi-dense methods. Sparse methods match feature points between images, similar to VO, using algorithms such as ORB-SLAM, whereas semi-dense methods operate on regions of strong image intensity gradients, with algorithms such as LSD-SLAM. SVO is another notable method, which takes a semi-direct approach by combining sparse feature matching with direct image alignment. While vSLAM algorithms can identify loop-closures making them robust to motion drift accumulation, they are considerably more computationally expensive than VO and provide more environmental information than is necessary for this project. \\
+
+Given these trade-offs, VO was selected as sufficient for identifying manoeuvres at a local scale without the overhead of full environment mapping. One approach for classifying manoeuvres from VO output, introduced by Zekany et al., involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW). However, as noted in recent reviews \cite{yurtsever2020survey}, separating perception from state estimation is preferred in safety-critical applications due to its explainability, and simpler rule-based methods are favoured where the task allows for it. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a threshold-based approach to yaw accumulation is adopted instead, where each detection decision can be directly traced to interpretable thresholds rather than the black-box nature of deep learning trajectory matching methods such as DTW.
+
+\section{Design and Development}
+\begin{comment}
+Provide an overview of your work so far. This should include:
+
+    - Technical Content - what work have you done? You should provide a meaningful discussion of the significant aspects rather than simply saying "I did x, y and z". This is necessary to show you've actually done it and in order for your assessor to award marks according to the assessment criteria.
+    - Progress - review your progress against the original timetable. If unexpected problems or delays have occurred, how have you dealt with the problem?
+\end{comment}
+
+% ...
+The project was implemented using a modular architecture, separating code into distinct sub-modules (Figure \ref{fig:folders}), corresponding to the Must-Have objectives: Lane Detection/Tracking (FR1.2/3), Gaze Estimation (FR1.4) and Web Application (FR2). This left room to extend the project with features, specifically those detailed in the Should-Have requirements, and to improve individual features further without affecting the rest of the system. While this did add some complexity with an additional necessary module to compile the outputs into the final analysis (`combined analysis’), the benefits to maintainability and extendibility were decided to outweigh this.\\
+
+The \texttt{combined\_analysis} module runs each module separately, and aggregates the results from each in order to assess the safety of manoeuvres. It does this by maintaining a \texttt{Safety Monitor} class, which keeps an event buffer, which is cross-referenced when a manoeuvre is detected, determining the safety classification that is given.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{project_management_images/folder_structure.png}
+    \caption{Folder structure showcasing the modular structure of the project.}
+    \label{fig:folders}
+\end{figure}
+
+\subsection{Resources and Tools}
+In line with modern ML approaches, the project utilises pre-existing models and standard tools to perform the analysis. Python, thanks to its robust ecosystem of data processing libraries, is the language chosen for most state-of-the-art ML research, so we use it in this project. While there are two prominent Python libraries for ML and NN development, PyTorch \cite{paszke2019pytorch} and TensorFlow \cite{abadi2016tensorflow}, we are only able to use models implemented in the PyTorch library. This is because it was discovered that the available development GPU (RTX 5070Ti) operates using a new CUDA compatibility protocol, `Compute Capability 12.0’, which is not yet supported by TensorFlow.\\
+
+\subsection{Lane Change Detection (FR1.2 \& FR1.3)}
+Lane detection allows us to represent the position of the car relative to the road, which in turn informs us of the vehicle’s movement, and specifically any manoeuvres that it performs. While the model we chose to use in the end was LaneATT, the process to come to this conclusion came with several challenges.\\
+
+One problem was that the datasets that are used for training models (TuSimple, CULane) contain only straight or slightly curved road examples. Because of this, roundabouts and roads with significant curvature fail to be detected. Additionally, there do not exist any specific datasets or research papers that investigate the specific case of driving on roundabouts. As such, roundabouts remain a limitation of the project at this stage.\\
+
+Another limitation identified was the generalisability of many models to consumer dash-cam hardware, with several models showing poor performance on the self-collected dataset (Figure \ref{fig:drive_examples}). A possible explanation is over-fitting to the camera parameters used during dataset collection. When tested on footage from cameras with different fields of view, warped lenses or compression artefacts, detection accuracy degraded significantly. The attention mechanism used by the LaneATT model may explain its increased robustness under these conditions, although this topic is not discussed in the literature.\\
+
+Lane tracking was implemented by storing lane information in `LaneTrack’ objects, which use a Kalman filter to store and update their state. An overall `LaneTracker’ object is responsible for matching previously stored lanes to newly detected lanes. Initially, the Hungarian algorithm \cite{kuhn1955hungarian} was used for this matching process, however it always produces a complete matching even when distances between lanes are very large. This resulted in scenarios where the system matched lanes across the entire image, if a lane on the left side of the image stopped being tracked, but a new lane was detected on the right side. \\
+
+Instead, we switched to a ‘closest first’ approach with a gate-based cut-off (Listing \ref{lst:lane-tracker-gated}). The first-closest pairs are matched to each other, and if a pair’s distance exceeds the cut-off point, they are not matched and the detected lane is stored as a new lane rather than updating an existing one, while the stored lane is counted as a miss. This change eliminated such scenarios and made the tracking work more reliably in practice (Figure \ref{fig:cars_lanes}).\\
+
+\begin{lstlisting}[
+    style=pythonstyle,
+    caption={Closest-first gated data association for lane tracking (key logic)},
+    label={lst:lane-tracker-gated}
+]
+class LaneTracker:
+    def update(self, detections):
+        # Predict existing tracks
+        predictions = [t.predict() for t in self.tracks]
+
+        # If no detections: count misses, prune stale tracks, then check lane-cross events
+        if not detections:
+            self._prune_tracks()
+            self.cross_events = [
+                {"track_id": t.id, "direction": d}
+                for t in self.tracks
+                if (d := t.check_lane_cross())
+            ]
+            return
+
+        # Distance-based cost between predicted and detected lane polynomials
+        C = self._calculate_cost_matrix(predictions, detections)
+
+        # Closest-first matching with gating
+        matches = []
+        Cg = C.copy()
+        while Cg.size > 0:
+            r, c = np.unravel_index(np.argmin(Cg), Cg.shape)
+            if C[r, c] > 300:  # gate threshold
+                break
+            matches.append((r, c))
+            Cg[r, :] = np.inf
+            Cg[:, c] = np.inf
+
+        matched = set()
+        for r, c in matches:
+            self.tracks[r].update(detections[c])
+            matched.add(c)
+
+        # Unmatched detections initialise new tracks; unmatched tracks accumulate misses
+        self._create_new_tracks([detections[i] for i in range(len(detections)) if i not in matched])
+        self._prune_tracks()
+\end{lstlisting}
+
+
+\begin{figure}[H]
+    \centering
+    \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/car_obstruction_marsland.png}}
+    \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/car_obstruction_2.png}} 
+    \caption{Example frames of cars obstructing lane, with lane remaining tracked.}
+    \label{fig:cars_lanes}
+\end{figure}
+
+The lane tracker stores the position of each lane relative to the image centre. Lane change detection is performed by checking whether a tracked lane crosses the centre of the frame, with lane velocity used to determine direction and reduce false positives caused by old or faded lane markings. Detected lane change events are stored in the \texttt{Safety Monitor} class' buffer.
+
+\subsection{Turn Detection (FR3.1.1)}
+Describe the work done in developing the visual odometry process, going from trying open-source solutions such as DROID-Slam, TartanVO and DeepV2D, to creating my own VO process, since this was easier to debug and adjust to my needs. Show results of iterations of VO via graphs and describe how and why each iteration improved the output.
+
+\subsection{Face Analysis (FR1.4)}
+Facial landmark extraction was implemented using the InsightFace \cite{deng2019arcface} library, which was selected due to its robustness under varying lighting conditions and large face rotations. Google’s MediaPipe \cite{lugaresi2019mediapipe} was also tested, however it frequently failed to maintain landmark tracking when the face rotated too far, making it unsuitable for this application. Using the landmarks extracted by InsightFace, head pose angles were calculated using the PnP algorithm.\\
+
+To classify discrete gaze directions, a sample video clip containing all required face directions was analysed (Figure \ref{fig:yawpitchroll_1}a). The yaw angle provided the most useful information for determining gaze direction, while pitch was found to be correlated with yaw due to the camera perspective. The estimated direction is visualised in Figure \ref{fig:gaze_examples} with a line coming from the nose.\\
+
+
+\begin{figure}[H]
+    \centering
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/head_angles_graph.png}}
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/pca_yaw_pitch_roll.png}} 
+    \caption{(a) Yaw, Pitch, Roll from example video clip. (b) PCA transformation from 3D to 2D.}
+    \label{fig:yawpitchroll_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{driving_images/left_mirror.png}}
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{driving_images/looking_forward.png}} 
+    \subfigure[]{\includegraphics[width=0.32\textwidth]{driving_images/right_mirror.png}} 
+    \caption{Angle estimations visualised: (a) Left mirror. (b) Looking ahead. (c) Right mirror.}
+    \label{fig:gaze_examples}
+\end{figure}
+
+PCA was applied to transform the angle data into a lower-dimensional space (Figure \ref{fig:yawpitchroll_1}b), resulting in more well-defined groupings of gaze directions. Initial experiments using K-Means clustering showed poor performance for outlying and ambiguous points, with several samples from the looking ahead and left mirror classes incorrectly grouped as rear mirror (Figure \ref{fig:yawpitchroll_2}a). In practice, the region corresponding to rear mirror checks occupies a much narrower area of the feature space than the other classes. For this reason, the data was manually labelled and an SVM classifier was trained instead, resulting in significantly more reliable classification (Figure \ref{fig:yawpitchroll_2}b).
+
+\begin{figure}[H]
+    \centering
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/kmeans_clusters.png}} 
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/svm_classification.png}} 
+    \caption{(a) KMeans clustering results. (b) SVM classification results.}
+    \label{fig:yawpitchroll_2}
+\end{figure}
+
+The gaze classifier was then integrated into the existing system. For each frame, facial landmarks and head pose angles are extracted, transformed using the PCA model, and classified into a gaze direction using the trained SVM. These observations are stored in the Safety Monitor buffer for use during mistake identification.
+
+\subsection{Mistake Identification (FR1.5)}
+Based on the currently available data, the system is able to identify the Must-Have mistake of failing to check mirrors prior to lane changes. For an objective measure, the driver must have checked the corresponding mirror within 5 seconds of a lane change. A simple rule-based heuristic is used, where the system checks whether a corresponding mirror check is stored in the buffer when a lane change is detected (Figure \ref{fig:safe_lane_change}). A safety score is then assigned: safe if checked, and dangerous otherwise. This approach works well for this simple mistake identification measure, while more complex heuristics will be required for the should-have objectives.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{driving_images/lanes+face.png}
+    \caption{Safe lane change with log showing right mirror was checked 3 seconds before the merge.}
+    \label{fig:safe_lane_change}
+\end{figure}
+
+\subsection{Web Application (FR2)}
+The final `Must-Have' objective is the web application. The application should allow the user to upload their footage, which is analysed and the mistakes are presented to them on a clear display with the ability to play back their videos and observe the results of the analysis. 
+
+
+
+\subsubsection{Overall System \& Backend Design}
+The application is designed as a Client-Server-Worker system, employed to handle the heavy video processing requirements while keeping the UI smooth and responsive. It does this by maintaining a Python-based FastAPI server, which accepts requests from the React-based web app. The server offloads the individual analysis work to sub-processes, which save the results on a centralised drive, accessible by the server. These results can then be sent back to the web interface for viewing (Figure \ref{fig:architecture}).\\ 
+
+\begin{figure}[H]
+    \centering
+    % TIKZ DIAGRAM START
+    \begin{tikzpicture}[
+        node distance=1.5cm and 1cm,
+        font=\sffamily\footnotesize,
+        % Define styles for the nodes
+        process/.style={rectangle, draw=black, fill=blue!10, thick, minimum width=2cm, minimum height=0.8cm, rounded corners, align=center},
+        user/.style={circle, draw=black, fill=orange!20, thick, minimum size=1cm, align=center},
+        storage/.style={cylinder, shape border rotate=90, draw=black, fill=green!10, thick, aspect=0.25, minimum width=1.5cm, minimum height=1.2cm, align=center},
+        group/.style={rectangle, draw=gray, thick, dashed, inner sep=8pt, rounded corners, fill=gray!5},
+        myarrow/.style={->, >=Stealth, thick, shorten >=2pt, shorten <=2pt},
+        label text/.style={midway, fill=white, font=\scriptsize\itshape, text=black, inner sep=1pt}
+    ]
+
+        % --- Nodes ---
+        \node[user] (user) {User};
+        \node[process, right=of user] (ui) {Web Interface};
+
+        \node[process, right=of ui] (api) {API Server};
+        \node[storage, below=of api] (db) {SQLite\\Database};
+        \node[process, right=of api] (worker) {Background\\Worker};
+
+        % Adjusted positioning slightly for better symmetry
+        \node[process, above right=0.5cm and 1.5cm of worker] (lanes) {Lane\\Detection};
+        \node[process, below right=0.5cm and 1.5cm of worker] (face) {Face\\Analysis};
+        \node[process, right=3cm of worker] (report) {Safety Report};
+
+        % --- Groups ---
+        \begin{scope}[on background layer]
+            \node[group, fit=(user) (ui), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:Frontend}] (frontend) {};
+            \node[group, fit=(api) (worker) (db), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:Backend}] (backend) {};
+            \node[group, fit=(lanes) (face) (report), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:AI Engine}] (ai) {};
+        \end{scope}
+
+        % --- Edges ---
+        \draw[myarrow] (user) -- (ui);
+        \draw[myarrow] (ui) to[bend left=45] (user);
+
+        \draw[myarrow] (ui) -- (api);
+        \draw[myarrow] (api) -- (ui);
+        \draw[myarrow] (api) -- (worker);
+        \draw[myarrow] (api) -- (db);
+        \draw[myarrow] (db) -- (api);
+
+        % 1. Worker to AI tasks: Changed from |- to straight lines (--)
+        \draw[myarrow] (worker) -- (lanes);
+        \draw[myarrow] (worker) -- (face);
+
+        % 2. AI tasks to Report: Changed from -| to straight lines converging (--)
+        \draw[myarrow] (lanes) -- (report);
+        \draw[myarrow] (face) -- (report);
+
+        \draw[myarrow] (report.south) -- ++(0,-2cm) |- (db.east);
+
+    \end{tikzpicture}
+    % TIKZ DIAGRAM END
+    \caption{System Architecture Diagram showing the data flow between Frontend, Backend, and AI Workers.}
+    \label{fig:architecture}
+\end{figure}
+
+When the server receives a request for an analysis job, it creates a new job object in a SQLite database. This job entry can be queried by the front-end to determine the current progress of the analysis or whether any errors have occurred. The server then spawns a new Python process to complete the analysis task. By using separate processes rather than threads, the system avoids memory management-based limitations imposed by Python’s Global Interpreter Lock, allowing multiple analysis jobs to run in parallel.\\
+
+The heavy processing jobs are executed by background worker processes, which save their results to a centralised drive accessible by the server. Once processing is complete, the results are retrieved by the server and made available to the web interface for visualisation. This Server–Worker design allows multiple jobs to be queued and processed without overloading the server, ensuring that the application remains responsive.\\
+
+A one-process-per-request strategy was chosen over maintaining a pool of idle processes, as the overhead of process creation is insignificant compared to the duration of the analysis tasks. This approach avoids unnecessary resource usage while maintaining flexibility and scalability as the system workload changes.\\
+
+\subsubsection{Front-end Design and Features}
+The web application allows users to upload synchronised road-facing and cabin-facing video footage for analysis and to view detected driving mistakes. The system supports the submission of multiple consecutive video files, which is necessary as dash-cam systems use loop-recording rather than saving entire driving sessions in a single file. Once uploaded, the files are sent to the server for processing, and the user is shown the progress of the analysis. \\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{analysis_submission.png}
+    \caption{Screenshot of the video submission page.}
+    \label{fig:video_submission}
+\end{figure}
+
+
+After analysis is complete, the application presents the detected results to the user, including safe and unsafe lane-change events. Results are visualised alongside synchronised video playback, allowing users to navigate directly to detected events. A custom timeline bar displays detected events and driver gaze information, enabling the user to view this information in a single place rather than splitting attention between different interface elements. Additional logs of detected events and gaze transitions are provided to make the system’s analysis transparent and easier to interpret.
+ \\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{website_images/web_display_1.png}
+    \caption{Web application design with sample video clip.}
+    \label{fig:web_app_design}
+\end{figure}
+
+\section{Evaluation Methodology}
+Explain the process(es) that I have gone through in order to evaluate the project. Justify that they are objective (or as much as I can make them), and help prove the technical contribution of the project.\\
+
+Possible results/evaluation inclusions in report:
+\begin{itemize}
+    \item Users have option to report mistakes in the application - can give \% of mistakes (FP/FN) compared to correct detections
+    \item Manually label parts of my own dataset to get \% correct event detections, can compare different versions of the models/system with this to show higher detection counts as we add/fine-tune features and do more research
+    \item Difficult to judge gaze classifications since this is user-specific (and needs to be user-calibrated), however would be interesting to investigate how many points you need to get a sufficient accuracy, by labelling some gaze clip myself (for validation) and then using an SVM trained on 10 frames, 100 frames, 1000 frames etc. to show how much calibration the user needs to do for example?
+    \item Ask passenger to identify how many errors they spotted, and compare this to the system
+    \item Qualitative evaluation of the application by users:
+    \begin{itemize}
+        \item `Would you use this/recommend this to someone learning?'
+        \item `Do you think this is a useful tool?'
+    \end{itemize}
+\end{itemize}
+
+\section{Results}
+Show the results - graphs, diagrams, tables of the evaluation techniques from the previous section.
+
+\section{Self-Assessment}
+Covers the author's own assessment of the success of the project, in terms of technical contribution, usefulness, limitations.\\
+
+Overall, the project was a success - it shows that a computer vision system can indeed identify driving errors which are difficult for non-trained passengers to spot. While the models do not perform with 100\% accuracy, as limited by the constraints (time, cost, resources, scope) of the project, the project overall does show that such a system would be helpful to people, and with a larger budget, scope, industry connections etc. this could be a successful business idea. It can also be applied to other industries such as insurance and in-car safety mechanisms. Since there don't currently exist systems that match what the project does, it provides justification for further developing the application or similar applications, and it presents a benchmark for future researchers to compare against. 
+
+\bibliography{progress_report_bibliography}
+
+%========== Project specification left as appendix to document ==========%
+\newpage
+
+\section*{Appendix: Project Specification}
+
+\section*{Problem Statement}
+Driving is an essential task for the majority of people in the modern world. Whether for work or leisure, almost everyone in the UK either drives a vehicle or must interact with drivers in one way or another. However, the concerning reality is that driving remains dangerous for both the occupants of the vehicle and those around it. In the UK, around five people are killed and 80 are injured every day due to driving-related incidents \citespec{govuk_casualties_2024}. The vast majority of driving accidents occur due to driver error - most often stemming not from a fundamental inability to operate the vehicle, but from behavioural mistakes, namely lack of awareness \citespec{road_accident_data, dia_collisions}.\\
+
+Driver Monitoring Systems (DMS) are a technology aimed at tracking driver behaviour using a variety of sensors, including in-cabin video footage. Initially a premium feature, they are now designated as an essential safety component in modern vehicles \citespec{eurlex_2019_2144}. Most current DMS’ are proprietary - either made by traditional car companies (Toyota \citespec{toyota_tmate}, JLR \citespec{jlr_dms_news}) or by companies selling hardware/software packages (SmartEye \citespec{smarteye_ai}, Nauto \citespec{nauto_platform}). While some open-source projects, such as OpenPilot \citespec{commaai_openpilot} and ZenRoad \citespec{zenroad_app}, also exist, both proprietary and open-source solutions focus on two distinct areas: driver distraction, using in-cabin footage; or the car’s movement, using dash-cam footage. However, no system combines the two sources of data.\\
+
+The central idea for this project is that a truly comprehensive understanding of driver behaviour cannot be determined solely from observing either the driver or the car’s movement in isolation. Instead, our objective is to implement a multi-modal approach, synchronising the driver’s state with the external road environment and the movement of the vehicle. As such, the aim of this project is to create a system capable of identifying driving mistakes, namely failure to check mirrors before manoeuvres, by processing synchronised dash-cam footage and in-cabin footage. The project will leverage computer vision techniques, such as head pose estimation from in-cabin footage to establish driver gaze direction, as well as neural networks or optical flow from dash-cam footage to identify car manoeuvres, such as lane changes and turns.\\
+
+A system capable of objectively identifying driver errors has numerous potential applications, such as:
+\begin{itemize}
+    \item A feedback tool for learner drivers to help them identify and reduce common errors in preparation for their practical driving test.
+    \item Improving usage-based car insurance by providing data on driver awareness, which can be used alongside black-box data to create more accurate risk profiles.
+    \item Developing an in-car alert system to warn the driver if they attempt a manoeuvre, like changing lanes, without first checking their mirrors.
+\end{itemize}
+
+In order to establish a clear goal and evaluation criteria, this project will focus on the learner driver use-case. The minimum viable product (MVP) is a web application for post-hoc analysis, processing synchronised dash-cam and in-cabin footage to identify and timestamp specific driving errors. The application aims to improve the quality of driving sessions with friends and family, who are less likely to spot subtle mistakes like mirror-checks \citespec{2nd2nonedrivingschoolLearningDrive}. The system's performance will be evaluated by addressing the research question: `Can the system identify driving errors with greater accuracy than a non-professional supervisor?' To this end, a user study will be conducted to quantitatively compare the application's error-detection performance against that of people who are not formally trained as driving instructors.
+
+\newpage
+
+\section*{Objectives}
+
+The application will analyse synchronised dash-cam and cabin footage to detect driving mistakes. This section defines the functional (\textbf{what} the system must do) and non-functional (\textbf{how} the system does it) requirements for MVP and outlines optional extensions.
+
+\subsection*{Functional Requirements}
+
+\subsubsection*{1. Core Video Analysis and Mistake Detection (Must-Have)}
+The primary objective is to develop and validate computer vision models that can accurately identify driving mistakes.
+
+\begin{itemize}
+    \item \textbf{FR1.1} Accept two synchronised video files as input: road-facing and cabin-facing.
+    \item \textbf{FR1.2} Analyse the dash-cam feed to detect and keep track of lane markings.
+    \item \textbf{FR1.3} Process the output of FR1.2 to detect timestamps for the start and end of lane change manoeuvres.
+    \item \textbf{FR1.4} Classify the driver's gaze direction per frame as either:
+    \begin{itemize}
+        \item Looking ahead.
+        \item Looking at the left mirror.
+        \item Looking at the right mirror.
+        \item Looking at the rear-view mirror.
+    \end{itemize}
+    \item \textbf{FR1.5} Combine the outputs of the manoeuvre and driver behaviour models using a rule-based algorithm to identify when manoeuvres are made without a prior mirror-check.
+\end{itemize}
+
+\subsubsection*{2. Web Interface and User Feedback (Must-Have)}
+This section outlines the requirements for a user interface. This component will accept user videos and display the data generated from Component 1.
+
+\begin{itemize}
+    \item \textbf{FR2.1} Provide a web interface for a user to upload video footage after their driving session.
+    \item \textbf{FR2.2} Display the type and count of detected mistakes.
+    \item \textbf{FR2.3} Present synchronised video playback that allows the user to navigate to detected mistake timestamps.
+\end{itemize}
+
+\subsubsection*{3. Mistake Detection Enhancements (Should-Have)}
+These requirements extend the core functionality to detect a more complex range of manoeuvres and actions.
+\begin{itemize}
+    \item \textbf{FR3.1} Manoeuvre detection extension - Enhance manoeuvre detection to include:
+    \begin{itemize}
+        \item \textbf{FR3.1.1} Turns into side roads.
+        \item \textbf{FR3.1.2} 3-point turns.
+        \item \textbf{FR3.1.3} Reversing.
+    \end{itemize}
+    \item \textbf{FR3.2} Gaze classification extension (I) - Detect blind-spot checks.
+\end{itemize}
+
+\subsubsection*{4. Extensions (Could-Have)}
+Additional features that would enhance the system, but are considered beyond the scope of the core project.
+
+\begin{itemize}
+    \item \textbf{FR4.1} Data input extension - Allow the use of a smartphone camera to record internal footage, for users without a 2-in-1 dash-cam system.
+    \item \textbf{FR4.2} Gaze classification extension (II) - Incorporate eye-tracking to improve gaze detection accuracy.
+\end{itemize}
+
+\subsection*{Non-Functional Requirements}
+\begin{itemize}
+    \item \textbf{NFR1} The core analysis script must be well-documented and capable of being executed via the command line.
+    \item \textbf{NFR2} The user interface must be intuitive to navigate and provide mistake identification information clearly to the user.
+    \item \textbf{NFR3} Data must be stored securely and anonymised, to comply with UK GDPR.
+\end{itemize}
+
+\newpage
+
+\section*{Methods and Methodology}
+
+The success of this project relies on combining three elements: academic research, a structured data strategy, and a practical software development process. At its core, the system will bring together two computer vision pipelines - one focused on detecting vehicle manoeuvres, and another on tracking the driver’s gaze. The information from these two pipelines will then be synchronised through a rule-based inference engine, designed to highlight driving mistakes.
+
+\subsection*{Research and Model Selection}
+
+Although the system itself is novel, it draws heavily on existing research in computer vision (CV) and machine learning (ML). A literature review will be conducted to select appropriate models for both vehicle manoeuvre detection and gaze analysis. This will consider the trade-off between accuracy, computational efficiency, and implementation effort.
+
+\subsection*{Data Strategy}
+
+The system’s effectiveness depends on the quality and diversity of data used for training and evaluation. A two-stage data strategy is adopted: large public datasets for initial model development, and a project-specific dataset for final validation. This approach minimises manual labelling effort while ensuring models remain tuned to the conditions of the collected data.
+
+\subsubsection*{Public Datasets}
+Relevant publicly available datasets include:
+\begin{itemize}
+    \item \textbf{TuSimple, CULane and BDD100K:} widely used for lane detection benchmarking \citespec{CULane2018, TuSimple2017, BDD100K}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.75\linewidth]{dataset_images/Typical-video-frames-of-TuSimple-CULane-and-BDD100K-datasets-Ground-truth-lanes-are.png}
+        \caption{Comparison of images from popular lane detection benchmarking datasets \citespec{datasetComparison}.}
+        \label{fig:placeholder}
+    \end{figure}
+    \item \textbf{Driver Monitoring Dataset (DMD):} contains extensive in-car gaze annotations, useful for gaze classification and head pose estimation \citespec{DMD2020}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\linewidth]{dataset_images/dmd_example.png}
+        \caption{Example images from the DMD \citespec{DMD2020}.}
+        \label{fig:placeholder}
+    \end{figure}
+\end{itemize}
+
+\subsubsection*{Project-Specific Dataset}
+A key part of validation will be based on a custom dataset, shown in Figure \ref{fig:project-spec}. The dataset consists of more than 1,500 minutes of synchronised dash-cam and cabin-cam footage. This data covers a range of conditions (day/night, varied roads, different drivers) and serves as a realistic testbed for evaluating the system. A subset will be manually annotated to create ground truth labels for both gaze zones and driving mistakes.
+
+\begin{figure}[h]
+    \centering
+    \subfigure[]{\includegraphics[width=0.3\textwidth]{dataset_images/Dash_cam_setup_annotated_cropped.JPG}} 
+    \subfigure[]{\includegraphics[width=0.3\textwidth]{dataset_images/dash_footage_ex.png}} 
+    \subfigure[]{\includegraphics[width=0.3\textwidth]{dataset_images/incabin_ex.png}}
+    \caption{(a) 2-in-1 Dash-cam setup. (b) External dash-cam example image. (c) Internal dash-cam example image.}
+    \label{fig:project-spec}
+\end{figure}
+
+\subsection*{Software Development and Evaluation}
+
+Development will be carried out using an Agile methodology, tracked with a Kanban board in Notion, as shown in Figure \ref{fig:kanban}. This method suits the research-focused nature of the project, where requirements may evolve, and also allows flexibility around other academic commitments.
+
+\subsubsection*{Evaluation Strategy}
+\begin{itemize}
+    \item \textbf{Component-Level:} Each ML model will be tested independently. For example, lane detection models will be measured using accuracy, precision, recall, and F1-score on a public dataset. Gaze classification performance will be reported with a confusion matrix against the annotated validation set. Specific accuracy benchmarks will be established following the literature review, to ensure they are ambitious but realistic.
+    \item \textbf{System-Level:} The system will be evaluated on its ability to correctly identify driving mistakes compared to a manually labelled ground truth. Recall will be the most important metric, since failing to detect a mistake is more harmful than a false alarm in this context.
+    \item \textbf{Web Application:} A user study will be conducted to compare the detection accuracy of the system with non-trained supervisors.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Kanban_board_v1.png}
+    \caption{Example kanban board with current project tasks.}
+    \label{fig:kanban}
+\end{figure}
+
+\section*{Timetable}
+
+Figures \ref{fig:term1_timeline} and \ref{fig:term2_timeline} outline the planned timeline for the project's tasks. Large time periods are given to research in order to allow suitable literature reviews to be carried out and written up before embarking on implementation. Manoeuvre detection will likely be one of the most difficult parts to research/implement, which is why it has the most time allocated. While the MVP is planned to be completed by the start of January, around three weeks' buffer time with no task other than write-up has been allocated to allow for unforeseen circumstances such as implementation difficulties, illness, and holidays.\\
+
+The timeline for term 2 is likely to be less accurate, but the general plan is to: implement the should-have features; conduct the user study; and write up the Final Report. A new timeline for this will be written closer to the time. In order to meet the expected timeline dates, 16 hours per week will be allocated to the project. The hours worked may vary throughout the year due to other commitments.\\
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Timeline1_V2_Key.png}
+    \caption{Timeline up to Progress Report.}
+    \label{fig:term1_timeline}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Timeline2_V2.png}
+    \caption{Timeline from MVP to Viva.}
+    \label{fig:term2_timeline}
+\end{figure}
+
+\section*{Resources \& Risks}
+The project benefits from external advisory support from a Machine Learning Research Engineer at JLR. The external advisor will offer guidance on methods, model selection and the overall strategic direction of the project. This collaboration is considered low-risk as the support is strictly advisory, and does not involve the provision of any data, equipment or other resources.\\
+
+For the initial custom data collection of dash-cam and internal camera footage, the VIOFO A229 3 Channel Dash Cam was used. The recordings ($\sim$200GB) are saved on an external 1TB SSD drive and copied to an additional 2TB NVME drive for backup. Additionally, video was recorded using an Android phone (Samsung Galaxy Note 10+) in preparation for FR4.1. \\
+
+The computer hardware used will include an RTX 5070TI (16GB) GPU. This GPU is accessible to the author, and with 16GB of VRAM it provides ample computational resources for the needs of the project. Another option is to use the Department of Computer Science (DCS) Batch Computer system if the single GPU is not fast enough or other problems occur. Cloud compute, such as AWS Databricks, could also be used to further scale the analysis capabilities if this proves necessary.\\
+
+In terms of software, the majority of the analysis will be written in Python. Python was chosen as it suits quick ML model development since there are numerous well-documented, open-source Python libraries suitable for ML and video processing. Libraries used may include OpenCV, SKLearn and PyTorch. Version control and project storage will be on GitHub. Overleaf, with GitHub integration, will store the assessed documents. The web interface will be made using React with the possibility of using styling libraries such as Tailwind or Bootstrap. React is one of the most well-supported and widely used front-end frameworks \citespec{statistaMostUsed}, and the author has experience with this framework.\\
+
+The largest risks to the project will most likely come from the ML analysis methods used. ML models may underperform due to insufficient, poorly labelled, or unrepresentative training data. Also, the inference time for long or high-resolution videos could exceed practical limits. To mitigate these risks, the project will progressively extend the feature set once acceptable accuracies (to be determined) for each component are achieved. For performance, pre-processing will be applied to reduce the data constraints on the models. To this end, only a subset of frames will be chosen for analysis (e.g. 2-5 frames per second rather than 30), and resolution will be reduced to an appropriate level.\\
+
+The final risk concerns an inability to work due to unforeseen circumstances such as illness. The risk of this is mitigated by the addition of buffer time in the timeline plan, and the agile strategy allows the constraints of the project to be reformulated and adjusted in a worst-case scenario.
+
+\section*{Legal, Social, Ethical and Professional Issues \& Considerations}
+As the project involves capturing and processing personally identifiable information, including facial images and behaviour patterns, compliance with the UK GDPR is essential. All data collection was carried out with informed consent, with participants given clear information on what was recorded and how it will be used, in accordance with the “Lawfulness, fairness and transparency” principle of GDPR \citespec{lawful_principle}. Data will be anonymised wherever possible (e.g., blurring faces of passengers and the public, and replacing identifying metadata with pseudonyms) and stored securely with restricted access. Data retention will be minimised in line with the “data minimisation” and “storage limitation” principles \citespec{stor_limit_principle, minim_principle}. The DCS granted ethical approval for the collection of the project-specific training dataset.\\
+
+Claiming to provide driving feedback or analysis may pose an issue if the system fails to detect errors accurately. Users may gain a false sense of security if mistakes go unflagged. It will be essential to communicate clearly which errors the system detects and to emphasise that it is a supplementary tool, not a replacement for lessons with a qualified instructor.\\
+
+\newpage
+
+% \printbibliography
+\bibliographyspec{spec_bibliography}
+
+\end{document}
