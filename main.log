@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.12)  12 MAR 2026 15:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.12)  13 MAR 2026 10:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -873,14 +873,18 @@ nput line 347.
  [11 <./face_analysis_images/head_angles_graph.png> <./face_analysis_images/pca
 _yaw_pitch_roll.png> <./driving_images/left_mirror.png> <./driving_images/looki
 ng_forward.png> <./driving_images/right_mirror.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 355--356
+
+ []
+
 <driving_images/lanes+face.png, id=82, 1445.4pt x 813.0375pt>
 File: driving_images/lanes+face.png Graphic file (type png)
 <use driving_images/lanes+face.png>
-Package pdftex.def Info: driving_images/lanes+face.png  used on input line 359.
+Package pdftex.def Info: driving_images/lanes+face.png  used on input line 361.
 
 (pdftex.def)             Requested size: 404.71353pt x 227.64894pt.
- [12 <./face_analysis_images/kmeans_clusters.png> <./face_analysis_images/svm_c
-lassification.png> <./driving_images/lanes+face.png (PNG copy)>]
+[12 <./face_analysis_images/kmeans_clusters.png> <./face_analysis_images/svm_cl
+assification.png> <./driving_images/lanes+face.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 370--371
 
  []
@@ -901,18 +905,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 437--438
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 440--441
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
 
  []
 
-<website_images/analysis_submission.png, id=86, 1116.17pt x 1083.04625pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 441--442
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 444--445
+
+ []
+
+[13]
+<website_images/analysis_submission.png, id=92, 1116.17pt x 1083.04625pt>
 File: website_images/analysis_submission.png Graphic file (type png)
 <use website_images/analysis_submission.png>
 Package pdftex.def Info: website_images/analysis_submission.png  used on input 
-line 444.
+line 448.
 (pdftex.def)             Requested size: 404.71353pt x 392.70576pt.
-[13]
-Underfull \hbox (badness 10000) in paragraph at lines 450--452
+
+Underfull \hbox (badness 10000) in paragraph at lines 454--455
 
  []
 
@@ -920,7 +935,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 450--452
 File: website_images/web_display_1.png Graphic file (type png)
 <use website_images/web_display_1.png>
 Package pdftex.def Info: website_images/web_display_1.png  used on input line 4
-55.
+58.
 (pdftex.def)             Requested size: 505.89pt x 426.48695pt.
 [14 <./website_images/analysis_submission.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 464--465
@@ -953,26 +968,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 492--493
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 494--495
+Underfull \hbox (badness 10000) in paragraph at lines 497--498
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 496--497
+Underfull \hbox (badness 10000) in paragraph at lines 516--517
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 501--502
-
- []
-
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 520--521
-
- []
-
-(./main.bbl
+[17] (./main.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 4--11
 []\OT1/cmr/m/n/10 Department for Trans-port.  Re-ported road ca-su-al-ties in g
 reat britain, pro-
@@ -1016,17 +1021,17 @@ em-[]set-[]revolutionise-[]road-[]safety$\OT1/cmr/m/n/10 , 2019.
  []
 
 [18] [19]) [20]
+Underfull \hbox (badness 10000) in paragraph at lines 528--529
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 530--531
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 532--533
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 534--535
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 536--537
 
  []
 
@@ -1038,13 +1043,13 @@ ts-Ground-truth-lanes-are.png Graphic file (type png)
 <use dataset_images/Typical-video-frames-of-TuSimple-CULane-and-BDD100K-dataset
 s-Ground-truth-lanes-are.png>
 Package pdftex.def Info: dataset_images/Typical-video-frames-of-TuSimple-CULane
--and-BDD100K-datasets-Ground-truth-lanes-are.png  used on input line 628.
+-and-BDD100K-datasets-Ground-truth-lanes-are.png  used on input line 624.
 (pdftex.def)             Requested size: 379.4175pt x 158.93658pt.
 
 ! Use of \@citex doesn't match its definition.
 \citespec ->\let \@citex \mb@@citex 
                                     \let \@newciteauxhandle \@auxoutspec \cs...
-l.629 ...g datasets \citespec{datasetComparison}.}
+l.625 ...g datasets \citespec{datasetComparison}.}
                                                   
 If you say, e.g., `\def\a1{...}', then you must always
 put `1' after `\a', since control sequence names are
@@ -1054,13 +1059,13 @@ followed by the required stuff, so I'm ignoring it.
 <dataset_images/dmd_example.png, id=125, 983.17313pt x 599.23875pt>
 File: dataset_images/dmd_example.png Graphic file (type png)
 <use dataset_images/dmd_example.png>
-Package pdftex.def Info: dataset_images/dmd_example.png  used on input line 635
+Package pdftex.def Info: dataset_images/dmd_example.png  used on input line 631
 .
 (pdftex.def)             Requested size: 252.94499pt x 154.17082pt.
 ! Use of \@citex doesn't match its definition.
 \citespec ->\let \@citex \mb@@citex 
                                     \let \@newciteauxhandle \@auxoutspec \cs...
-l.636 ... images from the DMD \citespec{DMD2020}.}
+l.632 ... images from the DMD \citespec{DMD2020}.}
                                                   
 If you say, e.g., `\def\a1{...}', then you must always
 put `1' after `\a', since control sequence names are
@@ -1075,18 +1080,18 @@ File: dataset_images/Dash_cam_setup_annotated_cropped.JPG Graphic file (type jp
 g)
 <use dataset_images/Dash_cam_setup_annotated_cropped.JPG>
 Package pdftex.def Info: dataset_images/Dash_cam_setup_annotated_cropped.JPG  u
-sed on input line 646.
+sed on input line 642.
 (pdftex.def)             Requested size: 151.76854pt x 85.22736pt.
 <dataset_images/dash_footage_ex.png, id=132, 1149.29375pt x 644.4075pt>
 File: dataset_images/dash_footage_ex.png Graphic file (type png)
 <use dataset_images/dash_footage_ex.png>
 Package pdftex.def Info: dataset_images/dash_footage_ex.png  used on input line
- 647.
+ 643.
 (pdftex.def)             Requested size: 151.76854pt x 85.0935pt.
 <dataset_images/incabin_ex.png, id=133, 1149.29375pt x 644.4075pt>
 File: dataset_images/incabin_ex.png Graphic file (type png)
 <use dataset_images/incabin_ex.png>
-Package pdftex.def Info: dataset_images/incabin_ex.png  used on input line 648.
+Package pdftex.def Info: dataset_images/incabin_ex.png  used on input line 644.
 
 (pdftex.def)             Requested size: 151.76854pt x 85.0935pt.
 <project_management_images/Kanban_board_v1.png, id=134, 679.78969pt x 337.26pt>
@@ -1094,17 +1099,17 @@ Package pdftex.def Info: dataset_images/incabin_ex.png  used on input line 648.
 File: project_management_images/Kanban_board_v1.png Graphic file (type png)
 <use project_management_images/Kanban_board_v1.png>
 Package pdftex.def Info: project_management_images/Kanban_board_v1.png  used on
- input line 666.
+ input line 662.
 (pdftex.def)             Requested size: 404.71353pt x 200.78798pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 673--674
+Underfull \hbox (badness 10000) in paragraph at lines 669--670
 
  []
 
 [24 <./dataset_images/Dash_cam_setup_annotated_cropped.JPG> <./dataset_images/d
 ash_footage_ex.png> <./dataset_images/incabin_ex.png> <./project_management_ima
 ges/Kanban_board_v1.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 675--676
+Underfull \hbox (badness 10000) in paragraph at lines 671--672
 
  []
 
@@ -1113,22 +1118,32 @@ pt>
 File: project_management_images/Timeline1_V2_Key.png Graphic file (type png)
 <use project_management_images/Timeline1_V2_Key.png>
 Package pdftex.def Info: project_management_images/Timeline1_V2_Key.png  used o
-n input line 679.
+n input line 675.
 (pdftex.def)             Requested size: 505.89pt x 263.15205pt.
 <project_management_images/Timeline2_V2.png, id=141, 756.57657pt x 381.67593pt>
 
 File: project_management_images/Timeline2_V2.png Graphic file (type png)
 <use project_management_images/Timeline2_V2.png>
 Package pdftex.def Info: project_management_images/Timeline2_V2.png  used on in
-put line 686.
+put line 682.
 (pdftex.def)             Requested size: 303.53708pt x 153.12775pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 692--693
+Underfull \hbox (badness 10000) in paragraph at lines 688--689
 
  []
 
 [25 <./project_management_images/Timeline1_V2_Key.png> <./project_management_im
 ages/Timeline2_V2.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 690--691
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 692--693
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 694--695
 
  []
@@ -1139,22 +1154,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 696--697
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 698--699
+Underfull \hbox (badness 10000) in paragraph at lines 701--702
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 700--701
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 705--706
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 707--708
+Underfull \hbox (badness 10000) in paragraph at lines 703--704
 
  []
 
@@ -1274,7 +1279,7 @@ s8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf/
 fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (28 pages, 24786938 bytes).
+Output written on main.pdf (28 pages, 24787474 bytes).
 PDF statistics:
  226 PDF objects out of 1000 (max. 8388607)
  116 compressed objects within 2 object streams
