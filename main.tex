@@ -292,9 +292,9 @@ Several established open-source VO and Visual SLAM systems were evaluated. DROID
 
 Because the project only requires yaw-based turn detection rather than metrically accurate 3D reconstruction, a custom lightweight VO pipeline was developed instead. This offered full control over each processing stage, making it straightforward to diagnose and fix failure modes as they arose, an advantage that proved critical during iterative development. Existing functions provided by the OpenCV Python library made creating this pipeline straightforward to implement. The pipeline operates by extracting and matching visual features between consecutive frames, then estimating the relative camera motion from the resulting point correspondences. \\
 
-Frame-by-frame, we perform a centre crop (75\%) of the road video. The crop removes the image periphery where radial lens distortion is strongest, avoiding the need for a full undistortion step that would add latency and introduce interpolation artefacts. This also removes external, static elements such as the hood of the car or stickers on the windscreen. For each frame, a Mask R-CNN (ResNet-50 FPN V2) instance segmentation model identifies dynamic objects (cars, pedestrians, cyclists, buses and trucks) and produces a binary mask. This masking step is essential because optical flow from moving vehicles would otherwise be interpreted as camera ego-motion, causing large errors in the estimated rotation. Early iterations without dynamic masking produced frequent false turn detections when vehicles overtook or braked ahead, as the dominant flow from these objects overwhelmed the static background signal.\\
+Frame-by-frame, we perform a centre crop (75\%) of the road video. The crop removes the image periphery where radial lens distortion is strongest, avoiding the need for a full undistortion step that would add latency and introduce interpolation artefacts. This also removes external, static elements such as the hood of the car or stickers on the windscreen. For each frame, a Mask R-CNN \cite{he2017mask} (ResNet-50 FPN V2) instance segmentation model identifies dynamic objects (cars, pedestrians, cyclists, buses and trucks) and produces a binary mask. This masking step is essential because optical flow from moving vehicles would otherwise be interpreted as camera ego-motion, causing large errors in the estimated rotation. Early iterations without dynamic masking produced frequent false turn detections when vehicles overtook or braked ahead, as the dominant flow from these objects overwhelmed the static background signal.\\
 
-[Insert images of tracking results with and without the masking]\\
+% TODO: Insert images of tracking results with and without the masking
 
 Features are detected only on the unmasked (static) regions using a grid-based bucketing strategy, which divides the image into a $4 \times 6$ grid and runs \texttt{goodFeaturesToTrack} independently in each cell. Without bucketing, detected features would be evenly spread out through the image, with many points detected in non-feature-rich areas of the image, such as repeating textures on housing tiles and roads (Figure \ref{fig:points_houses}). This meant that in subsequent frames where points were detected close to here, they would be matched to each other despite not actually corresponding to the same point. This essentially caused a high degree of noise within the tracking algorithm due to non-identifiable point-matching. This was fine while the car was moving, but when it was stationary or moving very slowly, the noise took over the tracking and caused extremely sharp, inaccurate pose predictions.\\
 
@@ -306,7 +306,7 @@ Features are detected only on the unmasked (static) regions using a grid-based b
     \label{fig:points_houses}
 \end{figure}
 
-Features are tracked between consecutive frames using Lucas-Kanade optical flow. A forward-backward consistency check is applied. This means that points are tracked forward to the current frame, then backward to the previous frame, and only matches with a re-projection error below 0.5 pixels are retained. This eliminates poorly tracked points that would otherwise introduce noise into the pose estimate, particularly near the edges of the dynamic object mask, where partial occlusions by cars and people caused errors in tracking. The essential matrix is then estimated via an algorithm called RANSAC [CITE], and the relative rotation and translation are recovered using \texttt{cv2.recoverPose}. One major improvement was to reject pose estimations between frames which are deemed physically implausible. A common example was if the calculated rotation exceeded an unrealistic threshold ($\sim$28\textdegree\ ), which often occurred during slow-moving sequences due to unexpected sources of noise.\\
+Features are tracked between consecutive frames using Lucas-Kanade optical flow. A forward-backward consistency check \cite{kalal2010forward} is applied. This means that points are tracked forward to the current frame, then backward to the previous frame, and only matches with a re-projection error below 0.5 pixels are retained. This eliminates poorly tracked points that would otherwise introduce noise into the pose estimate, particularly near the edges of the dynamic object mask, where partial occlusions by cars and people caused errors in tracking. The essential matrix is then estimated via RANSAC \cite{fischler1981random}, and the relative rotation and translation are recovered using \texttt{cv2.recoverPose}. One major improvement was to reject pose estimations between frames which are deemed physically implausible. A common example was if the calculated rotation exceeded an unrealistic threshold ($\sim$28\textdegree\ ), which often occurred during slow-moving sequences due to unexpected sources of noise.\\
 
 Raw pose estimates are accumulated and fused through a 12-state Kalman filter tracking position ($x, y, z$), orientation (roll, pitch, yaw) and their velocities. The Kalman filter serves two purposes: it smooths the noisy frame-to-frame VO estimates into a coherent trajectory, and it maintains a reasonable state estimate during periods where VO measurements are unreliable. To achieve the latter, the measurement noise covariance is adjusted dynamically based on tracking confidence. When the vehicle is moving and tracking is successful, standard noise is applied. When the vehicle is stationary (low optical flow), higher confidence is placed on the prediction to prevent drift from noisy near-zero estimates. When the segmentation mask covers most of the frame (a ``blind'' condition occurring in heavy traffic), the filter almost entirely trusts its own prediction, as there are insufficient static features to produce a meaningful VO measurement.\\
 
@@ -315,7 +315,7 @@ Raw pose estimates are accumulated and fused through a 12-state Kalman filter tr
     \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/tracking_without_kalman.png}}
     \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/tracking_with_kalman.png}} 
     \caption{(a) Tracking example with no Kalman filter or implausible-frame rejection. (b) Tracking example with Kalman filter and frame rejection.}
-    \label{fig:points_houses}
+    \label{fig:kalman_comparison}
 \end{figure}
 
 Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetector} class. An early approach decomposed Euler angles from the accumulated rotation matrix, but this produced sign flips in long videos where the total rotation grew large, causing left turns to be misclassified as right turns and vice versa. Instead, yaw is now integrated directly from each frame's small relative rotation, where the Euler decomposition is always well-conditioned. A turn event is triggered under one of three conditions: (1) the accumulated yaw exceeds 30\textdegree\ and at least one frame exhibited sharp rotation ($>$0.6\textdegree/frame), distinguishing genuine intersection turns from gradual road curvature; (2) the accumulated yaw exceeds 80\textdegree\ regardless of sharpness, to capture long sweeping turns such as roundabout exits; or (3) the accumulated yaw exceeds 15\textdegree\ combined with a sudden spike ($>$8\textdegree\ in a single frame), catching aggressive manoeuvres. A straightness reset clears the accumulator if rotation remains below 0.1\textdegree/frame for 30 consecutive frames ($\sim$1 second), preventing slow drift from eventually triggering a false detection. A 60-frame cooldown after each detection prevents duplicate events from the same turn. Detected turns are classified as \texttt{LEFT} or \texttt{RIGHT} and fed into the Safety Monitor, which validates them against the driver's gaze history using the same 5-second look-back window and mirror-check rules as lane changes.
@@ -324,7 +324,7 @@ Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetecto
     \centering
     \includegraphics[width=0.75\linewidth]{driving_images/tracking_with_turn_dets.png}
     \caption{Turn detections from full VO pipeline. Purple and Blue stars show Right and Left turns respectively.}
-    \label{fig:placeholder}
+    \label{fig:turn_detections}
 \end{figure}
 
 \subsection{Face Analysis (FR1.4)}
@@ -375,7 +375,7 @@ This rule-based heuristic was chosen over a learned classifier because the relat
 \end{figure}
 
 \subsection{Web Application (FR2)}
-The web application allows users to upload their footage, which is analysed and the results presented on an interactive display with synchronised video playback and navigation to detected events.
+The web application represents a substantial portion of the project's development effort. Beyond the core computer vision pipeline, building a responsive and functional system required solving a wide range of engineering challenges across the full stack: deploying a GPU-accelerated backend on shared university infrastructure, synchronising dual video streams with frame-level accuracy, and integrating a SLURM-based job queue transparently behind a web interface. A particular difficulty was designing workflows for tasks that are inherently user-specific and cannot be fully automated, such as gaze calibration, where each user's seating position and camera angle produce different head pose distributions that must be individually labelled and trained. Equally challenging was determining how to present the analysis results effectively; the interface needed to surface detected events, gaze history, timeline annotations and calibration tools without overwhelming users who are not technically trained. Iterative user testing was essential in finding the right balance between giving users enough control to calibrate and verify their results while keeping the interface intuitive. The resulting application allows users to upload their footage, which is analysed and the results presented on an interactive display with synchronised video playback and navigation to detected events.
 
 \subsubsection{Overall System \& Backend Design}
 The application is designed as a Client-Server-Worker system to handle the heavy video processing requirements while keeping the UI smooth and responsive. A Python-based FastAPI server accepts requests from the React-based web app. The server offloads individual analysis work to sub-processes, which save the results on a centralised drive accessible by the server. These results can then be sent back to the web interface for viewing (Figure \ref{fig:architecture}).\\ 
@@ -403,16 +403,17 @@ The application is designed as a Client-Server-Worker system to handle the heavy
         \node[storage, below=of api] (db) {SQLite\\Database};
         \node[process, right=of api] (worker) {Background\\Worker};
 
-        % Adjusted positioning slightly for better symmetry
-        \node[process, above right=0.5cm and 1.5cm of worker] (lanes) {Lane\\Detection};
-        \node[process, below right=0.5cm and 1.5cm of worker] (face) {Face\\Analysis};
-        \node[process, right=3cm of worker] (report) {Safety Report};
+        % AI task nodes stacked vertically
+        \node[process, above right=1cm and 1.5cm of worker] (lanes) {Lane\\Detection};
+        \node[process, right=1.5cm of worker] (vo) {Turn\\Detection};
+        \node[process, below right=1cm and 1.5cm of worker] (face) {Face\\Analysis};
+        \node[process, right=1.5cm of vo] (report) {Safety Report};
 
         % --- Groups ---
         \begin{scope}[on background layer]
             \node[group, fit=(user) (ui), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:Frontend}] (frontend) {};
             \node[group, fit=(api) (worker) (db), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:Backend}] (backend) {};
-            \node[group, fit=(lanes) (face) (report), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:AI Engine}] (ai) {};
+            \node[group, fit=(lanes) (face) (vo) (report), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:AI Engine}] (ai) {};
         \end{scope}
 
         % --- Edges ---
@@ -425,15 +426,17 @@ The application is designed as a Client-Server-Worker system to handle the heavy
         \draw[myarrow] (api) -- (db);
         \draw[myarrow] (db) -- (api);
 
-        % 1. Worker to AI tasks: Changed from |- to straight lines (--)
+        % 1. Worker to AI tasks
         \draw[myarrow] (worker) -- (lanes);
+        \draw[myarrow] (worker) -- (vo);
         \draw[myarrow] (worker) -- (face);
 
-        % 2. AI tasks to Report: Changed from -| to straight lines converging (--)
+        % 2. AI tasks to Report
         \draw[myarrow] (lanes) -- (report);
+        \draw[myarrow] (vo) -- (report);
         \draw[myarrow] (face) -- (report);
 
-        \draw[myarrow] (report.south) -- ++(0,-2cm) |- (db.east);
+        \draw[myarrow] (report.south) -- ++(0,-2.5cm) |- (db.east);
 
     \end{tikzpicture}
     % TIKZ DIAGRAM END
@@ -441,13 +444,13 @@ The application is designed as a Client-Server-Worker system to handle the heavy
     \label{fig:architecture}
 \end{figure}
 
-When the server receives a request for an analysis job, it creates a new job object in a SQLite database. This job entry can be queried by the front-end to determine the current progress of the analysis or whether any errors have occurred. The server then spawns a new Python process to complete the analysis task. By using separate processes rather than threads, the system avoids memory management-based limitations imposed by Python’s Global Interpreter Lock, allowing multiple analysis jobs to run in parallel.\\
-
-The heavy processing jobs are executed by background worker processes, which save their results to a centralised drive accessible by the server. Once processing is complete, the results are retrieved by the server and made available to the web interface for visualisation. This Server–Worker design allows multiple jobs to be queued and processed without overloading the server, ensuring that the application remains responsive.\\
+When the server receives a request for an analysis job, it creates a new job object in a SQLite database. This job entry can be queried by the front-end to determine the current progress of the analysis or whether any errors have occurred. The server then spawns a new Python process to complete the analysis task. By using separate processes rather than threads, the system avoids memory management-based limitations imposed by Python’s Global Interpreter Lock, allowing multiple analysis jobs to run in parallel. This design allows multiple jobs to be queued and processed without overloading the server, ensuring that the application remains responsive.\\
 
 A one-process-per-request strategy was chosen over maintaining a pool of idle processes, as the overhead of process creation is insignificant compared to the duration of the analysis tasks. This approach avoids unnecessary resource usage while maintaining flexibility and scalability as the system workload changes.\\
 
-The system was initially developed and tested locally, with both the frontend and backend running on the development machine. However, conducting a user study required the application to be accessible remotely so that participants could upload their own footage. To achieve this, the application was deployed to the university's DCS shared server infrastructure. The FastAPI backend and React frontend were served over HTTPS using self-signed SSL certificates, with the backend bound to a dedicated port and the frontend built and served via Vite's preview mode. Video files and analysis outputs were stored on the DCS large shared filesystem, which is accessible to both the server process and any SLURM cluster jobs. A startup script was written to launch both services, configure the correct paths, and activate the required Python virtual environment and Conda environment for GPU dependencies. SLURM cluster integration was added via SSH tunnelling, allowing analysis and recalibration jobs to be submitted to the university's GPU cluster. The backend manages job submission, monitors SLURM job status, and retrieves results from the shared filesystem, abstracting the cluster interaction entirely from the user.\\
+The system was initially developed and tested locally, with both the frontend and backend running on the development machine. However, conducting a user study required the application to be accessible remotely so that participants could upload their own footage. To achieve this, the application was deployed to the university’s DCS shared server infrastructure. The FastAPI backend and React frontend were served over HTTPS using self-signed SSL certificates, with the backend bound to a dedicated port and the frontend built and served via Vite’s preview mode. Video files and analysis outputs were stored on the DCS large shared filesystem, which is accessible to both the server process and any SLURM cluster jobs. A startup script was written to launch both services, configure the correct paths, and activate the required Python virtual environment and Conda environment for GPU dependencies.\\
+
+SLURM cluster integration was added via SSH tunnelling, allowing analysis and recalibration jobs to be submitted to the university’s GPU cluster. Offloading to the cluster significantly reduces processing time compared to running on the shared server’s CPU, as the Mask R-CNN inference and face analysis models benefit substantially from GPU acceleration. However, the SLURM scheduling system introduces a trade-off: during periods of high cluster utilisation, jobs may be queued behind other users’ workloads, meaning analysis start times are unpredictable. To manage this, the backend polls SLURM job status and relays queue position and estimated wait times to the frontend, so users are kept informed rather than left waiting without feedback. The backend manages job submission, monitors SLURM job status, and retrieves results from the shared filesystem, abstracting the cluster interaction entirely from the user.\\
 
 \subsubsection{Front-end Design and Features}
 The web application allows users to upload synchronised road-facing and cabin-facing video footage for analysis and to view detected driving mistakes. The system supports the submission of multiple consecutive video files, which is necessary as dash-cam systems use loop-recording rather than saving entire driving sessions in a single file. Once uploaded, the files are sent to the server for processing, and the user is shown the progress of the analysis. \\

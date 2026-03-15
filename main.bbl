@@ -317,6 +317,24 @@ Zachary Teed and Jia Deng.
   {Motion}, 2020.
 \newblock arXiv:1812.04605 [cs].
 
+\bibitem{he2017mask}
+Kaiming He, Georgia Gkioxari, Piotr Doll{\'a}r, and Ross Girshick.
+\newblock {Mask R-CNN}.
+\newblock In {\em Proceedings of the IEEE International Conference on Computer
+  Vision}, pages 2980--2988, 2017.
+
+\bibitem{kalal2010forward}
+Zdenek Kalal, Krystian Mikolajczyk, and Jiri Matas.
+\newblock Forward-backward error: Automatic detection of tracking failures.
+\newblock In {\em Proceedings of the 20th International Conference on Pattern
+  Recognition}, pages 2756--2759. IEEE, 2010.
+
+\bibitem{fischler1981random}
+Martin~A. Fischler and Robert~C. Bolles.
+\newblock Random sample consensus: A paradigm for model fitting with
+  applications to image analysis and automated cartography.
+\newblock {\em Communications of the ACM}, 24(6):381--395, 1981.
+
 \bibitem{deng2019arcface}
 Jiankang Deng, Jia Guo, Niannan Xue, and Stefanos Zafeiriou.
 \newblock {ArcFace}: Additive angular margin loss for deep face recognition.
