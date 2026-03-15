@@ -87,7 +87,7 @@ You will have done a good deal of finding out about the project area by reading 
 There may be no room for a full literature review in the Progress Report, but you should give an indication of how you have gained background information. It would be appropriate to mention just a few citations which you view as key sources for your project. References should be provided as a formal reference list at the end of your report. Check if your supervisor has a preferred format. If not, you can choose your own style, but be consistent.
 \end{comment}
 
-This section reviews the key computer vision techniques used in the project, covering lane detection, temporal tracking, gaze estimation and motion estimation as the three core components of the proposed system.
+This section reviews the key computer vision techniques used in the project, covering lane detection, temporal tracking, gaze estimation and motion estimation as the four core components of the proposed system.
 
 \subsection{Lane Detection}
 Lane detection is a well-researched topic within Computer Vision (CV). It is an essential tool for many modern vehicle features, from lane assist to full self-driving systems. Lane detection aims to detect lane lines or lane areas by either camera or lidar \cite{tang_review_2021}. This project focuses on camera-based perception, due to the cost and scope constraints of using lidar. Classical lane detection methods involved image processing techniques such as Sobel \cite{sobel_1968} and Canny \cite{canny_1986} filters, followed by Hough transform \cite{duda_1972} and curve fitting. However, these methods suffered from poor performance and consistency in varying lighting conditions and faded or obscured lane lines \cite{hillel_2014}. Since the project aims to work on urban roads in different lighting and weather conditions, these methods are not suitable. \\
@@ -174,28 +174,27 @@ Create some sort of ground truth benchmark - using GPS from car??
 Then compare results from VO model with/without various features to show addition helps.
 \end{comment}
 
-Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is used to detect left and right turns (FR3.1.1). Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM). \\
-
-VO analyses sequential camera frames in order to estimate the local motion incrementally between consecutive frames. This is usually done by detecting and tracking keypoints between frames, and using sparse Optical Flow to calculate how the motion of these keypoints implies that the camera has moved between frames. Since this project is limited to just one dash-cam, the variant of VO that we use is monocular. This naturally faces scale ambiguity, meaning it can only obtain relative motion estimates, and the motion estimate is likely to drift over 
-time. \\
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{research_images/optical_flow_ex.png}
-    \caption{Optical flow example. Source: \cite{mathworks_optical_flow}}
-    \label{fig:placeholder}
-\end{figure}
-
-vSLAM, by contrast, is a technique used for constructing a persistent map of the environment that the camera is in. vSLAM algorithms can be broadly classified into sparse and semi-dense methods. Sparse methods match feature points between images, similar to VO, using algorithms such as ORB-SLAM, whereas semi-dense methods operate on regions of strong image intensity gradients, with algorithms such as LSD-SLAM. SVO is another notable method, which takes a semi-direct approach by combining sparse feature matching with direct image alignment. While vSLAM algorithms can identify loop-closures making them robust to motion drift accumulation, they are considerably more computationally expensive than VO and provide more environmental information than is necessary for this project. \\
+Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is used to detect left and right turns (FR3.1.1). Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM). vSLAM constructs a persistent map of the environment (Figure \ref{fig:vslam_example}), and can identify loop-closures to correct for drift accumulation. However, it is considerably more computationally expensive than VO and provides more environmental information than is necessary for this project. Since only local, relative motion is needed for turn detection, VO was selected as sufficient without the overhead of full environment mapping. \\
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\linewidth]{research_images/pycuvslam_example.png}
     \caption{vSLAM example with vehicle segmentation on the KITTI Stereo Odometry dataset. Source: PyCuVLSAM \cite{korovko2025cuvslamcudaacceleratedvisual}}
-    \label{fig:placeholder}
+    \label{fig:vslam_example}
 \end{figure}
 
-Given these trade-offs, VO was selected as sufficient for identifying manoeuvres at a local scale without the overhead of full environment mapping. One approach for classifying manoeuvres from VO output, introduced by Zekany et al., involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW). However, as noted in recent reviews \cite{yurtsever2020survey}, separating perception from state estimation is preferred in safety-critical applications due to its explainability, and simpler rule-based methods are favoured where the task allows for it. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a threshold-based approach to yaw accumulation is adopted instead, where each detection decision can be directly traced to interpretable thresholds rather than the black-box nature of deep learning trajectory matching methods such as DTW.
+VO analyses sequential camera frames to estimate the camera's local motion incrementally. The process begins with keypoint detection, where algorithms such as Shi-Tomasi \cite{shi1994good} or ORB \cite{rublee2011orb} identify distinctive features in each frame. These keypoints are then tracked across consecutive frames using sparse Optical Flow, a technique that estimates the displacement of individual feature points between frames rather than computing motion for every pixel. The Lucas-Kanade method \cite{lucas1981iterative} is commonly used for this, as it is efficient and well-suited to tracking a sparse set of points. For this project, Shi-Tomasi was selected for keypoint detection, as it produces corners with strong gradients in two directions, which is exactly what Lucas-Kanade is designed to track. Alternatives such as FAST or ORB were considered, but these produce lower-quality corners or include binary descriptor computation that is unnecessary when using optical flow for matching rather than descriptor comparison. \\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{research_images/optical_flow_ex.png}
+    \caption{Optical flow example. Source: \cite{mathworks_optical_flow}}
+    \label{fig:optical_flow_ex}
+\end{figure}
+
+Once correspondences between keypoints are established, the Essential Matrix is computed from the matched point pairs. The Essential Matrix encodes the geometric relationship between two camera views, and can be decomposed into a rotation matrix $R$ and translation vector $t$ that describe how the camera has moved between frames. This is analogous to the PnP decomposition used in gaze estimation (Section 2.3), but operates on frame-to-frame correspondences rather than a canonical 3D model. Since this project is limited to a single dash-cam, the variant of VO used is monocular, which naturally faces scale ambiguity, meaning it can only obtain relative motion estimates, and the motion estimate is likely to drift over time. \\
+
+One approach for classifying manoeuvres from VO output, introduced by Zekany et al. \cite{zekany2022finding}, involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW), a classical distance metric for time-series comparison. However, the use of a deep learning model for the VO step makes the trajectory estimation itself a black box. As noted in recent reviews \cite{yurtsever2020survey}, separating perception from state estimation is preferred in safety-critical applications due to its explainability, and simpler rule-based methods are favoured where the task allows for it. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a threshold-based approach to yaw accumulation is adopted instead, where each detection decision can be directly traced to interpretable thresholds.
 
 \section{Design and Development}
 \begin{comment}

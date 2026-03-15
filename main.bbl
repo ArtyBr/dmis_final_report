@@ -242,6 +242,42 @@ Corinna Cortes and Vladimir Vapnik.
 \newblock Support-vector networks.
 \newblock {\em Machine Learning}, 20(3):273--297, 1995.
 
+\bibitem{korovko2025cuvslamcudaacceleratedvisual}
+Alexander Korovko, Dmitry Slepichev, Alexander Efitorov, Aigul Dzhumamuratova,
+  Viktor Kuznetsov, Hesam Rabeti, Joydeep Biswas, and Soha Pouya.
+\newblock cuvslam: Cuda accelerated visual odometry and mapping, 2025.
+
+\bibitem{shi1994good}
+Jianbo Shi and Carlo Tomasi.
+\newblock Good features to track.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 593--600. IEEE, 1994.
+
+\bibitem{rublee2011orb}
+Ethan Rublee, Vincent Rabaud, Kurt Konolige, and Gary Bradski.
+\newblock {ORB}: An efficient alternative to {SIFT} or {SURF}.
+\newblock In {\em Proceedings of the IEEE International Conference on Computer
+  Vision}, pages 2564--2571. IEEE, 2011.
+
+\bibitem{lucas1981iterative}
+Bruce~D Lucas and Takeo Kanade.
+\newblock An iterative image registration technique with an application to
+  stereo vision.
+\newblock In {\em Proceedings of the 7th International Joint Conference on
+  Artificial Intelligence}, volume~2, pages 674--679, 1981.
+
+\bibitem{mathworks_optical_flow}
+{Example: Dashcam optic flow using Computer Vision Toolbox - File Exchange -
+  MATLAB CentralFile Exchange - MATLAB Central}, August 2021.
+\newblock [Online; accessed 15. Mar. 2026].
+
+\bibitem{zekany2022finding}
+Stephen~A. Zekany, Thomas~F. Larsen, Ronald~G. Dreslinski, and Thomas~F.
+  Wenisch.
+\newblock Finding and indexing vehicle maneuvers from dashboard camera video.
+\newblock {\em IEEE Transactions on Intelligent Transportation Systems},
+  23(9):16098--16109, 2022.
+
 \bibitem{paszke2019pytorch}
 Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory
   Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et~al.
