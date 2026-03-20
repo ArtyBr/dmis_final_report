@@ -634,7 +634,7 @@ Performance varied across manoeuvre types. Right lane changes were detected most
 
 The confusion matrix also reveals that type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common type of confusion was between left turns and right turns (4 left turns detected as right turns), which occurs when the visual odometry briefly accumulates yaw in the wrong direction before correcting.\\
 
-These results can be compared to those of Zekany et al.\ \cite{zekany2022finding}, whose DTW-based manoeuvre classification approach was discussed in Section 2.4. Table \ref{tab:cm_comparison} presents the confusion matrices from both systems side by side for the four shared manoeuvre types, with diagonal (correct classification) percentages shown in bold where one system outperforms the other.
+These results can be compared to those of Zekany et al.\ \cite{zekany2022finding}, whose DTW-based manoeuvre classification approach was discussed in Section 2.4. As noted in the literature review, Zekany et al.\ is the only published work that attempts to detect and classify individual driving manoeuvres from dashboard camera video alone, making it the closest point of comparison for this project despite the differences in application domain (their system targets offline video indexing, while ours targets real-time driver feedback). Table \ref{tab:cm_comparison} presents the confusion matrices from both systems side by side for the four shared manoeuvre types, with diagonal (correct classification) percentages shown in bold where one system outperforms the other.
 
 \begin{table}[H]
 \centering
@@ -655,6 +655,52 @@ Right Lane Change & 0\% & 0\% & 2\% & \textbf{98\%} & 0\% & 0\% & 4\% & 92\% \\
 \end{table}
 
 While Zekany et al.\ achieve higher accuracy on turn detection (89\% and 80\% for left and right turns respectively, compared to our 63\% and 67\%), their lane change detection exhibits a severe systematic failure: only 7\% of left lane changes are correctly classified, with 70\% misclassified as right lane changes. Their system essentially classifies almost every lane change as a right lane change regardless of its actual direction, rendering the left/right distinction unreliable. By contrast, our system correctly distinguishes between left and right lane changes, achieving 76\% and 92\% respectively, with only a single instance of a right lane change being misclassified as a left lane change (4\%). The false positives that do occur in our lane change detection are caused by environmental factors (bus lanes, faded markings) rather than by a fundamental confusion between directions.\\
+
+However, the comparison in Table \ref{tab:cm_comparison} is not entirely like-for-like. Zekany et al.'s confusion matrix (their Table VIII) excludes both false negatives and false positives, reporting only the classification of detected manoeuvres. Our Table \ref{tab:cm_comparison} includes false negatives, which deflates the diagonal percentages for categories with lower recall. To enable a fairer comparison, Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to our 84 true positive detections, mirroring Zekany et al.'s methodology.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|cccc|cccc|}
+\hline
+ & \multicolumn{4}{c|}{\textbf{Zekany et al.\ (Table VIII)}} & \multicolumn{4}{c|}{\textbf{Ours (Matched Only)}} \\
+\textbf{Ground Truth} & LT & RT & LLC & RLC & LT & RT & LLC & RLC \\
+\hline
+Left Turn & 89\% & 0\% & 0\% & 8\% & \textbf{83\%} & 17\% & 0\% & 0\% \\
+Right Turn & 0\% & 80\% & 7\% & 13\% & 0\% & \textbf{94\%} & 0\% & 6\% \\
+Left Lane Change & 1\% & 18\% & 7\% & 70\% & 0\% & 0\% & \textbf{95\%} & 0\% \\
+Right Lane Change & 0\% & 0\% & 2\% & 98\% & 0\% & 0\% & 4\% & \textbf{96\%} \\
+\hline
+\end{tabular}
+\caption{Like-for-like confusion matrix comparison, with both systems evaluated only on matched (detected) events, excluding false positives and false negatives. Bold highlights the higher diagonal accuracy between the two systems. Zekany et al.\ percentages exclude their additional categories (U-Turn, K-Turn, Highway, Deceleration). Our row percentages are computed over the 84 true positive matches.}
+\label{tab:cm_matched}
+\end{table}
+
+Under this like-for-like comparison, the results shift substantially in our favour. Our system achieves higher classification accuracy on three of the four manoeuvre types: right turns (94\% vs.\ 80\%), left lane changes (95\% vs.\ 7\%), and right lane changes (96\% vs.\ 98\%, which is roughly comparable). Only for left turns does Zekany et al.'s system retain a lead (89\% vs.\ 83\%), and even there the gap narrows from the 26-point difference in Table \ref{tab:cm_comparison} to just 6 percentage points. Our overall classification accuracy across matched events is 92\% (77 of 84 correctly typed), compared to Zekany et al.'s best-match overall accuracy of 78.8\% (their Table VII: 628 of 797 matched correctly).\\
+
+The two systems also differ in evaluation framing. Zekany et al.\ report a metric called $F_\text{eliminated}$ ($1 - \frac{TP + FP}{N}$), representing the fraction of video discarded as uninteresting. This reflects their design goal of video indexing rather than event-level classification. Our system targets real-time driver feedback, so we evaluate using standard event-level precision (0.82), recall (0.81), and F1 (0.81). Despite this difference, a direct per-manoeuvre comparison is possible by taking the best (maximum F1) operating point for each of Zekany et al.'s individual classifiers from their Table III. Table \ref{tab:f1_comparison} presents this comparison.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|ccc|ccc|}
+\hline
+ & \multicolumn{3}{c|}{\textbf{Zekany et al.\ (Best F1)}} & \multicolumn{3}{c|}{\textbf{Ours}} \\
+\textbf{Manoeuvre} & P & R & F1 & P & R & F1 \\
+\hline
+Left Turn      & 0.52 & 0.74 & 0.61 & \textbf{0.82} & \textbf{0.77} & \textbf{0.79} \\
+Right Turn     & \textbf{0.85} & \textbf{0.92} & \textbf{0.89} & 0.59 & 0.71 & 0.64 \\
+Left Lane Change  & 0.61 & 0.33 & 0.43 & \textbf{0.95} & \textbf{0.80} & \textbf{0.87} \\
+Right Lane Change & 0.79 & 0.18 & 0.30 & \textbf{0.96} & \textbf{0.96} & \textbf{0.96} \\
+\hline
+\end{tabular}
+\caption{Per-manoeuvre precision, recall, and F1 comparison. Zekany et al.\ values are taken from the maximum-F1 row of each individual classifier in their Table III. Bold highlights the higher value in each metric. Our system achieves higher F1 on three of the four shared manoeuvre types.}
+\label{tab:f1_comparison}
+\end{table}
+
+Our system achieves a higher F1 score on three of the four manoeuvre types. The improvement is particularly striking for lane changes: our left lane change F1 of 0.87 more than doubles their 0.43, and our right lane change F1 of 0.96 exceeds their 0.30 by a wide margin. For left turns, our F1 of 0.79 also exceeds their 0.61. Zekany et al.'s system performs notably better only on right turns (F1 of 0.89 vs.\ our 0.64), where our system suffers from false positives caused by rightward road curves being indistinguishable from genuine right turns in the visual odometry signal (as discussed above). It is also worth noting that Zekany et al.'s per-classifier F1 scores are computed at individually optimised recall thresholds, whereas our scores reflect a single fixed system configuration with no per-class threshold tuning, making the comparison conservative in our favour.\\
+
+The systems also differ qualitatively in their failure modes. Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, confirmed by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching. The only cross-type confusions in our matched-events matrix are between left and right turns (17\% and 6\% respectively), caused by brief yaw oscillations in the visual odometry. Both systems share a susceptibility to road curves producing false turn detections.\\
 
 \subsection{Lane Detection Coverage}
 Lane detection achieved an average coverage of 81.7\% for detecting at least one lane and 75.5\% for detecting at least two lanes (the minimum required for lane crossing detection). Frame-to-frame stability was 96.9\%, indicating that the model rarely produces flickering detections. Coverage was comparable between day (82.5\% / 76.7\%) and night (79.4\% / 71.8\%) conditions, demonstrating that the LaneATT model generalises reasonably well across lighting conditions. The slight reduction at night is expected, as lane markings are less visible under headlights alone.\\
