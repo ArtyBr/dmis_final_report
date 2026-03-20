@@ -9,8 +9,8 @@
 \citation{nauto_platform}
 \citation{commaai_openpilot}
 \citation{zenroad_app}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{}\protected@file@percent }
 \citation{2nd2nonedrivingschoolLearningDrive}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{}\protected@file@percent }
 \citation{tang_review_2021}
 \citation{sobel_1968}
 \citation{canny_1986}
@@ -36,6 +36,7 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Lane Detection}{3}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Visualisation of CNN architecture. Source: \cite  {mathworks_cnn}.}}{3}{}\protected@file@percent }
 \newlabel{fig:cnn_vis}{{1}{3}{}{}{}}
+\citation{vaswani2017attention}
 \citation{jin_recursive_2023}
 \citation{wu_yolop_2022}
 \citation{chen_level_2022}
@@ -54,70 +55,114 @@
 \citation{jolliffe2016principal}
 \citation{macqueen1967some}
 \citation{cortes1995support}
+\citation{taketomi2017visual}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Visualisation of Kalman Filter for storing vehicle state. Source: \cite  {MachineLearningTV2021Jun}.}}{5}{}\protected@file@percent }
 \newlabel{fig:kalman_vis}{{3}{5}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Gaze Estimation}{5}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Visualisation of the PnP problem. Source: \cite  {opencv_pnp}.}}{5}{}\protected@file@percent }
 \newlabel{fig:pnpvis}{{4}{5}{}{}{}}
-\citation{yurtsever2020survey}
+\citation{korovko2025cuvslamcudaacceleratedvisual}
+\citation{korovko2025cuvslamcudaacceleratedvisual}
+\citation{shi1994good}
+\citation{rublee2011orb}
+\citation{lucas1981iterative}
+\citation{mathworks_optical_flow}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Motion Estimation}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Design and Development}{6}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces vSLAM example with vehicle segmentation on the KITTI Stereo Odometry dataset. Source: PyCuVLSAM \cite  {korovko2025cuvslamcudaacceleratedvisual}}}{6}{}\protected@file@percent }
+\newlabel{fig:vslam_example}{{5}{6}{}{}{}}
+\citation{zekany2022finding}
+\citation{yurtsever2020survey}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Optical flow example. Source: \cite  {mathworks_optical_flow}}}{7}{}\protected@file@percent }
+\newlabel{fig:optical_flow_ex}{{6}{7}{}{}{}}
 \citation{paszke2019pytorch}
 \citation{abadi2016tensorflow}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Design and Development}{8}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Folder structure showcasing the modular structure of the project.}}{8}{}\protected@file@percent }
+\newlabel{fig:folders}{{7}{8}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Resources and Tools}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Lane Change Detection (FR1.2 \& FR1.3)}{8}{}\protected@file@percent }
 \citation{kuhn1955hungarian}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Folder structure showcasing the modular structure of the project.}}{7}{}\protected@file@percent }
-\newlabel{fig:folders}{{5}{7}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Resources and Tools}{7}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Lane Change Detection (FR1.2 \& FR1.3)}{7}{}\protected@file@percent }
-\newlabel{lst:lane-tracker-gated}{{1}{8}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Closest-first gated data association for lane tracking (key logic)}{8}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Example frames of cars obstructing lane, with lane remaining tracked.}}{8}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{8}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{8}{}\protected@file@percent }
-\newlabel{fig:cars_lanes}{{6}{8}{}{}{}}
+\newlabel{lst:lane-tracker-gated}{{1}{9}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Closest-first gated data association for lane tracking (key logic)}{9}{}\protected@file@percent }
 \citation{teed2021droid}
 \citation{wang2021tartanvo}
 \citation{teed_deepv2d_2020}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Turn Detection (FR3.1.1)}{9}{}\protected@file@percent }
-\newlabel{lst:vo-grid}{{2}{9}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Grid-based feature detection for spatially uniform keypoint distribution}{9}{}\protected@file@percent }
-\citation{deng2019arcface}
-\citation{lugaresi2019mediapipe}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Face Analysis (FR1.4)}{10}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces (a) Yaw, Pitch, Roll from example video clip. (b) PCA transformation from 3D to 2D.}}{11}{}\protected@file@percent }
+\citation{he2017mask}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Example frames of cars obstructing lane, with lane remaining tracked.}}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{10}{}\protected@file@percent }
+\newlabel{fig:cars_lanes}{{8}{10}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Turn Detection (FR3.1.1)}{10}{}\protected@file@percent }
+\citation{kalal2010forward}
+\citation{fischler1981random}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) Tracked features without bucketing: points are evenly spread out on road and brick textures, and would jump noisily in subsequent frames. (b) Tracked features with bucketing: Points cluster to feature-dense areas of the image, and stay tracked to those areas in subsequent frames.}}{11}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{11}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{11}{}\protected@file@percent }
-\newlabel{fig:yawpitchroll_1}{{7}{11}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Angle estimations visualised: (a) Left mirror. (b) Looking ahead. (c) Right mirror.}}{11}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{11}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{11}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {}}}{11}{}\protected@file@percent }
-\newlabel{fig:gaze_examples}{{8}{11}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) KMeans clustering results. (b) SVM classification results.}}{12}{}\protected@file@percent }
+\newlabel{fig:points_houses}{{9}{11}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces (a) Tracking example with no Kalman filter or implausible-frame rejection. (b) Tracking example with Kalman filter and frame rejection.}}{12}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{12}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{12}{}\protected@file@percent }
-\newlabel{fig:yawpitchroll_2}{{9}{12}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Mistake Identification (FR1.5)}{12}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Safe lane change with log showing right mirror was checked 3 seconds before the merge.}}{12}{}\protected@file@percent }
-\newlabel{fig:safe_lane_change}{{10}{12}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Web Application (FR2)}{13}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}Overall System \& Backend Design}{13}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces System Architecture Diagram showing the data flow between Frontend, Backend, and AI Workers.}}{13}{}\protected@file@percent }
-\newlabel{fig:architecture}{{11}{13}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}Front-end Design and Features}{14}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Screenshot of the video submission page.}}{14}{}\protected@file@percent }
-\newlabel{fig:video_submission}{{12}{14}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Web application design with sample video clip.}}{15}{}\protected@file@percent }
-\newlabel{fig:web_app_design}{{13}{15}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}User Authentication and Account System (FR2.2)}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.4}Per-User Gaze Calibration (FR3.2)}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.5}Privacy: Non-Driver Face Blurring (FR3.3)}{16}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.6}Adaptive Video Quality}{16}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.7}User Error Reporting and Re-Analysis}{16}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.8}Admin Dashboard}{17}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.9}Multi-File Upload and Error Handling}{17}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation Methodology}{17}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{17}{}\protected@file@percent }
+\newlabel{fig:kalman_comparison}{{10}{12}{}{}{}}
+\citation{deng2019arcface}
+\citation{lugaresi2019mediapipe}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Turn detections from full VO pipeline. Purple and Blue stars show Right and Left turns respectively.}}{13}{}\protected@file@percent }
+\newlabel{fig:turn_detections}{{11}{13}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Face Analysis (FR1.4)}{13}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces (a) Yaw, Pitch, Roll from example video clip. (b) PCA transformation from 3D to 2D.}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{14}{}\protected@file@percent }
+\newlabel{fig:yawpitchroll_1}{{12}{14}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Angle estimations visualised: (a) Left mirror. (b) Looking ahead. (c) Right mirror.}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {}}}{14}{}\protected@file@percent }
+\newlabel{fig:gaze_examples}{{13}{14}{}{}{}}
+\citation{highwaycode2025}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces (a) KMeans clustering results. (b) SVM classification results.}}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{15}{}\protected@file@percent }
+\newlabel{fig:yawpitchroll_2}{{14}{15}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Mistake Identification (FR1.5)}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Safe lane change with log showing right mirror was checked 3 seconds before the merge.}}{16}{}\protected@file@percent }
+\newlabel{fig:safe_lane_change}{{15}{16}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Web Application (FR2)}{16}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}Overall System and Backend Design}{16}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces System Architecture Diagram showing the data flow between Frontend, Backend, and AI Workers.}}{17}{}\protected@file@percent }
+\newlabel{fig:architecture}{{16}{17}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}User Authentication and Account System}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}Upload Flow and Video Synchronisation}{18}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Screenshot of the video submission page.}}{18}{}\protected@file@percent }
+\newlabel{fig:video_submission}{{17}{18}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Synchronisation confirmation interface showing dual waveforms and manual adjustment controls.}}{20}{}\protected@file@percent }
+\newlabel{fig:audio_sync}{{18}{20}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.4}Results Display}{20}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Web application results page with synchronised dual-video playback, custom event timeline and event logs.}}{21}{}\protected@file@percent }
+\newlabel{fig:web_app_design}{{19}{21}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.5}Per-User Gaze Calibration}{21}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces (a) Clip editor for selecting labelled video segments. (b) Point editor for directly modifying training samples on the PCA scatter plot.}}{22}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{22}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{22}{}\protected@file@percent }
+\newlabel{fig:calib_editors}{{20}{22}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.6}Privacy and Video Output Processing}{22}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.7}Evaluation Infrastructure}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.8}Error Handling}{23}{}\protected@file@percent }
+\citation{zekany2022finding}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation Methodology}{24}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Dataset}{24}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Ground Truth Evaluation Methodology}{24}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Lane Detection Evaluation}{25}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}User Testing}{25}{}\protected@file@percent }
+\citation{zekany2022finding}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{26}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Event Detection Accuracy}{26}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces (a) Dashcam view of a rightward road curve misclassified as a right turn. The detected lanes curve to the right, producing the same visual odometry signal as a genuine turn. (b) Corresponding visual odometry trajectory showing the rightward yaw accumulation.}}{26}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{26}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{26}{}\protected@file@percent }
+\newlabel{fig:right_turn_misclass}{{21}{26}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Confusion matrix comparison between Zekany et al.\ and our system for the four shared manoeuvre types. Each row shows the percentage of ground truth events detected as each type. Bold highlights the higher diagonal (correct classification) accuracy. Zekany et al.\ percentages exclude their additional categories (U-Turn, K-Turn, Highway, Deceleration). Our percentages exclude false negatives (missed events).}}{27}{}\protected@file@percent }
+\newlabel{tab:cm_comparison}{{2}{27}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Lane Detection Coverage}{27}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Safety Event Distribution}{27}{}\protected@file@percent }
 \bibdata{progress_report_bibliography}
 \bibcite{govuk_casualties_2024}{{1}{}{{}}{{}}}
 \bibcite{road_accident_data}{{2}{}{{}}{{}}}
@@ -136,8 +181,9 @@
 \bibcite{duda_1972}{{15}{}{{}}{{}}}
 \bibcite{hillel_2014}{{16}{}{{}}{{}}}
 \bibcite{lecun_1998}{{17}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Future Work}{28}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgements}{28}{}\protected@file@percent }
 \bibcite{goodfellow_2016}{{18}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Self-Assessment}{18}{}\protected@file@percent }
 \bibcite{mathworks_cnn}{{19}{}{{}}{{}}}
 \bibcite{wang_lanenet_2018}{{20}{}{{}}{{}}}
 \bibcite{redmon_you_2016}{{21}{}{{}}{{}}}
@@ -149,38 +195,35 @@
 \bibcite{tabelini2021keep}{{27}{}{{}}{{}}}
 \bibcite{liu2021condlanenet}{{28}{}{{}}{{}}}
 \bibcite{zheng2022clrnet}{{29}{}{{}}{{}}}
-\bibcite{jin_recursive_2023}{{30}{}{{}}{{}}}
-\bibcite{wu_yolop_2022}{{31}{}{{}}{{}}}
-\bibcite{chen_level_2022}{{32}{}{{}}{{}}}
-\bibcite{yurtsever2020survey}{{33}{}{{}}{{}}}
-\bibcite{MachineLearningTV2021Jun}{{34}{}{{}}{{}}}
-\bibcite{salma_drive_2024}{{35}{}{{}}{{}}}
-\bibcite{opencv_pnp}{{36}{}{{}}{{}}}
-\bibcite{jolliffe2016principal}{{37}{}{{}}{{}}}
-\bibcite{macqueen1967some}{{38}{}{{}}{{}}}
-\bibcite{cortes1995support}{{39}{}{{}}{{}}}
-\bibcite{paszke2019pytorch}{{40}{}{{}}{{}}}
-\bibcite{abadi2016tensorflow}{{41}{}{{}}{{}}}
-\bibcite{kuhn1955hungarian}{{42}{}{{}}{{}}}
-\bibcite{teed2021droid}{{43}{}{{}}{{}}}
-\bibcite{wang2021tartanvo}{{44}{}{{}}{{}}}
-\bibcite{teed_deepv2d_2020}{{45}{}{{}}{{}}}
-\bibcite{deng2019arcface}{{46}{}{{}}{{}}}
-\bibcite{lugaresi2019mediapipe}{{47}{}{{}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Comparison of images from popular lane detection benchmarking datasets \let \let \@newciteauxhandle \@auxoutspec \cite  {datasetComparison}.}}{23}{}\protected@file@percent }
-\newlabel{fig:placeholder}{{14}{23}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Example images from the DMD \let \let \@newciteauxhandle \@auxoutspec \cite  {DMD2020}.}}{23}{}\protected@file@percent }
-\newlabel{fig:placeholder}{{15}{23}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces (a) 2-in-1 Dash-cam setup. (b) External dash-cam example image. (c) Internal dash-cam example image.}}{24}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{24}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{24}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {}}}{24}{}\protected@file@percent }
-\newlabel{fig:project-spec}{{16}{24}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Example kanban board with current project tasks.}}{24}{}\protected@file@percent }
-\newlabel{fig:kanban}{{17}{24}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Timeline up to Progress Report.}}{25}{}\protected@file@percent }
-\newlabel{fig:term1_timeline}{{18}{25}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Timeline from MVP to Viva.}}{25}{}\protected@file@percent }
-\newlabel{fig:term2_timeline}{{19}{25}{}{}{}}
+\bibcite{vaswani2017attention}{{30}{}{{}}{{}}}
+\bibcite{jin_recursive_2023}{{31}{}{{}}{{}}}
+\bibcite{wu_yolop_2022}{{32}{}{{}}{{}}}
+\bibcite{chen_level_2022}{{33}{}{{}}{{}}}
+\bibcite{yurtsever2020survey}{{34}{}{{}}{{}}}
+\bibcite{MachineLearningTV2021Jun}{{35}{}{{}}{{}}}
+\bibcite{salma_drive_2024}{{36}{}{{}}{{}}}
+\bibcite{opencv_pnp}{{37}{}{{}}{{}}}
+\bibcite{jolliffe2016principal}{{38}{}{{}}{{}}}
+\bibcite{macqueen1967some}{{39}{}{{}}{{}}}
+\bibcite{cortes1995support}{{40}{}{{}}{{}}}
+\bibcite{taketomi2017visual}{{41}{}{{}}{{}}}
+\bibcite{korovko2025cuvslamcudaacceleratedvisual}{{42}{}{{}}{{}}}
+\bibcite{shi1994good}{{43}{}{{}}{{}}}
+\bibcite{rublee2011orb}{{44}{}{{}}{{}}}
+\bibcite{lucas1981iterative}{{45}{}{{}}{{}}}
+\bibcite{mathworks_optical_flow}{{46}{}{{}}{{}}}
+\bibcite{zekany2022finding}{{47}{}{{}}{{}}}
+\bibcite{paszke2019pytorch}{{48}{}{{}}{{}}}
+\bibcite{abadi2016tensorflow}{{49}{}{{}}{{}}}
+\bibcite{kuhn1955hungarian}{{50}{}{{}}{{}}}
+\bibcite{teed2021droid}{{51}{}{{}}{{}}}
+\bibcite{wang2021tartanvo}{{52}{}{{}}{{}}}
+\bibcite{teed_deepv2d_2020}{{53}{}{{}}{{}}}
+\bibcite{he2017mask}{{54}{}{{}}{{}}}
+\bibcite{kalal2010forward}{{55}{}{{}}{{}}}
+\bibcite{fischler1981random}{{56}{}{{}}{{}}}
+\bibcite{deng2019arcface}{{57}{}{{}}{{}}}
+\bibcite{lugaresi2019mediapipe}{{58}{}{{}}{{}}}
+\bibcite{highwaycode2025}{{59}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{28}
+\gdef \@abspage@last{30}
