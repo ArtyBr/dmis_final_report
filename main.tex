@@ -212,11 +212,6 @@ Once correspondences between keypoints are established, the Essential Matrix is 
 
 One approach for classifying manoeuvres from VO output, introduced by Zekany et al. \cite{zekany2022finding}, involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW), a classical distance metric for time-series comparison. However, the use of a deep learning model for the VO step makes the trajectory estimation itself a black box. As noted in recent reviews \cite{yurtsever2020survey}, separating perception from state estimation is preferred in safety-critical applications due to its explainability, and simpler rule-based methods are favoured where the task allows for it. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a threshold-based approach to yaw accumulation is adopted instead, where each detection decision can be directly traced to interpretable thresholds.
 
-\subsection{Background summary}
-\begin{comment}
-I think it'd be good to have a summary subsection at the end of Section 2, making it clear which parts of Section 2 are going to be used in your work.
-\end{comment}
-
 \newpage
 
 \section{Design and Development}
@@ -325,7 +320,7 @@ Features are detected only on the unmasked (static) regions using a grid-based b
     \centering
     \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/house_without_grid.png}}
     \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/houses_with_grid.png}} 
-    \caption{(a) Tracked features without bucketing: points are evenly spread out on road and brick textures. (b) Tracked features with bucketing: Points cluster to feature-dense areas of the image.}
+    \caption{(a) Tracked features without bucketing: points are evenly spread out on road and brick textures, and would jump noisily in subsequent frames. (b) Tracked features with bucketing: Points cluster to feature-dense areas of the image, and stay tracked to those areas in subsequent frames.}
     \label{fig:points_houses}
 \end{figure}
 
@@ -537,8 +532,6 @@ During early user testing, several participants found the clip editor daunting, 
     \label{fig:calib_editors}
 \end{figure}
 
-
-
 \subsubsection{Privacy and Video Output Processing}
 The driver-facing camera inevitably captures passengers and, depending on the camera’s field of view, potentially pedestrians or other bystanders visible through windows. Distributing or displaying this footage without consent raises ethical and legal concerns, particularly under GDPR. Since the system’s analysis only requires the driver’s face, all other faces can be obscured without any loss of functionality.\\
 
@@ -582,6 +575,10 @@ Possible results/evaluation inclusions in report:
         \item `Do you think this is a useful tool?'
     \end{itemize}
 \end{itemize}
+
+Project evaluation was split into two parts: quantitative (author-labelled) and qualitative (user-testing). For the quantitative portion, each component of the system was evaluated - face analysis, lane change detection and turn detection. Qualitatively, we conducted user testing as well as a general interest questionnaire. User testing was difficult to conduct for several reasons. We were limited to participants that the author knew, due to the ethical and practical concerns of general user testing. While there were many potential participants who owned cars and driver's licenses, the largest limitation was the lack of dash-cam ownership - out of 19 potential driving participants, only 5 owned dash-cams. Therefore we note that this portion of evaluation may be biased due to the personal connections of participants to the author and has limited statistical significance. \\
+
+For quantitative testing, X clips were labelled by the author, containing Y total events (describe the events with numbers for each one). 
 
 \newpage
 
