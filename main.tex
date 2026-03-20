@@ -561,6 +561,7 @@ Error handling was hardened across the upload, synchronisation and analysis pipe
 
 \section{Evaluation Methodology}
 % I can see this is a plan rather than a draft. It looks good. I know we've discussed this before, but if you can compare against existing work in any way, that would be good. Did you do any testing?
+\begin{comment}
 Explain the process(es) that I have gone through in order to evaluate the project. Justify that they are objective (or as much as I can make them), and help prove the technical contribution of the project.\\
 
 Possible results/evaluation inclusions in report:
@@ -575,15 +576,90 @@ Possible results/evaluation inclusions in report:
         \item `Do you think this is a useful tool?'
     \end{itemize}
 \end{itemize}
+\end{comment}
 
-Project evaluation was split into two parts: quantitative (author-labelled) and qualitative (user-testing). For the quantitative portion, each component of the system was evaluated - face analysis, lane change detection and turn detection. Qualitatively, we conducted user testing as well as a general interest questionnaire. User testing was difficult to conduct for several reasons. We were limited to participants that the author knew, due to the ethical and practical concerns of general user testing. While there were many potential participants who owned cars and driver's licenses, the largest limitation was the lack of dash-cam ownership - out of 19 potential driving participants, only 5 owned dash-cams. Therefore we note that this portion of evaluation may be biased due to the personal connections of participants to the author and has limited statistical significance. \\
+Project evaluation was split into two parts: quantitative (author-labelled ground truth) and qualitative (user testing). For the quantitative portion, the author manually labelled manoeuvre events across a subset of the collected dataset and compared these labels against the system's detections. Qualitatively, user testing sessions and a general interest questionnaire were conducted. User testing was difficult to conduct for several reasons. Participants were limited to individuals known to the author, due to ethical and practical concerns around general recruitment. While there were many potential participants who owned cars and driver's licenses, the largest limitation was the lack of dash-cam ownership: out of 19 potential driving participants, only 5 owned dash-cams. Therefore, this portion of the evaluation may be biased due to personal connections and has limited statistical significance.\\
 
-For quantitative testing, X clips were labelled by the author, containing Y total events (describe the events with numbers for each one). 
+\subsection{Dataset}
+The evaluation dataset comprises approximately 350 three-minute video clips (each consisting of a synchronised road and driver-facing pair) collected from three drivers across a variety of routes and conditions. The majority of clips were recorded during the day (~265 clips), with smaller subsets captured at night (~34 clips) and in rainy daytime conditions (~50 clips). Of the total dataset, 11\% of clips were manually labelled with ground truth event annotations by the author. These labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.\\
+
+\subsection{Ground Truth Evaluation Methodology}
+To evaluate the system's event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 5-second tolerance. This tolerance is consistent with the approach taken by Zekany et al.\ \cite{zekany2022finding}, who use a 4-second ``Maneuver Time Error'' (MTE) threshold in their evaluation of dashboard camera manoeuvre detection. They justify this by observing that human-scored and system-detected event times typically differ by one to two seconds (for example, a car creeping forward into a turn while waiting for traffic will be detected at a different moment than a human would mark), and that no consecutive same-class manoeuvres occur within four seconds in their dataset. Our slightly larger 5-second window additionally matches the mirror check lookback window used by the Safety Monitor, ensuring that a detection is considered correct if it falls within the same temporal range that the system uses for its own safety judgements.\\
+
+Each ground truth event was matched to at most one detection (and vice versa), with matches assigned greedily by smallest time difference. Unmatched ground truth events are counted as false negatives (FN, missed detections), and unmatched system detections are counted as false positives (FP, spurious detections). Matched pairs are true positives (TP). From these counts, three standard metrics are computed:
+
+\begin{equation}
+\text{Precision} = \frac{TP}{TP + FP}
+\end{equation}
+
+\noindent which measures the proportion of the system's detections that correspond to real events (i.e.\ how trustworthy a detection is);
+
+\begin{equation}
+\text{Recall} = \frac{TP}{TP + FN}
+\end{equation}
+
+\noindent which measures the proportion of real events that the system successfully detected (i.e.\ how many events it misses); and
+
+\begin{equation}
+F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation}
+
+\noindent the harmonic mean of precision and recall, providing a single balanced measure of overall detection quality. Per-video timeline comparisons were also generated, showing ground truth events alongside system detections with match lines and highlighted false positives/negatives, enabling visual inspection of failure cases.\\
+
+\subsection{Lane Detection Evaluation}
+Lane detection was evaluated separately, since lane visibility is a prerequisite for lane change detection rather than a directly labelled event. Coverage was measured as the proportion of frames in which the model detected at least one lane ($\geq$1) or at least two lanes ($\geq$2), since two visible lanes are required for a lane crossing to be identified. Stability was measured as the proportion of consecutive frame pairs where the detected lane count did not change, indicating consistent rather than flickering detections.\\
+
+\subsection{User Testing}
+Beyond quantitative accuracy, the system was evaluated through user testing sessions where participants uploaded their own driving footage, reviewed the results, and reported any errors they identified through the built-in error reporting mechanism. These reports (false positives and false negatives) were reviewed by the author through the administrator dashboard and used both for accuracy measurement and for identifying systematic failure modes. Participants were also asked qualitative questions about the usefulness of the tool and whether they would recommend it to someone learning to drive.
 
 \newpage
 
 \section{Results}
-Show the results - graphs, diagrams, tables of the evaluation techniques from the previous section.
+% Show the results - graphs, diagrams, tables of the evaluation techniques from the previous section.
+This section presents the quantitative results of the evaluation methodology described above, covering event detection accuracy, lane detection coverage, and the distribution of safety classifications across detected events.
+
+\subsection{Event Detection Accuracy}
+Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 true positives, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds, with the majority of matches falling within 1.5 seconds of the labelled time.\\
+
+Performance varied across manoeuvre types. Right lane changes were detected most reliably, with 23 of 25 correctly matched (92\%), and left lane changes achieved 76\% recall (19/25). The remaining false positives for lane changes (6 of the 19 total) were predominantly caused by the lane detection model misclassifying bus lanes or faded road markings as lane boundaries, leading the system to detect a lane crossing where none occurred. Left turns and right turns achieved 63\% (19/30) and 67\% (16/24) respectively. The lower recall for turns is partly attributable to the visual odometry pipeline's sensitivity to dynamic objects and lighting conditions, which can suppress the yaw signal during complex junctions. Of the 19 false positives, 12 were classified as right turns. Upon reviewing these cases through the administrator dashboard, it was observed that the majority occurred on roads that curve rightward, producing a yaw accumulation pattern indistinguishable from a genuine right turn as far as the visual odometry is concerned. Since the model relies solely on camera motion, it has no way to differentiate between a road that bends to the right and a deliberate right turn at a junction. Mitigating this would require incorporating additional environmental context, such as detecting give-way lines, junction markings, or changes in road topology that distinguish intersections from curved road segments (Figure \ref{fig:right_turn_misclass}).\\
+
+\begin{figure}[H]
+    \centering
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{results_images/right_turn_misclass.png}}
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{results_images/right_turn_misclass_vo.png}}
+    \caption{(a) Dashcam view of a rightward road curve misclassified as a right turn. The detected lanes curve to the right, producing the same visual odometry signal as a genuine turn. (b) Corresponding visual odometry trajectory showing the rightward yaw accumulation.}
+    \label{fig:right_turn_misclass}
+\end{figure}
+
+The confusion matrix also reveals that type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common type of confusion was between left turns and right turns (4 left turns detected as right turns), which occurs when the visual odometry briefly accumulates yaw in the wrong direction before correcting.\\
+
+These results can be compared to those of Zekany et al.\ \cite{zekany2022finding}, whose DTW-based manoeuvre classification approach was discussed in Section 2.4. Table \ref{tab:cm_comparison} presents the confusion matrices from both systems side by side for the four shared manoeuvre types, with diagonal (correct classification) percentages shown in bold where one system outperforms the other.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|cccc|cccc|}
+\hline
+ & \multicolumn{4}{c|}{\textbf{Zekany et al.\ (Detected)}} & \multicolumn{4}{c|}{\textbf{Ours (Detected)}} \\
+\textbf{Ground Truth} & LT & RT & LLC & RLC & LT & RT & LLC & RLC \\
+\hline
+Left Turn & \textbf{89\%} & 0\% & 0\% & 8\% & 63\% & 13\% & 0\% & 0\% \\
+Right Turn & 0\% & \textbf{80\%} & 7\% & 13\% & 4\% & 67\% & 0\% & 0\% \\
+Left Lane Change & 1\% & 18\% & 7\% & 70\% & 0\% & 4\% & \textbf{76\%} & 0\% \\
+Right Lane Change & 0\% & 0\% & 2\% & \textbf{98\%} & 0\% & 0\% & 4\% & 92\% \\
+\hline
+\end{tabular}
+\caption{Confusion matrix comparison between Zekany et al.\ and our system for the four shared manoeuvre types. Each row shows the percentage of ground truth events detected as each type. Bold highlights the higher diagonal (correct classification) accuracy. Zekany et al.\ percentages exclude their additional categories (U-Turn, K-Turn, Highway, Deceleration). Our percentages exclude false negatives (missed events).}
+\label{tab:cm_comparison}
+\end{table}
+
+While Zekany et al.\ achieve higher accuracy on turn detection (89\% and 80\% for left and right turns respectively, compared to our 63\% and 67\%), their lane change detection exhibits a severe systematic failure: only 7\% of left lane changes are correctly classified, with 70\% misclassified as right lane changes. Their system essentially classifies almost every lane change as a right lane change regardless of its actual direction, rendering the left/right distinction unreliable. By contrast, our system correctly distinguishes between left and right lane changes, achieving 76\% and 92\% respectively, with only a single instance of a right lane change being misclassified as a left lane change (4\%). The false positives that do occur in our lane change detection are caused by environmental factors (bus lanes, faded markings) rather than by a fundamental confusion between directions.\\
+
+\subsection{Lane Detection Coverage}
+Lane detection achieved an average coverage of 81.7\% for detecting at least one lane and 75.5\% for detecting at least two lanes (the minimum required for lane crossing detection). Frame-to-frame stability was 96.9\%, indicating that the model rarely produces flickering detections. Coverage was comparable between day (82.5\% / 76.7\%) and night (79.4\% / 71.8\%) conditions, demonstrating that the LaneATT model generalises reasonably well across lighting conditions. The slight reduction at night is expected, as lane markings are less visible under headlights alone.\\
+
+\subsection{Safety Event Distribution}
+Of the 94 safety events detected by the system, 90\% were classified as safe (mirror check observed within the 5-second window) and 10\% as unsafe. The majority of unsafe events were associated with left turns, which aligns with the expectation that left turns in UK driving require checking the right mirror (a less habitual action for many drivers). Right turns and lane changes had very few unsafe detections, consistent with the more natural tendency to check mirrors on the corresponding side before merging or turning.
 
 \newpage
 
@@ -594,13 +670,6 @@ Discuss how this project can be extended further, what other use-cases there are
     \item More features for detecting mistakes (how these could be implemented - would they be simple? Which to prioritise first?)
     \item Other use-cases: not just for learner drivers: could be used for insurance systems or training ADAS systems by auto-labelling clips of manouevres for example.
 \end{itemize}
-
-\newpage
-
-\section{Self-Assessment}
-Covers the author's own assessment of the success of the project, in terms of technical contribution, usefulness, limitations.\\
-
-Overall, the project was a success - it shows that a computer vision system can indeed identify driving errors which are difficult for non-trained passengers to spot. While the models do not perform with 100\% accuracy, as limited by the constraints (time, cost, resources, scope) of the project, the project overall does show that such a system would be helpful to people, and with a larger budget, scope, industry connections etc. this could be a successful business idea. It can also be applied to other industries such as insurance and in-car safety mechanisms. Since there don't currently exist systems that match what the project does, it provides justification for further developing the application or similar applications, and it presents a benchmark for future researchers to compare against. 
 
 \section{Acknowledgements}
 Thank yous to supervisor, external advisor, DCS tech, other stakeholders...
