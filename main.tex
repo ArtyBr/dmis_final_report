@@ -585,6 +585,7 @@ Project evaluation was split into two parts: quantitative (author-labelled groun
 The evaluation dataset comprises approximately 350 three-minute video clips (each consisting of a synchronised road and driver-facing pair) collected from three drivers across a variety of routes and conditions. The majority of clips were recorded during the day (~265 clips), with smaller subsets captured at night (~34 clips) and in rainy daytime conditions (~50 clips). Of the total dataset, 11\% of clips were manually labelled with ground truth event annotations by the author. These labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.\\
 
 \subsection{Ground Truth Evaluation Methodology}
+% Explain greedy temporal matching. Citation needed?
 To evaluate the system's event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 5-second tolerance. This tolerance is consistent with the approach taken by Zekany et al.\ \cite{zekany2022finding}, who use a 4-second ``Maneuver Time Error'' (MTE) threshold in their evaluation of dashboard camera manoeuvre detection. They justify this by observing that human-scored and system-detected event times typically differ by one to two seconds (for example, a car creeping forward into a turn while waiting for traffic will be detected at a different moment than a human would mark), and that no consecutive same-class manoeuvres occur within four seconds in their dataset. Our slightly larger 5-second window additionally matches the mirror check lookback window used by the Safety Monitor, ensuring that a detection is considered correct if it falls within the same temporal range that the system uses for its own safety judgements.\\
 
 Each ground truth event was matched to at most one detection (and vice versa), with matches assigned greedily by smallest time difference. Unmatched ground truth events are counted as false negatives (FN, missed detections), and unmatched system detections are counted as false positives (FP, spurious detections). Matched pairs are true positives (TP). From these counts, three standard metrics are computed:
@@ -620,9 +621,13 @@ Beyond quantitative accuracy, the system was evaluated through user testing sess
 This section presents the quantitative results of the evaluation methodology described above, covering event detection accuracy, lane detection coverage, and the distribution of safety classifications across detected events.
 
 \subsection{Event Detection Accuracy}
-Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 true positives, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds, with the majority of matches falling within 1.5 seconds of the labelled time.\\
+Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 true positives, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds.\\
 
-Performance varied across manoeuvre types. Right lane changes were detected most reliably, with 23 of 25 correctly matched (92\%), and left lane changes achieved 76\% recall (19/25). The remaining false positives for lane changes (6 of the 19 total) were predominantly caused by the lane detection model misclassifying bus lanes or faded road markings as lane boundaries, leading the system to detect a lane crossing where none occurred. Left turns and right turns achieved 63\% (19/30) and 67\% (16/24) respectively. The lower recall for turns is partly attributable to the visual odometry pipeline's sensitivity to dynamic objects and lighting conditions, which can suppress the yaw signal during complex junctions. Of the 19 false positives, 12 were classified as right turns. Upon reviewing these cases through the administrator dashboard, it was observed that the majority occurred on roads that curve rightward, producing a yaw accumulation pattern indistinguishable from a genuine right turn as far as the visual odometry is concerned. Since the model relies solely on camera motion, it has no way to differentiate between a road that bends to the right and a deliberate right turn at a junction. Mitigating this would require incorporating additional environmental context, such as detecting give-way lines, junction markings, or changes in road topology that distinguish intersections from curved road segments (Figure \ref{fig:right_turn_misclass}).\\
+% Place a table here showing all of the counts of detections, false postiives/negatives for each class
+
+% Make the sentence explaining the VO pipeline's lower recall more layman-friendly
+
+Performance varied across manoeuvre types. Right lane changes were detected most reliably, with 23 of 25 correctly matched (92\%). False positives for lane changes (6 of the 19 total) were predominantly caused by the lane detection model misclassifying bus lanes or faded road markings as lane boundaries, leading the system to detect a lane crossing where none occurred. Left turns and right turns achieved 63\% (19/30) and 67\% (16/24) respectively. The lower recall for turns is partly attributable to the visual odometry pipeline's sensitivity to dynamic objects and lighting conditions, which can suppress the yaw signal during complex junctions. Of the 19 false positives, 12 were classified as right turns. It was observed that the majority occurred on roads that curve rightward, producing a yaw accumulation pattern indistinguishable from a genuine right turn as far as the visual odometry is concerned. Since the model relies solely on camera motion, it has no way to differentiate between a road that bends to the right and a deliberate right turn at a junction. Mitigating this would require incorporating additional environmental context, such as detecting give-way lines, junction markings, or changes in road topology that distinguish intersections from curved road segments (Figure \ref{fig:right_turn_misclass}).\\
 
 \begin{figure}[H]
     \centering
@@ -631,6 +636,8 @@ Performance varied across manoeuvre types. Right lane changes were detected most
     \caption{(a) Dashcam view of a rightward road curve misclassified as a right turn. The detected lanes curve to the right, producing the same visual odometry signal as a genuine turn. (b) Corresponding visual odometry trajectory showing the rightward yaw accumulation.}
     \label{fig:right_turn_misclass}
 \end{figure}
+
+% Referring to the confusion matrix before it's been shown?
 
 The confusion matrix also reveals that type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common type of confusion was between left turns and right turns (4 left turns detected as right turns), which occurs when the visual odometry briefly accumulates yaw in the wrong direction before correcting.\\
 
@@ -702,11 +709,11 @@ Our system achieves a higher F1 score on three of the four manoeuvre types. The 
 
 The systems also differ qualitatively in their failure modes. Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, confirmed by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching. The only cross-type confusions in our matched-events matrix are between left and right turns (17\% and 6\% respectively), caused by brief yaw oscillations in the visual odometry. Both systems share a susceptibility to road curves producing false turn detections.\\
 
-\subsection{Lane Detection Coverage}
-Lane detection achieved an average coverage of 81.7\% for detecting at least one lane and 75.5\% for detecting at least two lanes (the minimum required for lane crossing detection). Frame-to-frame stability was 96.9\%, indicating that the model rarely produces flickering detections. Coverage was comparable between day (82.5\% / 76.7\%) and night (79.4\% / 71.8\%) conditions, demonstrating that the LaneATT model generalises reasonably well across lighting conditions. The slight reduction at night is expected, as lane markings are less visible under headlights alone.\\
-
-\subsection{Safety Event Distribution}
 Of the 94 safety events detected by the system, 90\% were classified as safe (mirror check observed within the 5-second window) and 10\% as unsafe. The majority of unsafe events were associated with left turns, which aligns with the expectation that left turns in UK driving require checking the right mirror (a less habitual action for many drivers). Right turns and lane changes had very few unsafe detections, consistent with the more natural tendency to check mirrors on the corresponding side before merging or turning.
+
+% Next, discuss the safety stats and false positives/negatives of the users who have used the website.
+
+
 
 \newpage
 
