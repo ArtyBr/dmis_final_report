@@ -147,6 +147,7 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.7}Evaluation Infrastructure}{23}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.8}Error Handling}{23}{}\protected@file@percent }
 \citation{zekany2022finding}
+\citation{zekany2022finding}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation Methodology}{24}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Dataset}{24}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Ground Truth Evaluation Methodology}{24}{}\protected@file@percent }
@@ -155,18 +156,18 @@
 \citation{zekany2022finding}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Results}{26}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Event Detection Accuracy}{26}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Per-class event detection results. GT = ground truth count, TP = true positives, FP = false positives, FN = false negatives.}}{26}{}\protected@file@percent }
+\newlabel{tab:per_class_results}{{2}{26}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces (a) Dashcam view of a rightward road curve misclassified as a right turn. The detected lanes curve to the right, producing the same visual odometry signal as a genuine turn. (b) Corresponding visual odometry trajectory showing the rightward yaw accumulation.}}{26}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{26}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{26}{}\protected@file@percent }
 \newlabel{fig:right_turn_misclass}{{21}{26}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Confusion matrix comparison between Zekany et al.\ and our system for the four shared manoeuvre types. Each row shows the percentage of ground truth events detected as each type. Bold highlights the higher diagonal (correct classification) accuracy. Zekany et al.\ percentages exclude their additional categories (U-Turn, K-Turn, Highway, Deceleration). Our percentages exclude false negatives (missed events).}}{27}{}\protected@file@percent }
-\newlabel{tab:cm_comparison}{{2}{27}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Like-for-like confusion matrix comparison, with both systems evaluated only on matched (detected) events, excluding false positives and false negatives. Bold highlights the higher diagonal accuracy between the two systems. Zekany et al.\ percentages exclude their additional categories (U-Turn, K-Turn, Highway, Deceleration). Our row percentages are computed over the 84 true positive matches.}}{27}{}\protected@file@percent }
-\newlabel{tab:cm_matched}{{3}{27}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Per-manoeuvre precision, recall, and F1 comparison. Zekany et al.\ values are taken from the maximum-F1 row of each individual classifier in their Table III. Bold highlights the higher value in each metric. Our system achieves higher F1 on three of the four shared manoeuvre types.}}{28}{}\protected@file@percent }
-\newlabel{tab:f1_comparison}{{4}{28}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Lane Detection Coverage}{28}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Safety Event Distribution}{28}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Confusion matrix comparison between Zekany et al.\ and our system for the four shared manoeuvre types. Each cell shows the count and percentage of ground truth events detected as each type. Bold highlights the higher diagonal (correct classification) accuracy. Zekany et al.\ counts are from their Table VIII; percentages use their full row totals (including U-Turn, K-Turn, Highway, and Deceleration categories not shown here). Our percentages use each row's ground truth total (including false negatives not shown). Note that our evaluation is based on 104 labelled events compared to Zekany et al.'s 797, as labelling was performed solely by the author with limited resources.}}{27}{}\protected@file@percent }
+\newlabel{tab:cm_comparison}{{3}{27}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Like-for-like confusion matrix comparison, with both systems evaluated only on matched (detected) events, excluding false positives and false negatives. Bold highlights the higher diagonal accuracy between the two systems. Zekany et al.\ counts are from their Table VIII; percentages use their full row totals (including categories not shown). Our row percentages are computed over the 84 true positive matches (23 LT, 17 RT, 20 LLC, 24 RLC).}}{27}{}\protected@file@percent }
+\newlabel{tab:cm_matched}{{4}{27}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Per-manoeuvre precision, recall, and F1 comparison. Zekany et al.\ values are taken from the maximum-F1 row of each individual classifier in their Table III. Bold highlights the higher value in each metric. Our system achieves higher F1 on three of the four shared manoeuvre types.}}{28}{}\protected@file@percent }
+\newlabel{tab:f1_comparison}{{5}{28}{}{}{}}
 \bibdata{progress_report_bibliography}
 \bibcite{govuk_casualties_2024}{{1}{}{{}}{{}}}
 \bibcite{road_accident_data}{{2}{}{{}}{{}}}
