@@ -591,7 +591,15 @@ The dashboard provides per-user safety event analytics, displaying aggregated co
 
 This infrastructure proved valuable beyond simple monitoring. By reviewing user-reported false positives and false negatives, the author was able to measure the system’s detection accuracy across a range of real driving scenarios. The dashboard also enabled the discovery of specific failure modes; for example, reviewing reported errors in turn detection led to the identification and correction of the global angle accumulation issue discussed in Section 3.3. Without centralised access to user reports and the ability to replay events in context, such improvements would have been significantly harder to diagnose.
 
-% TODO: Insert screenshot of admin dashboard
+\begin{figure}[H]
+
+\centering
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{website_images/admin_user_accounts.png}}
+    \subfigure[]{\includegraphics[width=0.49\textwidth]{website_images/admin_user_reports.png}}
+    \caption{(a) Administrator view of user accounts with per-user safety event analytics. (b) User error reports dashboard showing submitted false positive and false negative reports.}
+    \label{fig:admin_dashboard}
+
+\end{figure}
 
 \subsubsection{Error Handling}
 Error handling was hardened across the upload, synchronisation and analysis pipeline to gracefully handle oversized files, network interruptions, malformed video codecs and out-of-memory conditions on the GPU. A ``Getting Started’’ guide page was added to the frontend to help new users understand the required dual-camera setup and upload process, reducing support requests during the evaluation phase.
