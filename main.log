@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.14)  24 MAR 2026 16:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.14)  27 MAR 2026 14:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -501,24 +501,43 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
+(/usr/share/texlive/texmf-dist/tex/latex/xurl/xurl.sty
+Package: xurl 2022/01/09 v 0.10 modify URL breaks
+)
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty
+Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
+
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count302
+))
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count302
+\lst@mode=\count303
 \lst@gtempboxa=\box69
 \lst@token=\toks40
-\lst@length=\count303
+\lst@length=\count304
 \lst@currlwidth=\dimen266
-\lst@column=\count304
-\lst@pos=\count305
+\lst@column=\count305
+\lst@pos=\count306
 \lst@lostspace=\dimen267
 \lst@width=\dimen268
-\lst@newlines=\count306
-\lst@lineno=\count307
+\lst@newlines=\count307
+\lst@lineno=\count308
 \lst@maxwidth=\dimen269
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2023/02/27 1.9 (Carsten Heinz)
-\c@lstnumber=\count308
-\lst@skipnumbers=\count309
+\c@lstnumber=\count309
+\lst@skipnumbers=\count310
 \lst@framebox=\box70
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
@@ -535,9 +554,9 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 (/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2022/02/03 v1.0f TeX engine tests
 ))
-\Gm@cnth=\count310
-\Gm@cntv=\count311
-\c@Gm@tempcnt=\count312
+\Gm@cnth=\count311
+\Gm@cntv=\count312
+\c@Gm@tempcnt=\count313
 \Gm@bindingoffset=\dimen270
 \Gm@wd@mp=\dimen271
 \Gm@odd@mp=\dimen272
@@ -550,38 +569,38 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count313
+\l__color_backend_stack_int=\count314
 \l__pdf_internal_box=\box71
 )
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count314
+\scratchcounter=\count315
 \scratchdimen=\dimen278
 \scratchbox=\box72
-\nofMPsegments=\count315
-\nofMParguments=\count316
+\nofMPsegments=\count316
+\nofMParguments=\count317
 \everyMPshowfont=\toks42
-\MPscratchCnt=\count317
+\MPscratchCnt=\count318
 \MPscratchDim=\dimen279
-\MPnumerator=\count318
-\makeMPintoPDFobject=\count319
+\MPnumerator=\count319
+\makeMPintoPDFobject=\count320
 \everyMPtoPDFconversion=\toks43
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -592,7 +611,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count320
+\c@lstlisting=\count321
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -628,588 +647,243 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 61--62
-
- []
-
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 76--77
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 78--79
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 82--83
-
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 103--104
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 105--106
-
- []
-
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
 <research_images/cnn_explanation.png, id=18, 1259.70625pt x 425.59pt>
 File: research_images/cnn_explanation.png Graphic file (type png)
 <use research_images/cnn_explanation.png>
 Package pdftex.def Info: research_images/cnn_explanation.png  used on input lin
-e 109.
+e 112.
 (pdftex.def)             Requested size: 505.89pt x 170.91484pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--115
-
- []
-
-[3 <./research_images/cnn_explanation.png>]
-<driving_images/poly_drive.png, id=24, 1922.18124pt x 1082.0425pt>
+ [3 <./research_images/cnn_explanation.png>]
+<driving_images/poly_drive.png, id=25, 1922.18124pt x 1082.0425pt>
 File: driving_images/poly_drive.png Graphic file (type png)
 <use driving_images/poly_drive.png>
-Package pdftex.def Info: driving_images/poly_drive.png  used on input line 147.
+Package pdftex.def Info: driving_images/poly_drive.png  used on input line 153.
 
 (pdftex.def)             Requested size: 166.43515pt x 93.68124pt.
-<driving_images/ufld_drive.png, id=25, 2428.07124pt x 1366.10374pt>
+<driving_images/ufld_drive.png, id=26, 2428.07124pt x 1366.10374pt>
 File: driving_images/ufld_drive.png Graphic file (type png)
 <use driving_images/ufld_drive.png>
-Package pdftex.def Info: driving_images/ufld_drive.png  used on input line 148.
+Package pdftex.def Info: driving_images/ufld_drive.png  used on input line 154.
 
 (pdftex.def)             Requested size: 166.43515pt x 93.63591pt.
-<driving_images/laneatt_drive.png, id=26, 1927.2pt x 1083.04625pt>
+<driving_images/laneatt_drive.png, id=27, 1927.2pt x 1083.04625pt>
 File: driving_images/laneatt_drive.png Graphic file (type png)
 <use driving_images/laneatt_drive.png>
 Package pdftex.def Info: driving_images/laneatt_drive.png  used on input line 1
-49.
+55.
 (pdftex.def)             Requested size: 166.43515pt x 93.52025pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 156--157
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 158--159
-
- []
-
-<research_images/kalman_vis.png, id=27, 1284.8pt x 722.7pt>
+<research_images/kalman_vis.png, id=28, 1284.8pt x 722.7pt>
 File: research_images/kalman_vis.png Graphic file (type png)
 <use research_images/kalman_vis.png>
-Package pdftex.def Info: research_images/kalman_vis.png  used on input line 164
+Package pdftex.def Info: research_images/kalman_vis.png  used on input line 172
 .
 (pdftex.def)             Requested size: 379.4175pt x 213.41519pt.
-[4 <./driving_images/poly_drive.png> <./driving_images/ufld_drive.png> <./drivi
-ng_images/laneatt_drive.png>]
-<research_images/pnp.png, id=36, 602.25pt x 421.575pt>
+ [4 <./driving_images/poly_drive.png> <./driving_images/ufld_drive.png> <./driv
+ing_images/laneatt_drive.png> <./research_images/kalman_vis.png>]
+<research_images/pnp.png, id=37, 602.25pt x 421.575pt>
 File: research_images/pnp.png Graphic file (type png)
 <use research_images/pnp.png>
-Package pdftex.def Info: research_images/pnp.png  used on input line 175.
+Package pdftex.def Info: research_images/pnp.png  used on input line 185.
 (pdftex.def)             Requested size: 252.94499pt x 177.06029pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 180--181
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 194--195
-
- []
-
-[5 <./research_images/kalman_vis.png> <./research_images/pnp.png>]
-<research_images/pycuvslam_example.png, id=44, 719.68875pt x 770.88pt>
+<research_images/pycuvslam_example.png, id=38, 719.68875pt x 770.88pt>
 File: research_images/pycuvslam_example.png Graphic file (type png)
 <use research_images/pycuvslam_example.png>
 Package pdftex.def Info: research_images/pycuvslam_example.png  used on input l
-ine 198.
+ine 210.
 (pdftex.def)             Requested size: 379.4175pt x 406.4119pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 203--204
-
- []
-
+ [5 <./research_images/pnp.png>]
 <research_images/optical_flow_ex.png, id=45, 1445.4pt x 657.2053pt>
 File: research_images/optical_flow_ex.png Graphic file (type png)
 <use research_images/optical_flow_ex.png>
 Package pdftex.def Info: research_images/optical_flow_ex.png  used on input lin
-e 207.
+e 221.
 (pdftex.def)             Requested size: 379.4175pt x 172.51396pt.
-[6 <./research_images/pycuvslam_example.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 212--213
-
- []
-
-[7 <./research_images/optical_flow_ex.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 227--228
-
- []
-
+ [6 <./research_images/pycuvslam_example.png (PNG copy)>] [7 <./research_images
+/optical_flow_ex.png (PNG copy)>]
 <project_management_images/folder_structure.png, id=53, 196.48407pt x 368.87813
 pt>
 File: project_management_images/folder_structure.png Graphic file (type png)
 <use project_management_images/folder_structure.png>
 Package pdftex.def Info: project_management_images/folder_structure.png  used o
-n input line 233.
+n input line 249.
 (pdftex.def)             Requested size: 151.76854pt x 284.94885pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 239--240
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 242--243
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 244--245
-
- []
-
 [8 <./project_management_images/folder_structure.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 246--247
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 248--249
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 250--251
-
- []
-
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 257.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 274.
 <driving_images/car_obstruction_marsland.png, id=58, 641.39626pt x 363.3575pt>
 File: driving_images/car_obstruction_marsland.png Graphic file (type png)
 <use driving_images/car_obstruction_marsland.png>
 Package pdftex.def Info: driving_images/car_obstruction_marsland.png  used on i
-nput line 299.
+nput line 316.
 (pdftex.def)             Requested size: 227.64894pt x 128.96231pt.
 <driving_images/car_obstruction_2.png, id=59, 641.39626pt x 363.3575pt>
 File: driving_images/car_obstruction_2.png Graphic file (type png)
 <use driving_images/car_obstruction_2.png>
 Package pdftex.def Info: driving_images/car_obstruction_2.png  used on input li
-ne 300.
+ne 317.
 (pdftex.def)             Requested size: 227.64894pt x 128.96231pt.
  [9]
-Underfull \hbox (badness 10000) in paragraph at lines 308--309
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 310--311
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 312--313
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 314--315
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 318--319
-
- []
-
-[10 <./driving_images/car_obstruction_marsland.png> <./driving_images/car_obstr
-uction_2.png>]
-<driving_images/house_without_grid.png, id=71, 489.83pt x 276.03125pt>
+<driving_images/house_without_grid.png, id=66, 489.83pt x 276.03125pt>
 File: driving_images/house_without_grid.png Graphic file (type png)
 <use driving_images/house_without_grid.png>
 Package pdftex.def Info: driving_images/house_without_grid.png  used on input l
-ine 322.
+ine 341.
 (pdftex.def)             Requested size: 227.64894pt x 128.2858pt.
-<driving_images/houses_with_grid.png, id=72, 489.83pt x 276.03125pt>
+<driving_images/houses_with_grid.png, id=67, 489.83pt x 276.03125pt>
 File: driving_images/houses_with_grid.png Graphic file (type png)
 <use driving_images/houses_with_grid.png>
 Package pdftex.def Info: driving_images/houses_with_grid.png  used on input lin
-e 323.
+e 342.
 (pdftex.def)             Requested size: 227.64894pt x 128.2858pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 328--329
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 330--331
-
- []
-
+ [10 <./driving_images/car_obstruction_marsland.png> <./driving_images/car_obst
+ruction_2.png>]
 <driving_images/tracking_without_kalman.png, id=73, 534.99875pt x 511.9125pt>
 File: driving_images/tracking_without_kalman.png Graphic file (type png)
 <use driving_images/tracking_without_kalman.png>
 Package pdftex.def Info: driving_images/tracking_without_kalman.png  used on in
-put line 334.
+put line 355.
 (pdftex.def)             Requested size: 227.64894pt x 217.82942pt.
 <driving_images/tracking_with_kalman.png, id=74, 534.99875pt x 511.9125pt>
 File: driving_images/tracking_with_kalman.png Graphic file (type png)
 <use driving_images/tracking_with_kalman.png>
 Package pdftex.def Info: driving_images/tracking_with_kalman.png  used on input
- line 335.
+ line 356.
 (pdftex.def)             Requested size: 227.64894pt x 217.82942pt.
-[11 <./driving_images/house_without_grid.png> <./driving_images/houses_with_gri
-d.png>]
-<driving_images/tracking_with_turn_dets.png, id=80, 722.7pt x 578.16pt>
+ [11 <./driving_images/house_without_grid.png> <./driving_images/houses_with_gr
+id.png> <./driving_images/tracking_without_kalman.png> <./driving_images/tracki
+ng_with_kalman.png>]
+<driving_images/tracking_with_turn_dets.png, id=82, 722.7pt x 578.16pt>
 File: driving_images/tracking_with_turn_dets.png Graphic file (type png)
 <use driving_images/tracking_with_turn_dets.png>
 Package pdftex.def Info: driving_images/tracking_with_turn_dets.png  used on in
-put line 344.
+put line 367.
 (pdftex.def)             Requested size: 379.4175pt x 303.52972pt.
- [12 <./driving_images/tracking_without_kalman.png> <./driving_images/tracking_
-with_kalman.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 350--351
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 352--353
-
- []
-
-<face_analysis_images/head_angles_graph.png, id=86, 570.13pt x 456.70625pt>
+<face_analysis_images/head_angles_graph.png, id=83, 570.13pt x 456.70625pt>
 File: face_analysis_images/head_angles_graph.png Graphic file (type png)
 <use face_analysis_images/head_angles_graph.png>
 Package pdftex.def Info: face_analysis_images/head_angles_graph.png  used on in
-put line 357.
+put line 381.
 (pdftex.def)             Requested size: 247.88887pt x 198.56804pt.
-<face_analysis_images/pca_yaw_pitch_roll.png, id=87, 571.13374pt x 456.70625pt>
+<face_analysis_images/pca_yaw_pitch_roll.png, id=84, 571.13374pt x 456.70625pt>
 
 File: face_analysis_images/pca_yaw_pitch_roll.png Graphic file (type png)
 <use face_analysis_images/pca_yaw_pitch_roll.png>
 Package pdftex.def Info: face_analysis_images/pca_yaw_pitch_roll.png  used on i
-nput line 358.
+nput line 382.
 (pdftex.def)             Requested size: 247.88887pt x 198.2196pt.
-[13 <./driving_images/tracking_with_turn_dets.png>]
-<driving_images/left_mirror.png, id=93, 641.39626pt x 363.3575pt>
+ [12 <./driving_images/tracking_with_turn_dets.png>]
+<driving_images/left_mirror.png, id=89, 641.39626pt x 363.3575pt>
 File: driving_images/left_mirror.png Graphic file (type png)
 <use driving_images/left_mirror.png>
-Package pdftex.def Info: driving_images/left_mirror.png  used on input line 365
+Package pdftex.def Info: driving_images/left_mirror.png  used on input line 391
 .
 (pdftex.def)             Requested size: 161.8885pt x 91.70961pt.
-<driving_images/looking_forward.png, id=94, 641.39626pt x 363.3575pt>
+<driving_images/looking_forward.png, id=90, 641.39626pt x 363.3575pt>
 File: driving_images/looking_forward.png Graphic file (type png)
 <use driving_images/looking_forward.png>
 Package pdftex.def Info: driving_images/looking_forward.png  used on input line
- 366.
+ 392.
 (pdftex.def)             Requested size: 161.8885pt x 91.70961pt.
-<driving_images/right_mirror.png, id=95, 641.39626pt x 363.3575pt>
+<driving_images/right_mirror.png, id=91, 641.39626pt x 363.3575pt>
 File: driving_images/right_mirror.png Graphic file (type png)
 <use driving_images/right_mirror.png>
-Package pdftex.def Info: driving_images/right_mirror.png  used on input line 36
-7.
+Package pdftex.def Info: driving_images/right_mirror.png  used on input line 39
+3.
 (pdftex.def)             Requested size: 161.8885pt x 91.70961pt.
-<face_analysis_images/kmeans_clusters.png, id=96, 563.10374pt x 456.70625pt>
+<face_analysis_images/kmeans_clusters.png, id=92, 563.10374pt x 456.70625pt>
 File: face_analysis_images/kmeans_clusters.png Graphic file (type png)
 <use face_analysis_images/kmeans_clusters.png>
 Package pdftex.def Info: face_analysis_images/kmeans_clusters.png  used on inpu
-t line 376.
+t line 404.
 (pdftex.def)             Requested size: 247.88887pt x 201.04892pt.
-<face_analysis_images/svm_classification.png, id=97, 691.58376pt x 549.05125pt>
+<face_analysis_images/svm_classification.png, id=93, 691.58376pt x 549.05125pt>
 
 File: face_analysis_images/svm_classification.png Graphic file (type png)
 <use face_analysis_images/svm_classification.png>
 Package pdftex.def Info: face_analysis_images/svm_classification.png  used on i
-nput line 377.
+nput line 405.
 (pdftex.def)             Requested size: 247.88887pt x 196.79538pt.
- [14 <./face_analysis_images/head_angles_graph.png> <./face_analysis_images/pca
-_yaw_pitch_roll.png> <./driving_images/left_mirror.png> <./driving_images/looki
-ng_forward.png> <./driving_images/right_mirror.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 385--386
 
- []
-
-<driving_images/lanes+face.png, id=104, 1445.4pt x 813.0375pt>
+[13 <./face_analysis_images/head_angles_graph.png> <./face_analysis_images/pca_
+yaw_pitch_roll.png> <./driving_images/left_mirror.png> <./driving_images/lookin
+g_forward.png> <./driving_images/right_mirror.png>]
+<driving_images/lanes+face.png, id=101, 1445.4pt x 813.0375pt>
 File: driving_images/lanes+face.png Graphic file (type png)
 <use driving_images/lanes+face.png>
-Package pdftex.def Info: driving_images/lanes+face.png  used on input line 391.
+Package pdftex.def Info: driving_images/lanes+face.png  used on input line 421.
 
 (pdftex.def)             Requested size: 404.71353pt x 227.64894pt.
-[15 <./face_analysis_images/kmeans_clusters.png> <./face_analysis_images/svm_cl
-assification.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 401--402
-
- []
-
-[16 <./driving_images/lanes+face.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 467--468
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 469--470
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 471--472
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--474
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 476--477
-
- []
-
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 481--482
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 483--484
-
- []
-
-<website_images/analysis_submission.png, id=116, 1116.17pt x 1083.04625pt>
+ [14 <./face_analysis_images/kmeans_clusters.png> <./face_analysis_images/svm_c
+lassification.png>] [15 <./driving_images/lanes+face.png (PNG copy)>]
+<website_images/analysis_submission.png, id=110, 1116.17pt x 1083.04625pt>
 File: website_images/analysis_submission.png Graphic file (type png)
 <use website_images/analysis_submission.png>
 Package pdftex.def Info: website_images/analysis_submission.png  used on input 
-line 487.
+line 521.
 (pdftex.def)             Requested size: 404.71353pt x 392.70576pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 494--495
-
- []
-
-[18 <./website_images/analysis_submission.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 496--497
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 498--499
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 500--501
-
- []
-
-<website_images/audio_sync_screen.png, id=121, 804.75656pt x 680.5425pt>
+ [16] [17 <./website_images/analysis_submission.png>]
+<website_images/audio_sync_screen.png, id=118, 804.75656pt x 680.5425pt>
 File: website_images/audio_sync_screen.png Graphic file (type png)
 <use website_images/audio_sync_screen.png>
 Package pdftex.def Info: website_images/audio_sync_screen.png  used on input li
-ne 504.
+ne 540.
 (pdftex.def)             Requested size: 404.71353pt x 342.24341pt.
-[19]
-Underfull \hbox (badness 10000) in paragraph at lines 510--511
-
- []
-
-<website_images/web_display_1.png, id=126, 1375.1375pt x 1159.33125pt>
+<website_images/web_display_1.png, id=119, 1375.1375pt x 1159.33125pt>
 File: website_images/web_display_1.png Graphic file (type png)
 <use website_images/web_display_1.png>
 Package pdftex.def Info: website_images/web_display_1.png  used on input line 5
-14.
+52.
 (pdftex.def)             Requested size: 505.89pt x 426.48695pt.
-[20 <./website_images/audio_sync_screen.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 520--521
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 522--523
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 524--525
-
- []
-
-[21 <./website_images/web_display_1.png>]
-<website_images/clip_editor.png, id=134, 772.8875pt x 1192.455pt>
+ [18 <./website_images/audio_sync_screen.png (PNG copy)>]
+[19 <./website_images/web_display_1.png>]
+<website_images/clip_editor.png, id=128, 772.8875pt x 1192.455pt>
 File: website_images/clip_editor.png Graphic file (type png)
 <use website_images/clip_editor.png>
-Package pdftex.def Info: website_images/clip_editor.png  used on input line 530
+Package pdftex.def Info: website_images/clip_editor.png  used on input line 570
 .
 (pdftex.def)             Requested size: 247.88887pt x 382.44858pt.
-<website_images/point_editor.png, id=135, 772.8875pt x 1250.6725pt>
+<website_images/point_editor.png, id=129, 772.8875pt x 1250.6725pt>
 File: website_images/point_editor.png Graphic file (type png)
 <use website_images/point_editor.png>
-Package pdftex.def Info: website_images/point_editor.png  used on input line 53
+Package pdftex.def Info: website_images/point_editor.png  used on input line 57
 1.
 (pdftex.def)             Requested size: 247.88887pt x 401.12032pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 537--538
-
- []
-
-[22 <./website_images/clip_editor.png> <./website_images/point_editor.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 539--540
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 545--546
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 548--549
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 550--551
-
- []
-
-[23]
-Underfull \hbox (badness 10000) in paragraph at lines 582--583
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 585--586
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 588--589
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 608--609
-
- []
-
-[24]
-Underfull \hbox (badness 10000) in paragraph at lines 611--612
-
- []
-
-[25]
-Underfull \hbox (badness 10000) in paragraph at lines 623--624
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 643--644
-
- []
-
-<results_images/right_turn_misclass.png, id=152, 482.55281pt x 271.0125pt>
+ [20 <./website_images/clip_editor.png> <./website_images/point_editor.png>] [2
+1] [22] [23]
+<results_images/right_turn_misclass.png, id=145, 482.55281pt x 271.0125pt>
 File: results_images/right_turn_misclass.png Graphic file (type png)
 <use results_images/right_turn_misclass.png>
 Package pdftex.def Info: results_images/right_turn_misclass.png  used on input 
-line 647.
+line 693.
 (pdftex.def)             Requested size: 247.88887pt x 139.21942pt.
-<results_images/right_turn_misclass_vo.png, id=153, 722.7pt x 578.16pt>
+<results_images/right_turn_misclass_vo.png, id=146, 722.7pt x 578.16pt>
 File: results_images/right_turn_misclass_vo.png Graphic file (type png)
 <use results_images/right_turn_misclass_vo.png>
 Package pdftex.def Info: results_images/right_turn_misclass_vo.png  used on inp
-ut line 648.
+ut line 694.
 (pdftex.def)             Requested size: 247.88887pt x 198.30972pt.
-[26 <./results_images/right_turn_misclass.png (PNG copy)> <./results_images/rig
-ht_turn_misclass_vo.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 673--674
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 695--696
-
- []
-
-[27]
-Underfull \hbox (badness 10000) in paragraph at lines 717--718
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 719--720
-
- []
-
-[28] (./main.bbl
-Underfull \hbox (badness 10000) in paragraph at lines 4--11
-[]\OT1/cmr/m/n/10 Department for Trans-port.  Re-ported road ca-su-al-ties in g
-reat britain, pro-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 4--11
-\OT1/cmr/m/n/10 vi-sional es-ti-mates: 2024.  $\OT1/cmtt/m/n/10 https : / / www
- . gov . uk / government / statistics /
- []
-
-
-Overfull \hbox (217.93735pt too wide) in paragraph at lines 4--11
-\OT1/cmtt/m/n/10 reported-[]road-[]casualties-[]great-[]britain-[]provisional-[
-]results-[]2024 / reported-[]road-[]casualties-[]in-[]great-[]britain-[]provisi
-onal-[]estimates-[]2024$\OT1/cmr/m/n/10 ,
- []
-
-
-Underfull \hbox (badness 2478) in paragraph at lines 20--24
-[]\OT1/cmr/m/n/10 Driving In-struc-tors As-so-ci-a-tion.  Uk's top causes of ro
-ad col-li-sions.  $\OT1/cmtt/m/n/10 https : / / www . driving . org /
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 40--47
-[]\OT1/cmr/m/n/10 Jaguar Land Rover.  Jaguar land rover un-veil new driver mon-
-i-tor sys-tem that is
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 40--47
-\OT1/cmr/m/n/10 set to rev-o-lu-tionise road safety.  $\OT1/cmtt/m/n/10 https :
- / / media . landrover . com / en-[]gb / news / 2019 / 05 /
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 40--47
-\OT1/cmtt/m/n/10 jaguar-[]land-[]rover-[]unveil-[]new-[]driver-[]monitor-[]syst
-em-[]set-[]revolutionise-[]road-[]safety$\OT1/cmr/m/n/10 , 2019.
- []
-
-[29] [30]) [31] (./main.aux)
+ [24] [25 <./results_images/right_turn_misclass.png (PNG copy)> <./results_imag
+es/right_turn_misclass_vo.png>] [26] (./main.bbl [27] [28]) [29] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17618 strings out of 476182
- 352244 string characters out of 5795595
- 2178975 words of memory out of 5000000
- 39326 multiletter control sequences out of 15000+600000
+ 18363 strings out of 476182
+ 363914 string characters out of 5795595
+ 2177975 words of memory out of 5000000
+ 40048 multiletter control sequences out of 15000+600000
  567305 words of font info for 69 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,9n,93p,1552b,1385s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,9n,93p,1552b,1382s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/arty/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
 k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
@@ -1218,22 +892,21 @@ ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmtt9.pfb>
-Output written on main.pdf (31 pages, 23527101 bytes).
+/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmtt9.pfb>
+Output written on main.pdf (29 pages, 23512333 bytes).
 PDF statistics:
- 267 PDF objects out of 1000 (max. 8388607)
- 138 compressed objects within 2 object streams
+ 255 PDF objects out of 1000 (max. 8388607)
+ 130 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  168 words of extra memory for PDF output out of 10000 (max. 10000000)
 
