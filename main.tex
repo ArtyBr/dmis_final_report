@@ -608,9 +608,6 @@ F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \te
 
 \noindent the harmonic mean of precision and recall, providing a single balanced measure of overall detection quality. Per-video timeline comparisons were also generated, showing ground truth events alongside system detections with match lines and highlighted false positives/negatives, enabling visual inspection of failure cases.\\
 
-\subsection{Lane Detection Evaluation}
-Lane detection was evaluated separately, since lane visibility is a prerequisite for lane change detection rather than a directly labelled event. Coverage was measured as the proportion of frames in which the model detected at least one lane ($\geq$1) or at least two lanes ($\geq$2), since two visible lanes are required for a lane crossing to be identified. Stability was measured as the proportion of consecutive frame pairs where the detected lane count did not change, indicating consistent rather than flickering detections.\\
-
 \subsection{User Testing}
 Beyond quantitative accuracy, the system was evaluated through user testing sessions where participants uploaded their own driving footage, reviewed the results, and reported any errors they identified through the built-in error reporting mechanism. These reports (false positives and false negatives) were reviewed by the author through the administrator dashboard and used both for accuracy measurement and for identifying systematic failure modes. Participants were also asked qualitative questions about the usefulness of the tool and whether they would recommend it to someone learning to drive.
 
