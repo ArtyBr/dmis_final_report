@@ -743,17 +743,107 @@ The systems also differ qualitatively in their failure modes. Zekany et al.\ ack
 \subsection{Safety Monitoring Results}
 Of the 94 safety events detected by the system, 90\% were classified as safe (mirror check observed within the 5-second window) and 10\% as unsafe. The majority of unsafe events were associated with left turns, which aligns with the expectation that left turns in UK driving require checking the right mirror (a less habitual action for many drivers). Right turns and lane changes had very few unsafe detections, consistent with the more natural tendency to check mirrors on the corresponding side before merging or turning.
 
-% Next, discuss the safety stats and false positives/negatives of the users who have used the website.
+\subsection{User-Submitted Video Results}
+Beyond the author-labelled ground truth evaluation, the system was deployed as a live web application and used by external participants who uploaded and analysed their own driving footage. This section reports the results from that deployment, providing an independent measure of system behaviour on previously unseen drivers, vehicles, camera setups, and routes.
+
+\subsubsection{Deployment Overview}
+Over a four-week period (late February to late March 2026), six external users registered accounts and submitted driving footage through the web application. In total, 23 unique video pairs (road-facing and driver-facing) were uploaded and successfully analysed, representing approximately 148 minutes of driving footage across a range of conditions and locations. Several users re-analysed the same footage after creating or refining their gaze calibration profiles; after deduplication (retaining the most recent calibrated analysis per unique video pair), the 23 analyses produced 170 safety events. Of the 23 unique analyses, 13 (57\%) used a personalised gaze calibration, while the remaining 10 relied on the system's default classifier.
+
+\subsubsection{Aggregate Safety Classification}
+Table~\ref{tab:user_safety} summarises the safety classification results across all user-submitted videos. Of the 170 safety events detected, 137 (80.6\%) were classified as safe and 33 (19.4\%) as unsafe. This safe/unsafe split differs from the author-labelled dataset (90\%/10\%), which is expected given that external users represent a broader range of driving habits, camera placements, and calibration quality.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Manoeuvre Type} & \textbf{Total} & \textbf{Safe (\%)} & \textbf{Unsafe (\%)} \\
+\hline
+Left Turn & 62 & 49 (79\%) & 13 (21\%) \\
+Right Turn & 64 & 59 (92\%) & 5 (8\%) \\
+Left Lane Change & 16 & 6 (38\%) & 10 (62\%) \\
+Right Lane Change & 28 & 23 (82\%) & 5 (18\%) \\
+\hline
+\textbf{Total} & \textbf{170} & \textbf{137 (80.6\%)} & \textbf{33 (19.4\%)} \\
+\hline
+\end{tabular}
+\caption{Safety classification of events detected in user-submitted videos, broken down by manoeuvre type. Percentages are row-wise.}
+\label{tab:user_safety}
+\end{table}
+
+The per-manoeuvre breakdown reveals patterns consistent with the author-labelled results. Right turns had the highest safe rate (92\%), confirming that drivers naturally check the nearside mirror before turning right in UK driving. Left turns showed a lower safe rate (79\%), reflecting the less habitual action of checking the offside (right) mirror before a left turn. Left lane changes had the lowest safe rate (38\%), though this category had the fewest events (16), making it more sensitive to individual cases.
+
+\subsubsection{Per-User Analysis}
+Table~\ref{tab:per_user_safety} shows the per-user breakdown. Six external users contributed footage, with submission counts ranging from 1 to 7 unique videos per user.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{User} & \textbf{Videos} & \textbf{Footage (min)} & \textbf{Events} & \textbf{Safe (\%)} & \textbf{Unsafe (\%)} \\
+\hline
+User A & 7 & 78.3 & 61 & 56 (92\%) & 5 (8\%) \\
+User B & 7 & 20.1 & 26 & 21 (81\%) & 5 (19\%) \\
+User C & 3 & 20.5 & 36 & 30 (83\%) & 6 (17\%) \\
+User D & 3 & 13.8 & 12 & 11 (92\%) & 1 (8\%) \\
+User E & 1 & 9.2 & 14 & 8 (57\%) & 6 (43\%) \\
+User F & 1 & 2.9 & 11 & 3 (27\%) & 8 (73\%) \\
+\hline
+\end{tabular}
+\caption{Per-user safety statistics across deduplicated video submissions, anonymised for privacy. Users are ordered by number of video submissions.}
+\label{tab:per_user_safety}
+\end{table}
+
+The per-user results demonstrate meaningful variation between drivers. Users A and D achieved 92\% safe classifications, suggesting consistent mirror-checking habits, while Users E and F had substantially higher unsafe rates (43\% and 73\% respectively). Notably, Users E and F each submitted only a single video and did not use a personalised gaze calibration, so their higher unsafe rates may partly reflect the default classifier's reduced accuracy on unfamiliar camera angles and seating positions rather than genuinely unsafe driving. This highlights the importance of gaze calibration for reliable safety assessment: across the full dataset, calibrated analyses exhibited a safe rate of 83.3\% compared to 76.4\% for uncalibrated analyses, suggesting that the default classifier produces more false ``unsafe'' classifications when the driver's head geometry or camera position differs from the training data.
+
+\subsubsection{User Error Reports}
+The web application includes an error reporting mechanism that allows users to flag false positive detections (events the system detected that did not occur) and false negative detections (real events the system missed). During the deployment, users submitted 13 error reports: 9 false positives and 4 false negatives.
+
+Of the 9 false positive reports, 7 concerned the same video submission (User F's footage) and were predominantly right turn detections. Manual review through the administrator dashboard confirmed that these false positives were caused by a winding road with successive right-hand curves, producing visual odometry signals indistinguishable from genuine turns. This is consistent with the curved-road false positive pattern identified in the author-labelled evaluation (Section 6.1).
+
+The 4 false negative reports identified three distinct failure modes:
+\begin{enumerate}
+    \item \textbf{Missing lane markings}: one user noted that a right lane change was missed because the road lacked visible lane markings, preventing the lane detection model from identifying a boundary crossing.
+    \item \textbf{Direction misclassification}: one user reported that a left turn was classified as a right turn, consistent with the yaw oscillation confusion identified in the author-labelled evaluation.
+    \item \textbf{Missed lane change}: one user reported an undetected right lane change, likely caused by the lane boundary being outside the camera's field of view at the time of the manoeuvre.
+\end{enumerate}
+
+These error reports, while limited in number, corroborate the failure modes observed in the controlled evaluation and demonstrate that the error reporting mechanism is effective at surfacing systematic issues. Across the 170 detected events, the 9 user-reported false positives imply a lower bound on the false positive rate of 5.3\% from the user's perspective, though this likely underestimates the true rate since users may not have flagged every incorrect detection.
 
 \newpage
 
 \section{Conclusion and Future Work}
-Discuss how this project can be extended further, what other use-cases there are for the technology. Plan to include: 
-\begin{itemize}
-    \item How the current features could be improved
-    \item More features for detecting mistakes (how these could be implemented - would they be simple? Which to prioritise first?)
-    \item Other use-cases: not just for learner drivers: could be used for insurance systems or training ADAS systems by auto-labelling clips of manouevres for example.
-\end{itemize}
+This project set out to build a system capable of identifying driving mistakes by combining road-facing and driver-facing video, an approach that, as identified in the literature review, no existing open-source or commercial system currently takes. The resulting system detects lane changes, turns, and gaze direction from synchronised dual-camera footage, cross-references them to identify failures to check mirrors before manoeuvres, and presents the results through an interactive web application. This section reflects on the key findings, limitations, and directions for future development.
+
+\subsection{Conclusions}
+The results demonstrate that a multi-modal approach, combining road-facing and driver-facing video, can reliably identify driving mistakes that neither data source could detect in isolation. The system's detection and classification performance compares favourably against the closest existing work by Zekany et al., particularly for lane changes where their system suffers from severe directional confusion that our explicit lane boundary crossing approach avoids entirely. This validates the core hypothesis of the project: that synchronising driver state with vehicle movement provides a richer and more accurate understanding of driving behaviour than analysing either stream alone.
+
+The user deployment confirmed that the system generalises beyond the author's own footage and vehicle. Error reports submitted by external users surfaced the same failure modes identified in the controlled evaluation, rather than novel categories of failure, suggesting that the system's weaknesses are well-characterised and stem from fundamental limitations of the sensing approach (visual odometry ambiguity on curved roads, lane detection model coverage) rather than overfitting to the author's driving style or camera setup.
+
+The evaluation also revealed that per-user gaze calibration is essential for reliable safety classification. The difference in accuracy between calibrated and uncalibrated analyses was substantial, confirming that a one-size-fits-all gaze model is insufficient given the variation in camera placement, seating position, and facial geometry across users. The iterative development of the calibration interface (from clip editor to point editor, reducing the process from five minutes to under one minute) illustrates a broader lesson: the usability of calibration and setup workflows is as important as the accuracy of the underlying models, since users who are frustrated by the process may disengage before obtaining useful results.
+
+\subsection{Limitations and Barriers to Adoption}
+The most significant technical limitation is the visual odometry pipeline's inability to distinguish road curvature from genuine turns, as both produce identical yaw accumulation signals. Addressing this would require additional environmental context, such as junction markings, give-way lines, or map data. Roundabouts remain entirely unsupported due to the absence of suitable lane detection training data and the continuous curvature they present.
+
+Beyond technical limitations, the system faces a substantial barrier to adoption in its current form. Of 19 potential participants, only 5 owned dash-cams, and even among those with suitable hardware, the multi-step workflow (record on dash-cam, simultaneously record on phone, download both files, upload through the web interface) deterred several interested users from completing a submission. Gaze calibration compounds this friction; while essential for accuracy, the process requires users to understand and interact with scatter plots or video segment labelling before they can obtain reliable results. Some users found this unintuitive and were initially frustrated by the inaccurate default gaze classifications, only gaining confidence in the system after completing calibration. These barriers collectively limit the application's viability as a consumer-facing learner driver tool in its current form.
+
+\subsection{Future Work}
+
+\subsubsection{Improving Gaze Calibration}
+The calibration burden could be reduced through two complementary approaches. First, an unsupervised or self-supervised learning approach could automatically construct a calibration profile from the user's own footage, clustering head pose vectors to infer gaze regions without requiring manual labelling. Second, in the context of an integrated in-vehicle system, real-time audio cues could guide the driver through a brief calibration routine (e.g.\ ``please look at your left mirror now''), collecting labelled samples during the drive rather than requiring a separate post-hoc step.
+
+\subsubsection{Improving Detection Accuracy}
+The most impactful detection improvement would be reducing false turn detections on curved roads. Incorporating map data or GPS traces to distinguish junctions from road curvature is one approach; alternatively, training a lightweight classifier on visual features of junction geometry (give-way lines, road widening, traffic light presence) could provide the necessary environmental context without requiring external data sources. Turn detection accuracy could also benefit from sensor fusion with IMU data if available, providing a direct yaw rate measurement to complement the vision-based estimate.
+
+Lane change detection could be improved by training or fine-tuning the lane detection model on a dataset that includes UK-specific road markings (bus lanes, cycle lanes, faded markings), which currently account for the majority of lane change false positives. Support for roundabout detection would require both a dedicated training dataset and a modified tracking approach that handles continuous curvature.
+
+\subsubsection{Additional Detectable Mistakes}
+The current system detects only one category of driving mistake: failure to check mirrors before manoeuvres. The modular architecture was designed to support additional mistake types with relatively contained changes. Signal-based mistakes, such as failure to indicate before a manoeuvre, could be detected by adding an audio classifier trained on indicator click sounds, which are captured by the in-cabin microphone. Speed-related mistakes, such as exceeding the limit in a residential area, could be inferred by combining visual odometry velocity estimates with road type classification or map data. Following distance violations could be estimated from the dash-cam by tracking the vehicle ahead and computing time-to-collision from its apparent size change rate.
+
+\subsubsection{Hardware Integration and Alternative Use-Cases}
+The system would benefit from integration with existing dual-channel dash-cam systems, such as those manufactured by Viofo, which combine road-facing and driver-facing cameras in a single unit and could streamline the capture and upload workflow. Similarly, vehicles with factory-fitted interior cameras (such as the latest JLR range) already possess the necessary hardware, though integration with proprietary in-vehicle systems presents its own challenges. Even with such integrations, the requirement for specialised recording hardware remains a significant barrier for a learner driver feedback tool compared to software-only solutions.
+
+This suggests that the alternative applications outlined in the introduction may represent more practical deployment paths for the underlying detection pipeline. Usage-based insurance analytics and in-car alert systems both operate within contexts where dual-camera hardware is already present or can be justified by the application's commercial value. A further use-case, and the one motivating Zekany et al.\ \cite{zekany2022finding}, is automated extraction of manoeuvre clips from large-scale dash-cam datasets to generate training data for ADAS. Our system's higher classification accuracy on three of the four shared manoeuvre types, and its avoidance of their severe lane change directional confusion, makes it a viable candidate for such annotation tasks. In this context, the event detection pipeline would serve as an annotation tool rather than a safety monitor, and the barrier to entry is minimal since the input is existing fleet footage rather than user-recorded video.
 
 \section{Acknowledgements}
 Thank yous to supervisor, external advisor, DCS tech, other stakeholders...
