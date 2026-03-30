@@ -80,17 +80,80 @@ Driving remains one of the most dangerous routine activities in the UK. In the U
 Driver Monitoring Systems (DMS) are a technology aimed at tracking driver behaviour using a variety of sensors, including in-cabin video footage. They have recently been designated as an essential safety component in modern vehicles by EU regulation \cite{eurlex_2019_2144}. Most current DMS’ are proprietary - either made by traditional car companies (Toyota \cite{toyota_tmate}, JLR \cite{jlr_dms_news}) or by companies selling hardware/software packages (SmartEye \cite{smarteye_ai}, Nauto \cite{nauto_platform}). While some open-source projects, such as OpenPilot \cite{commaai_openpilot} and ZenRoad \cite{zenroad_app}, also exist, both proprietary and open-source solutions focus on two distinct areas: driver distraction, using in-cabin footage; or the car’s movement, using dash-cam footage. However, no system combines the two sources of data.
 
 % Can you show some screenshots of existing tools in the Introduction section?
+% Insert screenshot of SmartEye landing and ZenRoad landing, with links to figures in the text.
 
-The central idea for this project is that a truly comprehensive understanding of driver behaviour cannot be determined solely from observing either the driver or the car’s movement in isolation. Instead, our objective is to implement a multi-modal approach, synchronising the driver’s state with the external road environment and the movement of the vehicle. As such, the aim of this project is to create a system capable of identifying driving mistakes, namely failure to check mirrors before manoeuvres, by processing synchronised dash-cam footage and in-cabin footage. The project will leverage computer vision techniques, such as head pose estimation from in-cabin footage to establish driver gaze direction, as well as neural networks or optical flow from dash-cam footage to identify car manoeuvres, such as lane changes and turns.
+The central idea for this project is that a truly comprehensive understanding of driver behaviour cannot be determined solely from observing either the driver or the car’s movement in isolation. Instead, our objective is to implement a multi-modal approach, synchronising the driver’s state with the external road environment and the movement of the vehicle. As such, the aim of this project is to create a system capable of identifying driving mistakes, namely failure to check mirrors before manoeuvres, by processing synchronised dash-cam footage and in-cabin footage. The project will leverage computer vision techniques, such as head pose estimation from in-cabin footage to establish driver gaze direction, as well as neural networks and visual odometry from dash-cam footage to identify car manoeuvres, such as lane changes and turns.
 
 A system capable of objectively identifying driver errors has numerous potential applications, such as:
+% Can you highlight any evidence you've found for this? Like that other current DMS systems do have these purposes to? Research - Nauto has insurance analytics for fleets. Include a reference to this: https://www.nauto.com/industries/insurance
 \begin{itemize}
     \item A feedback tool for learner drivers.
-    \item Improving usage-based car insurance analytics.
+    \item Improving usage-based car insurance analytics. 
     \item In-car accident prevention/alert systems.
 \end{itemize}
 
 In order to establish a clear goal and evaluation criteria, this project will focus on the learner driver use-case. The minimum viable product (MVP) is a web application for post-hoc analysis, processing synchronised dash-cam and in-cabin footage to identify and timestamp specific driving errors. The application aims to improve the quality of driving sessions with friends and family, who are less likely to spot subtle mistakes like mirror-checks \cite{2nd2nonedrivingschoolLearningDrive}. The system's performance will be evaluated by addressing the research question: `Can the system identify driving errors with greater accuracy than a non-professional supervisor?' To this end, a user study will be conducted to quantitatively compare the application's error-detection performance against that of people who are not formally trained as driving instructors.
+
+\newpage
+
+\section{Objectives}
+
+The application will analyse synchronised dash-cam and cabin footage to detect driving mistakes. This section defines the functional and non-functional requirements for MVP and outlines optional extensions.
+
+\subsection*{Functional Requirements}
+
+\subsubsection*{1. Core Video Analysis and Mistake Detection (Must-Have)}
+The primary objective is to develop and validate computer vision models that can accurately identify driving mistakes.
+
+\begin{itemize}
+    \item \textbf{FR1.1} Accept two synchronised video files as input: road-facing and cabin-facing.
+    \item \textbf{FR1.2} Analyse the dash-cam feed to detect and keep track of lane markings.
+    \item \textbf{FR1.3} Process the output of FR1.2 to detect timestamps for the start and end of lane change manoeuvres.
+    \item \textbf{FR1.4} Classify the driver's gaze direction per frame as either:
+    \begin{itemize}
+        \item Looking ahead.
+        \item Looking at the left mirror.
+        \item Looking at the right mirror.
+        \item Looking at the rear-view mirror.
+    \end{itemize}
+    \item \textbf{FR1.5} Combine the outputs of the manoeuvre and driver behaviour models using a rule-based algorithm to identify when manoeuvres are made without a prior mirror-check.
+\end{itemize}
+
+\subsubsection*{2. Web Interface and User Feedback (Must-Have)}
+This section outlines the requirements for a user interface. This component will accept user videos and display the data generated from Component 1.
+
+\begin{itemize}
+    \item \textbf{FR2.1} Provide a web interface for a user to upload video footage after their driving session.
+    \item \textbf{FR2.2} Display the type and count of detected mistakes.
+    \item \textbf{FR2.3} Present synchronised video playback that allows the user to navigate to detected mistake timestamps.
+\end{itemize}
+
+\subsubsection*{3. Mistake Detection Enhancements (Should-Have)}
+These requirements extend the core functionality to detect a more complex range of manoeuvres and actions.
+\begin{itemize}
+    \item \textbf{FR3.1} Manoeuvre detection extension - Enhance manoeuvre detection to include:
+    \begin{itemize}
+        \item \textbf{FR3.1.1} Turns into side roads.
+        \item \textbf{FR3.1.2} 3-point turns.
+        \item \textbf{FR3.1.3} Reversing.
+    \end{itemize}
+    \item \textbf{FR3.2} Gaze classification extension (I) - Detect blind-spot checks.
+\end{itemize}
+
+\subsubsection*{4. Extensions (Could-Have)}
+Additional features that would enhance the system, but are considered beyond the scope of the core project.
+
+\begin{itemize}
+    \item \textbf{FR4.1} Data input extension - Allow the use of a smartphone camera to record internal footage.
+    \item \textbf{FR4.2} Gaze classification extension (II) - Incorporate eye-tracking to improve gaze detection accuracy.
+\end{itemize}
+
+\subsection*{Non-Functional Requirements}
+\begin{itemize}
+    \item \textbf{NFR1} The core analysis script must be well-documented and capable of being executed via the command line.
+    \item \textbf{NFR2} The user interface must be intuitive to navigate and provide mistake identification information clearly to the user.
+    \item \textbf{NFR3} Data must be stored securely and anonymised, to comply with UK GDPR.
+\end{itemize}
 
 \newpage
 
@@ -253,7 +316,7 @@ The \texttt{combined\_analysis} module runs each module separately, and aggregat
 \end{figure}
 
 \subsection{Resources and Tools}
-Rather than training models from scratch, the project utilises pre-trained models and standard tools to perform the analysis. Python, thanks to its robust ecosystem of data processing libraries, is the language chosen for most state-of-the-art ML research, so we use it in this project. While there are two prominent Python libraries for ML and NN development, PyTorch \cite{paszke2019pytorch} and TensorFlow \cite{abadi2016tensorflow}, we are only able to use models implemented in the PyTorch library. This is because it was discovered that the available development GPU (RTX 5070Ti) operates using a new CUDA compatibility protocol, `Compute Capability 12.0’, which is not yet supported by TensorFlow.
+Rather than training models from scratch, the project utilises pre-trained models and standard tools to perform the analysis. Python, due to its robust ecosystem of data processing libraries, is the language chosen for most state-of-the-art ML research, so we use it in this project. While there are two prominent Python libraries for ML and NN development, PyTorch \cite{paszke2019pytorch} and TensorFlow \cite{abadi2016tensorflow}, we are only able to use models implemented in the PyTorch library. This is because the available development GPU (RTX 5070Ti) operates using a new CUDA compatibility protocol, `Compute Capability 12.0’, which is not yet supported by TensorFlow.
 
 \subsection{Lane Change Detection (FR1.2 \& FR1.3)}
 Lane detection allows us to represent the position of the car relative to the road, which in turn informs us of the vehicle’s movement, and specifically any manoeuvres that it performs. While the model we chose to use in the end was LaneATT, the process to come to this conclusion came with several challenges.
@@ -262,7 +325,7 @@ One problem was that the datasets that are used for training models (TuSimple, C
 
 Another limitation identified was the generalisability of many models to consumer dash-cam hardware, with several models showing poor performance on the self-collected dataset (Figure \ref{fig:drive_examples}). A possible explanation is over-fitting to the camera parameters used during dataset collection. When tested on footage from cameras with different fields of view, warped lenses or compression artefacts, detection accuracy degraded significantly. The attention mechanism used by the LaneATT model may explain its increased robustness under these conditions, although this topic is not discussed in the literature.
 
-Lane tracking was implemented by storing lane information in `LaneTrack’ objects, which use a Kalman filter to store and update their state. An overall `LaneTracker’ object is responsible for matching previously stored lanes to newly detected lanes. Initially, the Hungarian algorithm \cite{kuhn1955hungarian} was used for this matching process, however it always produces a complete matching even when distances between lanes are very large. This resulted in scenarios where the system matched lanes across the entire image, if a lane on the left side of the image stopped being tracked, but a new lane was detected on the right side. 
+Lane tracking was implemented by storing lane information in `LaneTrack’ objects, which use a Kalman filter to store and update their state. An overall `LaneTracker’ object is responsible for matching previously stored lanes to newly detected lanes. Initially, the Hungarian algorithm \cite{kuhn1955hungarian} was used for this matching process, however it always produces a complete matching even when distances between lanes are very large. This resulted in scenarios where the system matched lanes across the entire image if a lane on the left side of the image stopped being tracked, and a new lane was detected on the right side. 
 
 Instead, we switched to a ‘closest first’ approach with a gate-based cut-off (Listing \ref{lst:lane-tracker-gated}). The first-closest pairs are matched to each other, and if a pair’s distance exceeds the cut-off point, they are not matched and the detected lane is stored as a new lane rather than updating an existing one, while the stored lane is counted as a miss. This change eliminated such scenarios and made the tracking work more reliably in practice (Figure \ref{fig:cars_lanes}).
 
@@ -662,6 +725,8 @@ F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \te
 \subsection{User Testing}
 Beyond quantitative accuracy, the system was evaluated through user testing sessions where participants uploaded their own driving footage, reviewed the results, and reported any errors they identified through the built-in error reporting mechanism. These reports (false positives and false negatives) were reviewed by the author through the administrator dashboard and used both for accuracy measurement and for identifying systematic failure modes. Participants were also asked qualitative questions about the usefulness of the tool and whether they would recommend it to someone learning to drive.
 
+% Add more here - how users were recruited (those known to the author, fully qualified drivers), how they should have conducted their driving - just regular driving, record with phone or 2-in-1 system, survey questions that were asked - https://forms.gle/AUpb8mX9cFf1XoFQ8 - where it was sent/response got from (NextDoor app, LinkedIn, sent to friends and family).
+
 \newpage
 
 \section{Results}
@@ -750,10 +815,9 @@ Right Lane Change & 0.79 & 0.18 & 0.30 & \textbf{0.96} & \textbf{0.96} & \textbf
 
 The systems also differ qualitatively in their failure modes. Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, confirmed by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion almost entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching. The cross-type confusions in our matched-events matrix are predominantly between left and right turns (17\% and 6\% respectively), caused by brief yaw oscillations in the visual odometry, with only minor lane change cross-classification (5\% and 4\%). Both systems share a susceptibility to road curves producing false turn detections.
 
-\subsection{Safety Monitoring Results}
-Of the 94 safety events detected by the system, 90\% were classified as safe (mirror check observed within the 5-second window) and 10\% as unsafe. The majority of unsafe events were associated with left turns, which aligns with the expectation that left turns in UK driving require checking the right mirror (a less habitual action for many drivers). Right turns and lane changes had very few unsafe detections, consistent with the more natural tendency to check mirrors on the corresponding side before merging or turning.
-
 \subsection{User-Submitted Video Results}
+% In this section, mention somewhere the change in safe/unsafe events before and after users did their calibrations.
+
 Beyond the author-labelled ground truth evaluation, the system was deployed as a live web application and used by external participants who uploaded and analysed their own driving footage. This section reports the results from that deployment, providing an independent measure of system behaviour on previously unseen drivers, vehicles, camera setups, and routes.
 
 \subsubsection{Deployment Overview}
@@ -812,7 +876,7 @@ The web application includes an error reporting mechanism that allows users to f
 
 The false positive reports were mainly right turn detections. Manual review through the administrator dashboard confirmed that these false positives were caused by winding roads with successive right-hand curves, producing visual odometry signals indistinguishable from genuine turns. This is consistent with the curved-road false positive pattern identified in the author-labelled evaluation (Section 6.1).
 
-The 4 false negative reports identified three distinct failure modes:
+The 4 false negative reports identified three unique failure modes:
 \begin{enumerate}
     \item \textbf{Missing lane markings}: one user noted that a right lane change was missed because the road lacked visible lane markings, preventing the lane detection model from identifying a boundary crossing.
     \item \textbf{Direction misclassification}: one user reported that a left turn was classified as a right turn, consistent with the yaw oscillation confusion identified in the author-labelled evaluation.
@@ -858,7 +922,7 @@ The system would benefit from integration with existing dual-channel dash-cam sy
 This suggests that the alternative applications outlined in the introduction may represent more practical deployment paths for the underlying detection pipeline. Usage-based insurance analytics and in-car alert systems both operate within contexts where dual-camera hardware is already present or can be justified by the application's commercial value. A further use-case, and the one motivating Zekany et al.\ \cite{zekany2022finding}, is automated extraction of manoeuvre clips from large-scale dash-cam datasets to generate training data for ADAS. Our system's higher classification accuracy on three of the four shared manoeuvre types, and its avoidance of their severe lane change directional confusion, makes it a viable candidate for such annotation tasks. In this context, the event detection pipeline would serve as an annotation tool rather than a safety monitor, and the barrier to entry is minimal since the input is existing fleet footage rather than user-recorded video.
 
 \section{Acknowledgements}
-The author wishes to express sincere gratitude to the project supervisor, Dr Greg Watson, and the external advisor, Sriya Roy, for their invaluable guidance and technical oversight throughout this research. Further appreciation is extended to the DCS technical staff for their essential support with the computing infrastructure.
+The author wishes to express sincere gratitude to the project supervisor, Dr Greg Watson, and the external advisor, Sriya Roy, for their invaluable guidance and technical oversight throughout this research. Further appreciation is extended to the DCS technical staff for their support with the web hosting infrastructure.
 
 \bibliography{progress_report_bibliography}
 
