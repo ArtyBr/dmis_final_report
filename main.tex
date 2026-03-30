@@ -52,6 +52,7 @@
 \newpage
 
 \section*{Abstract}
+% Actually the premise the DMS don't combine in-cabin and road-facing video is wrong - what's actually missing it the identification of driving mistakes such as mirror checks, rather than simply distraction or looking at phones - which is what current systems do. Need to adjust text in both abstract and introduction to reflect this.
 The majority of driving accidents stem from behavioural errors, particularly failures of awareness, yet existing Driver Monitoring Systems analyse either in-cabin footage or dash-cam footage in isolation, never both together. This project addresses that gap by developing a multi-modal system that synchronises road-facing and driver-facing video to identify a specific and common driving mistake: failing to check mirrors before manoeuvres. The system combines deep learning-based lane detection (LaneATT) with Kalman filter tracking to detect lane changes, a custom visual odometry pipeline with dynamic object masking to detect turns, and head pose estimation via the Perspective-n-Point algorithm with an SVM classifier to determine gaze direction. A rule-based Safety Monitor cross-references detected manoeuvres against the driver's gaze history to classify each event as safe or unsafe. The pipeline is deployed through a web application featuring automated audio-based video synchronisation, per-user gaze calibration, and an interactive results display. Evaluated on 104 labelled manoeuvre events across approximately 350 video clips, the system achieved an F1 score of 0.81 for event detection and 92\% classification accuracy on matched events, outperforming the closest comparable work by Zekany et al.\ on three of four manoeuvre types. A live deployment with six external users over four weeks produced 170 safety events and confirmed that the system generalises to unseen drivers, vehicles, and camera setups, with user-reported failure modes consistent with those identified in the controlled evaluation.
 
 \newpage
@@ -150,7 +151,7 @@ This section reviews the key computer vision techniques used in the project, cov
 \subsection{Lane Detection}
 Lane detection is a well-researched topic within computer vision (CV). It is an essential tool for many modern vehicle features, from lane assist to full self-driving systems. Lane detection aims to detect lane lines or lane areas by either camera or lidar \cite{tang_review_2021}. This project focuses on camera-based perception, due to the cost and scope constraints of using lidar. Classical lane detection methods involved image processing techniques such as Sobel \cite{sobel_1968} and Canny \cite{canny_1986} filters, followed by Hough transform \cite{duda_1972} and curve fitting. However, these methods suffered from poor performance and consistency in varying lighting conditions and faded or obscured lane lines \cite{hillel_2014}. Since the project aims to work on urban roads in different lighting and weather conditions, these methods are not suitable. 
 
-The modern development of lane detection systems focuses on deep learning to create more robust and adaptable models, specifically using Convolutional Neural Networks (CNNs). CNNs are an advancement of traditional Neural Networks (NNs), with Convolutional and Pooling layers added to the beginning of the architecture \cite{lecun_1998}, generalising NNs to work on images (Figure \ref{fig:cnn_vis}). These layers use convolutions \cite{goodfellow_2016} to extract relevant features from the input, which are then flattened and passed to traditional, fully connected layers for classification.
+The modern development of lane detection systems focuses on deep learning to create more robust and adaptable models, specifically using Convolutional Neural Networks (CNNs). CNNs are an advancement of traditional Neural Networks (NNs), with convolutional and pooling layers added to the beginning of the architecture \cite{lecun_1998}, generalising NNs to work on images (Figure \ref{fig:cnn_vis}). These layers use convolutions \cite{goodfellow_2016} to extract relevant features from the input, which are then flattened and passed to traditional, fully connected layers for classification.
 
 \begin{figure}[H]
 
@@ -169,7 +170,7 @@ Figure \ref{fig:dataset_examples} shows typical frames from each dataset, illust
 
 \begin{figure}[H]
 \centering
-    \subfigure[TuSimple: US highway scene.]{\includegraphics[width=0.45\textwidth]{dataset_images/tusimple_example.png}}
+    \subfigure[TuSimple: US highway scene.]{\includegraphics[width=0.45\textwidth]{dataset_images/tusimple_lanes.jpg}}
     \subfigure[CULane: varied urban conditions with ground truth overlays.]{\includegraphics[width=0.45\textwidth]{dataset_images/culane_examples.png}}
     \caption{Example frames from the TuSimple and CULane lane detection benchmarks. Sources: (a) \cite{TuSimple2017}, (b) \cite{CULane2018}.}
     \label{fig:dataset_examples}
@@ -196,6 +197,8 @@ Figure \ref{fig:dataset_examples} shows typical frames from each dataset, illust
     \label{tab:lane_model_comparison}
 
 \end{table}
+
+% Move this paragraph and subsequent images into the implementation section, probably the lane detection park
 
 In order to establish if these models would generalise to British streets and consumer hardware (dash-cams), they were also qualitatively tested on our self-collected driving dataset (Figure \ref{fig:drive_examples}). Three representative models were compared: PolyLaneNet, Ultra-Fast Lane Detection (UFLD) \cite{qin2020ultra} and LaneATT. The LaneATT model was found to perform the most accurately and reliably. A quantitative benchmark was infeasible for the project, as this would require extensive manual labelling, taking time away from feature development. 
 
@@ -245,16 +248,7 @@ Once angles are extracted, they must be classified into discrete gaze directions
 For the final classification step, a choice exists between unsupervised clustering (e.g. K-Means \cite{macqueen1967some}) and supervised learning (e.g. Support Vector Machines or SVM \cite{cortes1995support}). While K-Means can show the quality of clusters without labels, it often struggles with outliers or classes that occupy narrow areas of the feature space. SVMs are well-suited to this task for several reasons: they are effective with small training sets because they rely only on the support vectors near the decision boundary rather than the entire dataset \cite{cortes1995support}; they produce deterministic, interpretable decision boundaries that can be visualised and verified; and, as noted in the ADAS review by Yurtsever et al.\ \cite{yurtsever2020survey}, separating perception from classification using explainable models is preferred in safety-related applications over end-to-end neural network approaches that act as black boxes.
 
 \subsection{Motion Estimation}
-Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is used to detect left and right turns (FR3.1.1). Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM) \cite{taketomi2017visual}. vSLAM constructs a persistent map of the environment (Figure \ref{fig:vslam_example}), and can identify loop-closures to correct for drift accumulation. However, it is considerably more computationally expensive than VO and provides more environmental information than is necessary for this project. Since only local, relative motion is needed for turn detection, VO was selected as sufficient without the overhead of full environment mapping.
-
-\begin{figure}[H]
-
-\centering
-    \includegraphics[width=0.75\linewidth]{research_images/pycuvslam_example.png}
-    \caption{vSLAM example with vehicle segmentation on the KITTI Stereo Odometry dataset. Source: PyCuVLSAM \cite{korovko2025cuvslamcudaacceleratedvisual}}
-    \label{fig:vslam_example}
-
-\end{figure}
+Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is used to detect left and right turns (FR3.1.1). Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM) \cite{taketomi2017visual}. vSLAM constructs a persistent map of the environment, and can identify loop-closures to correct for drift accumulation. However, it is considerably more computationally expensive than VO and requires camera calibration to function correctly, which would be impractical for all users. Since only local, relative motion is needed for turn detection, VO was selected as sufficient without the overhead of full environment mapping.
 
 VO analyses sequential camera frames to estimate the camera's local motion incrementally. The process begins with keypoint detection, where algorithms such as Shi-Tomasi \cite{shi1994good} or ORB \cite{rublee2011orb} identify distinctive features in each frame. These keypoints are then tracked across consecutive frames using sparse Optical Flow, a technique that estimates the displacement of individual feature points between frames rather than computing motion for every pixel. The Lucas-Kanade method \cite{lucas1981iterative} is commonly used for this, as it is efficient and well-suited to tracking a sparse set of points. For this project, Shi-Tomasi was selected for keypoint detection, as it produces corners with strong gradients in two directions, which is exactly what Lucas-Kanade is designed to track. Alternatives such as FAST or ORB were considered, but these produce lower-quality corners or include binary descriptor computation that is unnecessary when using optical flow for matching rather than descriptor comparison.
 
