@@ -109,16 +109,16 @@ The primary objective was to develop and validate computer vision models that ca
 All core requirements (FR1.1--FR1.5) were fully implemented.
 
 \subsubsection*{2. Web Interface and User Feedback (Must-Have)}
-% Add the user authentication and account system here. Refer back to the new objective in the place in design and development where it is talked about.
 This section outlines the requirements for the user interface. This component accepts user videos and displays the data generated from Component 1.
 
 \begin{itemize}
     \item \textbf{FR2.1} Provide a web interface for a user to upload video footage after their driving session.
     \item \textbf{FR2.2} Display the type and count of detected mistakes.
     \item \textbf{FR2.3} Present synchronised video playback that allows the user to navigate to detected mistake timestamps.
+    \item \textbf{FR2.4} Implement a user authentication and account system with per-user access control over uploaded videos and analysis results.
 \end{itemize}
 
-All web interface requirements (FR2.1--FR2.3) were fully implemented.
+All web interface requirements (FR2.1--FR2.4) were fully implemented.
 
 \subsubsection*{3. Mistake Detection Enhancements (Should-Have)}
 These requirements extend the core functionality to detect a more complex range of manoeuvres and actions.
@@ -451,8 +451,7 @@ The gaze classifier was then integrated into the existing system. For each frame
 
 \subsection{Mistake Identification (FR1.5)}
 The system identifies the driving mistake of failing to check mirrors prior to manoeuvres, including both lane changes and turns. When a manoeuvre is detected (either a lane crossing from the lane tracker or a turn event from the visual odometry module), the Safety Monitor queries the driver's gaze history over the preceding 5 seconds. If the driver checked the corresponding mirror (left mirror for rightward manoeuvres, right mirror for leftward manoeuvres) within this window, the event is classified as safe; otherwise, it is classified as unsafe. A rear mirror check is also noted if present, but is not sufficient on its own.
-% Mention zekany's paper with their 4-second threshold to justidy the window further
-This rule-based heuristic was chosen over a learned classifier because the relationship between mirror checks and manoeuvres is well-defined by driving standards, making a simple threshold both interpretable and auditable. The UK Highway Code states that drivers should check mirrors ``in good time'' before any change of direction or speed \cite{highwaycode2025}, but does not prescribe a precise threshold. A 5-second lookback window was chosen as a practical compromise: long enough to capture a check performed shortly before the manoeuvre begins, but short enough that the observed traffic state remains relevant (Figure \ref{fig:safe_lane_change}).
+This rule-based heuristic was chosen over a learned classifier because the relationship between mirror checks and manoeuvres is well-defined by driving standards, making a simple threshold both interpretable and auditable. The UK Highway Code states that drivers should check mirrors ``in good time'' before any change of direction or speed \cite{highwaycode2025}, but does not prescribe a precise threshold. A 5-second lookback window was chosen as a practical compromise: long enough to capture a check performed shortly before the manoeuvre begins, but short enough that the observed traffic state remains relevant. This is consistent with the approach taken by Zekany et al.\ \cite{zekany2022finding}, who use a 4-second ``Maneuver Time Error'' (MTE) threshold in their evaluation of dashboard camera manoeuvre detection. They justify this by observing that human-scored and system-detected event times typically differ by one to two seconds, for example when a car creeps forward into a turn while waiting for traffic. Our slightly larger 5-second window additionally matches the mirror check lookback window used by the Safety Monitor, ensuring consistency between the system's own safety judgements and the evaluation tolerance (Figure \ref{fig:safe_lane_change}).
 
 \begin{figure}[H]
 
@@ -541,7 +540,7 @@ A one-process-per-request strategy was chosen over maintaining a pool of idle pr
 
 For the user study, the application was deployed to the university’s DCS shared server infrastructure. The FastAPI backend and React frontend were served over HTTPS, with video files and analysis outputs stored on the DCS shared filesystem. SLURM cluster integration was added via SSH tunnelling, allowing analysis jobs to be offloaded to the university’s GPU cluster for significantly faster processing. The backend manages job submission, polls SLURM job status, and relays queue position and estimated wait times to the frontend, abstracting the cluster interaction entirely from the user.
 
-\subsubsection{User Authentication and Account System}
+\subsubsection{User Authentication and Account System (FR2.4)}
 The initial prototype operated without user accounts, meaning anyone with the URL could upload videos and view all results. This was acceptable during development but inadequate for real-world use, where analysis results contain sensitive footage and users need to manage their own history. A user account system was therefore added, with registration, login, and per-user access control over uploaded videos and results.
 
 Authentication is handled via JSON Web Tokens (JWT) with a 7-day expiry limit, chosen over session-based authentication for its stateless nature, which avoids the need for server-side session storage. Account activation requires admin approval after registration, effectively acting as a whitelist that allows us to verify each user’s driver’s licence as required by the ethical approval board.
@@ -657,8 +656,7 @@ Project evaluation was split into two parts: quantitative (author-labelled groun
 The evaluation dataset comprises approximately 350 three-minute video clips (each consisting of a synchronised road and driver-facing pair) collected from the author's driving footage across a variety of routes and conditions. The majority of clips were recorded during the day ($\sim$265 clips), with smaller subsets captured at night ($\sim$34 clips) and in rainy daytime conditions ($\sim$50 clips). These labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.
 
 \subsection{Ground Truth Evaluation Methodology}
-% Move the 4-second tolerance window discussion to the above section discussing our 5-second tolerance in design and development
-To evaluate the system's event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 5-second tolerance. In this approach, ground truth events and detections are paired one-to-one by iteratively selecting the closest unmatched pair in time, ensuring that each ground truth event is matched to at most one detection and vice versa. This tolerance is consistent with the approach taken by Zekany et al.\ \cite{zekany2022finding}, who use a 4-second ``Maneuver Time Error'' (MTE) threshold in their evaluation of dashboard camera manoeuvre detection. They justify this by observing that human-scored and system-detected event times typically differ by one to two seconds (for example, a car creeping forward into a turn while waiting for traffic will be detected at a different moment than a human would mark), and that no consecutive same-class manoeuvres occur within four seconds in their dataset. Our slightly larger 5-second window additionally matches the mirror check lookback window used by the Safety Monitor, ensuring that a detection is considered correct if it falls within the same temporal range that the system uses for its own safety judgements.
+To evaluate the system's event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 5-second tolerance, consistent with the rationale discussed in Section 4.5. In this approach, ground truth events and detections are paired one-to-one by iteratively selecting the closest unmatched pair in time, ensuring that each ground truth event is matched to at most one detection and vice versa.
 
 Each ground truth event was matched to at most one detection (and vice versa), with matches assigned greedily by smallest time difference. Unmatched ground truth events are counted as false negatives (FN, missed detections), and unmatched system detections are counted as false positives (FP, spurious detections). Matched pairs are true positives (TP). From these counts, three standard metrics are computed:
 
@@ -692,34 +690,34 @@ A separate questionnaire was distributed more broadly through the Nextdoor neigh
 \newpage
 
 \section{Results}
-This section presents the quantitative results of the evaluation methodology described above, covering event detection accuracy, lane detection coverage, and the distribution of safety classifications across detected events.
+This section presents the quantitative results of the evaluation methodology described above, covering detection accuracy with a comparison to the closest existing work, user-submitted video results, and questionnaire findings.
 
-\subsection{Event Detection Accuracy}
-Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections (detections that correspond to a ground truth event), 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds. Table \ref{tab:detection_results} shows the detection performance breakdown by manoeuvre type. Note that in this initial analysis, a detection is considered correct (True Positive) if it correctly identifies the presence of a manoeuvre within the temporal tolerance, regardless of whether it correctly identified the specific type.
-% WHy are we doing a table where we don't care about the type here? I think intitially I wanted to do this in order to compare to zekany et al., but since we're not doing that - we should actually do it based on actually correctly identifying the events. Then we mention in the comparison with zekany that in that one, the recall is different because there, they only measure the detections rather than types. Adjust this entire section accordingly. ACtually, we can combine the event detection accuracy and classification accuracy and literature comparison into one. Remove this table and compare the recall/precision/f1 table first, then discuss false positives and the image associated, and then compare the confusion matrices.
+\subsection{Detection Accuracy and Literature Comparison}
+Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds. The closest comparable system in the literature is that of Zekany et al.\ \cite{zekany2022finding}. Table \ref{tab:f1_comparison} presents a direct per-manoeuvre comparison by taking the best (maximum F1) operating point for each of their individual classifiers from their Table III.
+
 \begin{table}[H]
-
 \centering
-\begin{tabular}{|l|c|c|c|c|c|}
+\small
+\begin{tabular}{|l|ccc|ccc|}
 \hline
-\textbf{Manoeuvre Type} & \textbf{GT} & \textbf{Detected} & \textbf{FP} & \textbf{FN} & \textbf{Recall} \\
+ & \multicolumn{3}{c|}{\textbf{Zekany et al.\ (Best F1)}} & \multicolumn{3}{c|}{\textbf{Ours}} \\
+\textbf{Manoeuvre} & P & R & F1 & P & R & F1 \\
 \hline
-Left Turn & 30 & 23 & 5 & 7 & 77\% \\
-Right Turn & 24 & 17 & 12 & 7 & 71\% \\
-Left Lane Change & 25 & 20 & 1 & 5 & 80\% \\
-Right Lane Change & 25 & 24 & 1 & 1 & 96\% \\
-\hline
-\textbf{Total} & \textbf{104} & \textbf{84} & \textbf{19} & \textbf{20} & \textbf{81\%} \\
+Left Turn      & 0.52 & 0.74 & 0.61 & \textbf{0.82} & \textbf{0.77} & \textbf{0.79} \\
+Right Turn     & \textbf{0.85} & \textbf{0.92} & \textbf{0.89} & 0.59 & 0.71 & 0.64 \\
+Left Lane Change  & 0.61 & 0.33 & 0.43 & \textbf{0.95} & \textbf{0.80} & \textbf{0.87} \\
+Right Lane Change & 0.79 & 0.18 & 0.30 & \textbf{0.96} & \textbf{0.96} & \textbf{0.96} \\
 \hline
 \end{tabular}
-\caption{Detection performance by manoeuvre type. GT = ground truth count, Detected = matched detections (TP at detection level), FP = false positives, FN = false negatives. Recall here measures the system's ability to find the event, even if misclassified.}
-\label{tab:detection_results}
-
+\caption{Per-manoeuvre precision, recall, and F1 comparison. Zekany et al.\ values are from their Table III. Bold highlights the higher value.}
+\label{tab:f1_comparison}
 \end{table}
 
-Performance varied across manoeuvre types. Lane changes were detected most reliably, with right lane changes achieving 96\% recall. False positives for lane changes (6 of the 19 total) were predominantly caused by the lane detection model misclassifying bus lanes or faded road markings as lane boundaries, leading the system to detect a lane crossing where none occurred. Left turns and right turns achieved 77\% and 71\% recall respectively. The lower recall for turns can be explained by the fact that moving vehicles, pedestrians, and varying lighting at junctions interfere with the feature tracking used by the visual odometry pipeline, weakening the turn signal and causing some turns to go undetected.
+In both systems, a detection is considered a true positive if it falls within the temporal tolerance of a ground truth event of the same manoeuvre category, so both precision and recall reflect correct type identification. It is also worth noting that Zekany et al.'s per-classifier F1 scores are computed at individually optimised recall thresholds, whereas our scores reflect a single fixed system configuration with no per-class threshold tuning, making the comparison conservative in our favour.
 
-Of the 19 false positives, 12 were classified as right turns. It was observed that the majority occurred on roads that curve rightward, producing a yaw accumulation pattern indistinguishable from a genuine right turn as far as the visual odometry is concerned. Since the model relies solely on camera motion, it has no way to differentiate between a road that bends to the right and a deliberate right turn at a junction. Mitigating this would require incorporating additional environmental context, such as detecting give-way lines, junction markings, or changes in road topology that distinguish intersections from curved road segments (Figure \ref{fig:right_turn_misclass}).
+Our system achieves a higher F1 score on three of the four manoeuvre types. Lane changes were detected most reliably, with right lane changes achieving 96\% recall and 96\% precision; both lane change F1 scores more than double those of Zekany et al. Left turns also showed a substantial improvement (0.79 vs.\ 0.61). The notable exception is right turns, where our system achieves an F1 of only 0.64 compared to their 0.89. This is primarily due to a high false positive rate for right turns, discussed below, which lowers precision to 0.59. The lower recall for turns more generally (77\% for left, 71\% for right) can be attributed to moving vehicles, pedestrians, and varying lighting at junctions interfering with the visual odometry feature tracking.
+
+Of the 19 false positives, 12 were classified as right turns. The majority occurred on roads that curve rightward, producing a yaw accumulation pattern indistinguishable from a genuine right turn as far as the visual odometry is concerned. Since the pipeline relies solely on camera motion, it has no way to differentiate between a road that bends to the right and a deliberate right turn at a junction. Mitigating this would require incorporating additional environmental context, such as detecting give-way lines, junction markings, or changes in road topology that distinguish intersections from curved road segments (Figure \ref{fig:right_turn_misclass}). The remaining false positives for lane changes (6 of the 19 total) were predominantly caused by the lane detection model misclassifying bus lanes or faded road markings as lane boundaries.
 
 \begin{figure}[H]
     \centering
@@ -729,10 +727,7 @@ Of the 19 false positives, 12 were classified as right turns. It was observed th
     \label{fig:right_turn_misclass}
 \end{figure}
 
-\subsection{Classification Accuracy and Literature Comparison}
-Beyond detection, it is important to examine whether the system correctly identifies the type of manoeuvre. As outlined in the evaluation methodology, the closest comparable system is that of Zekany et al.\ \cite{zekany2022finding}. Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology from their Table VIII. 
-
-In our system, type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common confusion was between left turns and right turns (4 left turns detected as right turns), which occurs when the visual odometry briefly accumulates yaw in the wrong direction before correcting. Overall, the system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% across detected manoeuvres. This compares favourably against Zekany et al.'s best-match overall accuracy of 78.8\% (their Table VII: 628 of 797 matched correctly).
+To examine classification accuracy in more detail, Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology from their Table VIII. Our system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% compared to Zekany et al.'s 78.8\% (their Table VII: 628 of 797 matched correctly). Type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common confusion was between left turns and right turns (4 left turns detected as right turns), which occurs when the visual odometry briefly accumulates yaw in the wrong direction before correcting.
 
 \begin{table}[H]
 \centering
@@ -752,33 +747,9 @@ Right Lane Change & 0 (0\%) & 0 (0\%) & 1 (2\%) & \textbf{62 (98\%)} & 0 (0\%) &
 \label{tab:cm_matched}
 \end{table}
 
-Under this comparison, our system achieves higher classification accuracy on three of the four shared manoeuvre types: right turns (94\% vs.\ 80\%), left lane changes (95\% vs.\ 7\%), and right lane changes (96\% vs.\ 98\%, which is comparable). Their lane change detection exhibits a severe systematic failure, with 70\% of left lane changes misclassified as right lane changes, whereas our system avoids this directional confusion almost entirely.
-
-A direct per-manoeuvre comparison is also possible by taking the best (maximum F1) operating point for each of Zekany et al.'s individual classifiers from their Table III. Table \ref{tab:f1_comparison} presents this comparison using our standard precision, recall, and F1 metrics. Our system achieves a higher F1 score on three of the four manoeuvre types, particularly for lane changes where our F1 scores (0.87 and 0.96) more than double their results. It is also worth noting that Zekany et al.'s per-classifier F1 scores are computed at individually optimised recall thresholds, whereas our scores reflect a single fixed system configuration with no per-class threshold tuning, making the comparison conservative in our favour.
-
-\begin{table}[H]
-\centering
-\small
-\begin{tabular}{|l|ccc|ccc|}
-\hline
- & \multicolumn{3}{c|}{\textbf{Zekany et al.\ (Best F1)}} & \multicolumn{3}{c|}{\textbf{Ours}} \\
-\textbf{Manoeuvre} & P & R & F1 & P & R & F1 \\
-\hline
-Left Turn      & 0.52 & 0.74 & 0.61 & \textbf{0.82} & \textbf{0.77} & \textbf{0.79} \\
-Right Turn     & \textbf{0.85} & \textbf{0.92} & \textbf{0.89} & 0.59 & 0.71 & 0.64 \\
-Left Lane Change  & 0.61 & 0.33 & 0.43 & \textbf{0.95} & \textbf{0.80} & \textbf{0.87} \\
-Right Lane Change & 0.79 & 0.18 & 0.30 & \textbf{0.96} & \textbf{0.96} & \textbf{0.96} \\
-\hline
-\end{tabular}
-\caption{Per-manoeuvre precision, recall, and F1 comparison. Zekany et al.\ values are from their Table III. Bold highlights the higher value. Our system achieves higher F1 on three of the four shared manoeuvre types.}
-\label{tab:f1_comparison}
-\end{table}
-
-The systems also differ qualitatively in their failure modes. Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, confirmed by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion almost entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching. The cross-type confusions in our matched-events matrix are predominantly between left and right turns (17\% and 6\% respectively), caused by brief yaw oscillations in the visual odometry, with only minor lane change cross-classification (5\% and 4\%). Both systems share a susceptibility to road curves producing false turn detections.
+Our system achieves higher classification accuracy on two of the four shared manoeuvre types: right turns (94\% vs.\ 80\%) and left lane changes (95\% vs.\ 7\%). Right lane change accuracy is comparable (96\% vs.\ 98\%), while Zekany et al.\ achieve higher accuracy on left turns (89\% vs.\ 83\%). Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, confirmed by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion almost entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching. The cross-type confusions in our system are predominantly between left and right turns (17\% and 6\% respectively), caused by brief yaw oscillations in the visual odometry. Both systems share a susceptibility to road curves producing false turn detections.
 
 \subsection{User-Submitted Video Results}
-% In this section, go through and describe the changes in safe/unsafe events before and after users did their gaze calibrations.
-
 Beyond the author-labelled ground truth evaluation, the system was deployed as a live web application and used by external participants who uploaded and analysed their own driving footage. This section reports the results from that deployment, providing an independent measure of system behaviour on previously unseen drivers, vehicles, camera setups, and routes.
 
 \subsubsection{Deployment Overview}
@@ -829,7 +800,10 @@ User F & 1 & 2.9 & 11 & 3 (27\%) & 8 (73\%) \\
 \label{tab:per_user_safety}
 \end{table}
 
-The per-user results demonstrate meaningful variation between drivers. Users A and D achieved 92\% safe classifications, suggesting consistent mirror-checking habits, while Users E and F had substantially higher unsafe rates (43\% and 73\% respectively). Notably, Users E and F each submitted only a single video and did not use a personalised gaze calibration, so their higher unsafe rates may partly reflect the default classifier's reduced accuracy on unfamiliar camera angles and seating positions rather than genuinely unsafe driving. This highlights the importance of gaze calibration for reliable safety assessment: across the full dataset, calibrated analyses exhibited a safe rate of 83.3\% compared to 76.4\% for uncalibrated analyses, suggesting that the default classifier produces more false ``unsafe'' classifications when the driver's head geometry or camera position differs from the training data.
+The per-user results demonstrate meaningful variation between drivers. Users A and D achieved 92\% safe classifications, suggesting consistent mirror-checking habits, while Users E and F had substantially higher unsafe rates (43\% and 73\% respectively). Notably, Users E and F each submitted only a single video and did not use a personalised gaze calibration, so their higher unsafe rates may partly reflect the default classifier's reduced accuracy on unfamiliar camera angles and seating positions rather than genuinely unsafe driving.
+
+\subsubsection{Effect of Gaze Calibration}
+Several users re-analysed their footage after creating or refining a personalised gaze calibration profile, providing a direct before-and-after comparison of calibration's effect on safety classifications. Across the full dataset, calibrated analyses exhibited a safe rate of 83.3\% compared to 76.4\% for uncalibrated analyses, a 7 percentage-point difference that suggests the default classifier systematically over-reports unsafe events when the driver's head geometry or camera position differs from the training data. This is consistent with the per-user results: Users E and F, who did not calibrate, had the highest unsafe rates (43\% and 73\%), while Users A and D, who used personalised calibrations, achieved 92\% safe classifications. These results reinforce the finding from Section 4.6 that per-user calibration is not merely a convenience feature but a prerequisite for reliable safety assessment across diverse users and setups.
 
 \subsubsection{User Error Reports}
 As described in Section \ref{sec:eval_infra}, the web application includes an error reporting mechanism that allows users to flag false positive detections (events the system detected that did not occur) and false negative detections (real events the system missed). During the deployment, users submitted 13 error reports: 9 false positives and 4 false negatives.
@@ -884,7 +858,7 @@ Perhaps the most practically significant finding is that per-user gaze calibrati
 \subsection{Limitations and Barriers to Adoption}
 The most significant technical limitation is the visual odometry pipeline's inability to distinguish road curvature from genuine turns, as both produce identical yaw accumulation signals. Addressing this would require additional environmental context, such as junction markings, give-way lines, or map data. Roundabouts remain entirely unsupported due to the absence of suitable lane detection training data and the continuous curvature they present.
 
-Beyond technical limitations, the system faces a substantial barrier to adoption in its current form. Of 19 potential participants, only 5 owned dash-cams, and even among those with suitable hardware, the multi-step workflow (record on dash-cam, simultaneously record on phone, download both files, upload through the web interface) deterred several interested users from completing a submission. Gaze calibration compounds this friction; while essential for accuracy, the process requires users to understand and interact with scatter plots or video segment labelling before they can obtain reliable results. Some users found this unintuitive and were initially frustrated by the inaccurate default gaze classifications, only gaining confidence in the system after completing calibration. These barriers collectively limit the application's viability as a consumer-facing learner driver tool in its current form.
+Beyond technical limitations, the system faces a substantial barrier to adoption in its current form. Of the 19 individuals contacted for user testing, only 5 owned dash-cams, and even among those with suitable hardware, the multi-step workflow (record on dash-cam, simultaneously record on phone, download both files, upload through the web interface) deterred several interested users from completing a submission. Gaze calibration compounds this friction; while essential for accuracy, the process requires users to understand and interact with scatter plots or video segment labelling before they can obtain reliable results. Some users found this unintuitive and were initially frustrated by the inaccurate default gaze classifications, only gaining confidence in the system after completing calibration. These barriers collectively limit the application's viability as a consumer-facing learner driver tool in its current form.
 
 \subsection{Future Work}
 The limitations identified above, along with feedback from user testing, suggest several directions for future development across calibration, detection accuracy, detectable mistake types, and hardware integration.
@@ -903,7 +877,9 @@ The current system detects only one category of driving mistake: failure to chec
 \subsubsection{Hardware Integration and Alternative Use-Cases}
 The system would benefit from integration with existing dual-channel dash-cam systems, such as those manufactured by Viofo \cite{viofo_a229plus}, which combine road-facing and driver-facing cameras in a single unit and could streamline the capture and upload workflow. Similarly, vehicles with factory-fitted interior cameras (such as those in the latest JLR range \cite{jlr_dms_news}) already possess the necessary hardware, though integration with proprietary in-vehicle systems presents its own challenges. Even with such integrations, the requirement for specialised recording hardware remains a significant barrier for a learner driver feedback tool compared to software-only solutions.
 
-This suggests that the alternative applications outlined in the introduction may represent more practical deployment paths for the underlying detection pipeline. Usage-based insurance analytics and in-car alert systems both operate within contexts where dual-camera hardware is already present or can be justified by the application's commercial value. A further use-case, and the one motivating Zekany et al.\ \cite{zekany2022finding}, is automated extraction of manoeuvre clips from large-scale dash-cam datasets to generate training data for ADAS. Our system's higher classification accuracy on three of the four shared manoeuvre types, and its avoidance of their severe lane change directional confusion, makes it a viable candidate for such annotation tasks. In this context, the event detection pipeline would serve as an annotation tool rather than a safety monitor, and the barrier to entry is minimal since the input is existing fleet footage rather than user-recorded video.
+This suggests that the alternative applications outlined in the introduction may represent more practical deployment paths for the underlying detection pipeline. Usage-based insurance analytics and in-car alert systems both operate within contexts where dual-camera hardware is already present or can be justified by the application's commercial value. A further use-case, and the one motivating Zekany et al.\ \cite{zekany2022finding}, is automated extraction of manoeuvre clips from large-scale dash-cam datasets to generate training data for ADAS. Our system's higher F1 score on three of the four shared manoeuvre types, and its avoidance of their severe lane change directional confusion, makes it a viable candidate for such annotation tasks. In this context, the event detection pipeline would serve as an annotation tool rather than a safety monitor, and the barrier to entry is minimal since the input is existing fleet footage rather than user-recorded video.
+
+Taken together, these directions suggest that the core contribution of this project, a working multi-modal pipeline that correlates driver behaviour with vehicle movement, has value beyond the learner driver context in which it was developed. The technical foundations are sound, and the path from research prototype to practical deployment is largely one of reducing friction rather than solving fundamentally new problems.
 
 \section{Acknowledgements}
 The author wishes to express sincere gratitude to the project supervisor, Dr Greg Watson, and the external advisor, Sriya Roy, for their invaluable guidance and technical oversight throughout this research. Further appreciation is extended to the DCS technical staff for their support with the web hosting infrastructure.

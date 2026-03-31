@@ -1,0 +1,47 @@
+\contentsline {section}{\numberline {1}Introduction}{4}{}%
+\contentsline {section}{\numberline {2}Objectives}{5}{}%
+\contentsline {section}{\numberline {3}Background}{7}{}%
+\contentsline {subsection}{\numberline {3.1}Lane Detection}{7}{}%
+\contentsline {subsection}{\numberline {3.2}Temporal Tracking}{8}{}%
+\contentsline {subsection}{\numberline {3.3}Gaze Estimation}{9}{}%
+\contentsline {subsection}{\numberline {3.4}Motion Estimation}{10}{}%
+\contentsline {section}{\numberline {4}Design and Development}{11}{}%
+\contentsline {subsection}{\numberline {4.1}Resources and Tools}{11}{}%
+\contentsline {subsection}{\numberline {4.2}Lane Change Detection (FR1.2 \& FR1.3)}{11}{}%
+\contentsline {subsection}{\numberline {4.3}Turn Detection (FR3.1.1)}{13}{}%
+\contentsline {subsection}{\numberline {4.4}Face Analysis (FR1.4)}{16}{}%
+\contentsline {subsection}{\numberline {4.5}Mistake Identification (FR1.5)}{18}{}%
+\contentsline {subsection}{\numberline {4.6}Web Application (FR2)}{19}{}%
+\contentsline {subsubsection}{\numberline {4.6.1}Overall System and Backend Design}{19}{}%
+\contentsline {subsubsection}{\numberline {4.6.2}User Authentication and Account System (FR2.4)}{20}{}%
+\contentsline {subsubsection}{\numberline {4.6.3}Upload Flow and Video Synchronisation}{20}{}%
+\contentsline {subsubsection}{\numberline {4.6.4}Results Display}{22}{}%
+\contentsline {subsubsection}{\numberline {4.6.5}Per-User Gaze Calibration}{23}{}%
+\contentsline {subsubsection}{\numberline {4.6.6}Privacy and Video Output Processing}{24}{}%
+\contentsline {subsubsection}{\numberline {4.6.7}Evaluation Infrastructure}{25}{}%
+\contentsline {subsubsection}{\numberline {4.6.8}Error Handling}{26}{}%
+\contentsline {subsection}{\numberline {4.7}Testing and Verification}{26}{}%
+\contentsline {section}{\numberline {5}Evaluation Methodology}{28}{}%
+\contentsline {subsection}{\numberline {5.1}Dataset}{28}{}%
+\contentsline {subsection}{\numberline {5.2}Ground Truth Evaluation Methodology}{28}{}%
+\contentsline {subsection}{\numberline {5.3}User Testing}{28}{}%
+\contentsline {subsubsection}{\numberline {5.3.1}Direct User Testing}{28}{}%
+\contentsline {subsubsection}{\numberline {5.3.2}General Interest Questionnaire}{29}{}%
+\contentsline {section}{\numberline {6}Results}{30}{}%
+\contentsline {subsection}{\numberline {6.1}Detection Accuracy and Literature Comparison}{30}{}%
+\contentsline {subsection}{\numberline {6.2}User-Submitted Video Results}{31}{}%
+\contentsline {subsubsection}{\numberline {6.2.1}Deployment Overview}{32}{}%
+\contentsline {subsubsection}{\numberline {6.2.2}Aggregate Safety Classification}{32}{}%
+\contentsline {subsubsection}{\numberline {6.2.3}Per-User Analysis}{32}{}%
+\contentsline {subsubsection}{\numberline {6.2.4}Effect of Gaze Calibration}{32}{}%
+\contentsline {subsubsection}{\numberline {6.2.5}User Error Reports}{33}{}%
+\contentsline {subsection}{\numberline {6.3}Questionnaire Results}{33}{}%
+\contentsline {section}{\numberline {7}Conclusion and Future Work}{34}{}%
+\contentsline {subsection}{\numberline {7.1}Conclusions}{34}{}%
+\contentsline {subsection}{\numberline {7.2}Limitations and Barriers to Adoption}{34}{}%
+\contentsline {subsection}{\numberline {7.3}Future Work}{34}{}%
+\contentsline {subsubsection}{\numberline {7.3.1}Improving Gaze Calibration}{34}{}%
+\contentsline {subsubsection}{\numberline {7.3.2}Improving Detection Accuracy}{35}{}%
+\contentsline {subsubsection}{\numberline {7.3.3}Additional Detectable Mistakes}{35}{}%
+\contentsline {subsubsection}{\numberline {7.3.4}Hardware Integration and Alternative Use-Cases}{35}{}%
+\contentsline {section}{\numberline {8}Acknowledgements}{35}{}%

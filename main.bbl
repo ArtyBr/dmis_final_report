@@ -69,6 +69,12 @@
 \newblock \url{https://github.com/zenroad/zenroad-app}, 2022.
 \newblock GitHub Repository. (Accessed on 2025-09-09).
 
+\bibitem{nauto_insurance}
+{Nauto Inc.}
+\newblock Nauto for insurance.
+\newblock \url{https://www.nauto.com/industries/insurance}.
+\newblock (Accessed on 2026-03-30).
+
 \bibitem{2nd2nonedrivingschoolLearningDrive}
 {2nd 2 None Driving School}.
 \newblock Learning to drive with your parents.
@@ -255,11 +261,6 @@ Takafumi Taketomi, Hideaki Uchiyama, and Sei Ikeda.
 \newblock {\em IPSJ Transactions on Computer Vision and Applications}, 9(1):16,
   2017.
 
-\bibitem{korovko2025cuvslamcudaacceleratedvisual}
-Alexander Korovko, Dmitry Slepichev, Alexander Efitorov, Aigul Dzhumamuratova,
-  Viktor Kuznetsov, Hesam Rabeti, Joydeep Biswas, and Soha Pouya.
-\newblock cuvslam: Cuda accelerated visual odometry and mapping, 2025.
-
 \bibitem{shi1994good}
 Jianbo Shi and Carlo Tomasi.
 \newblock Good features to track.
@@ -311,13 +312,6 @@ Harold~W Kuhn.
 \newblock The {Hungarian} method for the assignment problem.
 \newblock {\em Naval Research Logistics Quarterly}, 2(1-2):83--97, 1955.
 
-\bibitem{teed2021droid}
-Zachary Teed and Jia Deng.
-\newblock {DROID-SLAM}: Deep visual {SLAM} for monocular, stereo, and {RGB-D}
-  cameras.
-\newblock In {\em Advances in Neural Information Processing Systems},
-  volume~34, pages 16558--16569, 2021.
-
 \bibitem{wang2021tartanvo}
 Wenshan Wang, Yaoyu Hu, and Sebastian Scherer.
 \newblock {TartanVO}: A generalizable learning-based {VO}.
@@ -367,5 +361,11 @@ Camillo Lugaresi, Jiuqiang Tang, Hadon Nash, Chris McClanahan, Esha Uboweja,
   \url{https://www.gov.uk/guidance/the-highway-code/using-the-road-159-to-203},
   2025.
 \newblock Accessed: 2026-03-19.
+
+\bibitem{viofo_a229plus}
+{Viofo}.
+\newblock A229 plus dual channel dash cam.
+\newblock \url{https://viofo.com/dashcam/a229-plus.html}.
+\newblock (Accessed on 2026-03-30).
 
 \end{thebibliography}
