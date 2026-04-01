@@ -50,10 +50,20 @@
 \begin{document}
 
 
+% Make the title page look nicer. Include warwick logo, other things - make it look professional and stylish. It's also unusual to have a page number on the title page.
 
 \maketitle
 
 \newpage
+
+\section*{Acknowledgements}
+The author wishes to express sincere gratitude to the project supervisor, Dr Greg Watson, and the external advisor, Sriya Roy, for their invaluable guidance and technical oversight throughout this research. Gratidude is given to the DCS technical staff for their support with the web hosting infrastructure. We give thanks to the participants in the user study and those who answered the questionnaire. Finally, the author thanks their parents for their emotional support and advice throughout the year.
+
+\newpage
+
+% In the abstract, reword ‘outperforming the closest comparable work’ since it’s not like-for-like (different datasets and labellers etc.)
+
+% First sentence reads like a second sentence. May start with something like 'Driving accidents are the 'X'th biggest cause of loss of life in the UK, with the majority caused by behavioural errors...
 
 \section*{Abstract}
 The majority of driving accidents are caused by behavioural errors, particularly a lack of awareness during manoeuvres. Identifying and assessing these errors in context is therefore critical, yet no current system directly correlates the driver's actions with the vehicle's behaviour and road environment to assess whether the driver responded appropriately to the driving situation. This project addresses that gap by developing a multi-modal system that synchronises road-facing and driver-facing video to identify specific driving mistakes, focusing on the case of failing to check mirrors before manoeuvres. The system combines deep learning-based lane detection; a visual odometry pipeline to detect turns; and head pose estimation to determine gaze direction. A rule-based Safety Monitor cross-references detected manoeuvres against the driver's gaze history to classify each event as safe or unsafe. The pipeline is deployed through a web application featuring job submission through an online GPU cluster and an interactive results display. 
@@ -93,6 +103,8 @@ In order to establish a clear goal and evaluation criteria, we focused on the le
 
 \newpage
 
+% Potentially move objectives to being after the background research section to show that the research was taken into account in order to come up with the objectives. Make the intro paragraph to objectives flow naturally from the background and introduction in this case. Also, make the follow-up further into the design and implementation section flow naturally from the objectives section then.
+
 \section{Objectives}
 
 The application analyses synchronised dash-cam and cabin footage to detect driving mistakes. This section defines the functional and non-functional requirements for the MVP and outlines optional extensions.
@@ -128,8 +140,6 @@ This section outlines the requirements for the user interface. This component ac
     \item \textbf{FR2.4} Implement a user authentication and account system with per-user access control over uploaded videos and analysis results.
 \end{itemize}
 
-All web interface requirements (FR2.1--FR2.4) were fully implemented.
-
 \subsubsection*{3. Mistake Detection Enhancements (Should-Have)}
 These requirements extend the core functionality to detect a more complex range of manoeuvres and actions.
 \begin{itemize}
@@ -143,8 +153,6 @@ These requirements extend the core functionality to detect a more complex range 
     \item \textbf{FR3.3} Gaze classification generalisation - Provide a per-user gaze calibration system integrated into the web application, allowing the gaze classifier to generalise to different drivers, camera positions and seating arrangements.
 \end{itemize}
 
-Of these, turn detection into side roads (FR3.1.1) and per-user gaze calibration (FR3.3) were fully implemented. The remaining enhancements (FR3.1.2, FR3.1.3, FR3.2) were deprioritised in favour of completing the user testing and evaluation phase, which we considered more valuable to the project than additional detection features.
-
 \subsubsection*{4. Extensions (Could-Have)}
 Additional features that would enhance the system, but considered beyond the scope of the core project.
 
@@ -153,16 +161,12 @@ Additional features that would enhance the system, but considered beyond the sco
     \item \textbf{FR4.2} Gaze classification extension (II) - Incorporate eye-tracking to improve gaze detection accuracy.
 \end{itemize}
 
-Smartphone camera support (FR4.1) was implemented, as it was essential for enabling external users to participate in testing without specialised hardware. Eye-tracking (FR4.2) was not pursued, as it would have required additional hardware and was not necessary for the head pose-based approach adopted.
-
 \subsection*{Non-Functional Requirements}
 \begin{itemize}
     \item \textbf{NFR1} The core analysis script must be well-documented and capable of being executed via the command line.
     \item \textbf{NFR2} The user interface must be intuitive to navigate and provide mistake identification information clearly to the user.
     \item \textbf{NFR3} Data must be stored securely and anonymised, to comply with UK GDPR.
 \end{itemize}
-
-All non-functional requirements were met.
 
 
 \newpage
@@ -256,6 +260,8 @@ Motion estimation is an essential topic within robotics and autonomous vehicle r
 
 VO analyses sequential camera frames to estimate the camera's local motion incrementally. The process begins with keypoint detection, where algorithms such as Shi-Tomasi \cite{shi1994good} or ORB \cite{rublee2011orb} identify distinctive features in each frame. These keypoints are then tracked across consecutive frames using sparse Optical Flow, a technique that estimates the displacement of individual feature points between frames rather than computing motion for every pixel. The Lucas-Kanade method \cite{lucas1981iterative} is commonly used for this, as it is efficient and well-suited to tracking a sparse set of points. For this project, Shi-Tomasi was selected for keypoint detection, as it produces corners with strong gradients in two directions, which is exactly what Lucas-Kanade is designed to track. Alternatives such as FAST or ORB were considered, but these produce lower-quality corners and include binary descriptor computation that is unnecessary when using optical flow for matching rather than descriptor comparison.
 
+% Make sure all figures (including this one and others later in the doc) have descriptive captions.
+
 \begin{figure}[H]
 
 \centering
@@ -278,6 +284,8 @@ Having established the theoretical foundations and selected appropriate techniqu
 The project was implemented using a modular architecture, separating code into distinct sub-modules (Figure \ref{fig:folders}), corresponding to the Must-Have objectives: Lane Detection/Tracking (FR1.2/3), Gaze Estimation (FR1.4) and Web Application (FR2). This left room to extend the project with features, specifically those detailed in the Should-Have requirements, and to improve individual features further without affecting the rest of the system. Features added on top of the Must-Have requirements were FR3.1, FR3.3 and FR4.1, since these were decided to have the largest impact for the project with the time remaining. While the modular approach did add some complexity with an additional necessary module to compile the outputs into the final analysis (`combined analysis’), the benefits to maintainability and extendibility were decided to outweigh this.
 
 The \texttt{combined\_analysis} module runs each module separately, and aggregates the results from each in order to assess the safety of manoeuvres. It does this by maintaining a \texttt{Safety Monitor} class, storing an event buffer which is cross-referenced when a manoeuvre is detected, determining the safety classification that is given.
+
+% Change this to a Tikz diagram
 
 \begin{figure}[H]
 
@@ -599,6 +607,8 @@ After analysis is complete, the application presents the detected results to the
 \subsubsection{Per-User Gaze Calibration}
 The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person’s data frequently misclassified another’s gaze directions (Figure \ref{fig:uncalib_timeline}). Since the gaze classifier is the foundation of all safety judgements, poor classification accuracy renders the entire system unreliable. This motivated the development of a per-user calibration system as an extension.
 
+% These figures should be discussed in the text.
+
 \begin{figure}[H]
 \centering
     \includegraphics[width=1\linewidth]{website_images/uncalibrated_timeline.png}
@@ -631,7 +641,7 @@ During early user testing, several participants found the clip editor daunting, 
 The driver-facing camera inevitably captures passengers and, depending on the camera’s field of view, potentially pedestrians or other bystanders visible through windows. Distributing or displaying this footage without consent raises ethical and legal concerns, particularly under GDPR. Since the system’s analysis only requires the driver’s face, all other faces can be obscured without any loss of functionality.
 
 During analysis, the \texttt{FaceAnalyzer} identifies the driver using a heuristic: in landscape-oriented footage (the typical dash-cam configuration), the driver is the largest face on the left side of the frame (corresponding to the right-hand-drive UK vehicles used in testing). In portrait orientation, as may occur with a phone-based camera, the largest face overall is selected, as spatial position is less reliable. All other detected faces are blurred using a Gaussian kernel sized proportionally to the face bounding box, ensuring sufficient obscuration regardless of distance from the camera. The blurred frames are written as the output video, so the original unblurred footage is never stored on the server. Gaussian blurring was chosen over pixelation because it is less visually jarring while still being irreversible, and over full-frame blurring because retaining the driver’s face allows manual verification of gaze classifications during evaluation.
-
+% 1080p can be vague. Maybe say something like 1920x1080 and the same for the other resolutions. However also mention that some resolutions might be different due to other aspect ratios on cameras, such as portrait phone devices, so be clear on how this resolution scaling is done.
 During user testing on mobile devices, it was observed that loading the full-resolution output videos (1080p) over some Wi-Fi networks or mobile data sources caused significant buffering. Since two concurrent video streams double the bandwidth requirement compared to a single-video application, adaptive quality selection was particularly important. To address this, the system generates multiple quality variants (720p and 480p) of both output videos after analysis completes. The frontend estimates the user’s effective bandwidth and automatically selects an appropriate resolution, with the option to manually choose their resolution.
 
 \subsubsection{Evaluation Infrastructure}
@@ -661,16 +671,18 @@ By reviewing user-reported false positives and false negatives, we were able to 
 \end{figure}
 
 \subsubsection{Error Handling}
-Error handling was hardened across the upload, synchronisation and analysis pipeline to gracefully handle oversized files, network interruptions, malformed video codecs and out-of-memory conditions on the GPU. Following Nielsen's usability heuristics \cite{nielsen1990heuristic}, we show clear error messages and recovery steps on the front-end for common fault cases (Heuristic 9: Help users recognise, diagnose, and recover from errors), and provide a ``Getting Started'' guide page to help new users understand the required dual-camera setup and upload process (Heuristic 10: Help and documentation.)
+Error handling was hardened across the upload, synchronisation and analysis pipeline to gracefully handle oversized files, network interruptions, malformed video codecs and out-of-memory conditions on the GPU. Following Nielsen's usability heuristics \cite{nielsen1990heuristic}, we show clear error messages and recovery steps on the front-end for common fault cases (Heuristic 9: Help users recognise, diagnose, and recover from errors), and provide a ``Getting Started'' guide page (Figure \ref{fig:user_guide}) to help new users understand the required dual-camera setup and upload process (Heuristic 10: Help and documentation.)
 
 \begin{figure}[H]
 \centering
     \includegraphics[width=1\linewidth]{website_images/user_guide.png}
     \caption{User guide page showing how to setup phone for recording.}
-    \label{fig:uncalib_timeline}
+    \label{fig:user_guide}
 \end{figure}
 
 \newpage
+
+% Think about merging sections 5 and 6 (Evaluation methodology with results) to make it easier to read - so the reader doesn’t have to jump from one place to the next or remember what was previously said’
 
 \section{Evaluation Methodology}
 Project evaluation was split into two parts: quantitative (author-labelled ground truth) and qualitative (user testing). For the quantitative portion, we manually labelled manoeuvre events across a subset of the collected dataset and compared these labels against the system's detections. Qualitatively, user testing sessions and a general interest questionnaire were conducted.
@@ -695,7 +707,7 @@ Beyond quantitative accuracy, the system was evaluated through two qualitative c
 \subsubsection{Direct User Testing}
 For user testing, participants were recruited from the author's personal network, including friends and family. All participants were fully qualified drivers with valid UK driving licences. They were asked to record their regular driving using their existing dash-cam alongside a phone mounted on the dashboard for the cabin-facing feed, or a dual-channel dash-cam system if available. No special driving instructions were given; participants simply drove as they normally would to ensure the footage reflected natural driving behaviour. After uploading and reviewing their results, participants could report any errors they identified through the built-in error reporting mechanism.
 
-\subsubsection{General Interest Questionnaire}
+\subsubsection{General Interest Questionnaire} % Full questionnaire should be included in the appendices, and referred to here
 A separate questionnaire was distributed more broadly through the Nextdoor neighbourhood app, LinkedIn, and our personal contacts. This questionnaire did not require respondents to have used the application themselves. Instead, it presented demo videos of our driving footage and the corresponding analysis results, then asked respondents about their driving background, dash-cam ownership, preferred recording setup, likelihood of using such a system, desired features, and willingness to pay.
 
 \newpage
@@ -705,13 +717,14 @@ This section presents the results of the evaluation methodology described above,
 
 \subsection{Detection Accuracy and Literature Comparison}
 Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds. The closest comparable system in the literature is that of Zekany et al.\ \cite{zekany2022finding}. Table \ref{tab:f1_comparison} presents a direct per-manoeuvre comparison by taking the best (maximum F1) operating point for each of their individual classifiers from their Table III. It should be noted that the two systems were evaluated on entirely different datasets, though the evaluation procedure of Zekany et al. was followed as closely as possible.
+% Put citation to their work in the table heading. 
 
 \begin{table}[H]
 \centering
 \small
 \begin{tabular}{|l|ccc|ccc|}
 \hline
- & \multicolumn{3}{c|}{\textbf{Zekany et al.\ (Best F1)}} & \multicolumn{3}{c|}{\textbf{Ours}} \\
+ & \multicolumn{3}{c|}{\textbf{Zekany et al.\ (Best F1) \cite{zekany2022finding}}} & \multicolumn{3}{c|}{\textbf{Ours}} \\
 \textbf{Manoeuvre} & P & R & F1 & P & R & F1 \\
 \hline
 Left Turn      & 0.52 & 0.74 & 0.61 & \textbf{0.82} & \textbf{0.77} & \textbf{0.79} \\
@@ -738,14 +751,14 @@ Of the 19 false positives, 12 were classified as right turns. The majority occur
     \label{fig:right_turn_misclass}
 \end{figure}
 
-To examine classification accuracy in more detail, Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology from their Table VIII. Our system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% compared to Zekany et al.'s 78.8\% (their Table VII: 628 of 797 matched correctly). Type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common confusion was between left turns and right turns (4 left turns detected as right turns).
-
+To examine classification accuracy in more detail, Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology. Our system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% compared to Zekany et al.'s 78.8\% (their Table VII: 628 of 797 matched correctly). Type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common confusion was between left turns and right turns (4 left turns detected as right turns).
+% Replace these tables with python-generated confusion matrices, including the exact same numbers with percentages next to them. Also make sure the names of the categories can be referenced / referred to as the same between horizontal and vertical rows/columns
 \begin{table}[H]
 \centering
 \footnotesize
 \begin{tabular}{|l|cccc|cccc|}
 \hline
- & \multicolumn{4}{c|}{\textbf{Zekany et al.\ (Table VIII)}} & \multicolumn{4}{c|}{\textbf{Ours (Matched Only)}} \\
+ & \multicolumn{4}{c|}{\textbf{Zekany et al.\ \cite{zekany2022finding}}} & \multicolumn{4}{c|}{\textbf{Ours}} \\
 \textbf{Ground Truth} & LT & RT & LLC & RLC & LT & RT & LLC & RLC \\
 \hline
 Left Turn & \textbf{161 (89\%)} & 0 (0\%) & 15 (8\%) & 0 (0\%) & 19 (83\%) & 4 (17\%) & 0 (0\%) & 0 (0\%) \\
@@ -754,7 +767,7 @@ Left Lane Change & 14 (18\%) & 2 (3\%) & 5 (7\%) & 53 (70\%) & 0 (0\%) & 0 (0\%)
 Right Lane Change & 0 (0\%) & 0 (0\%) & 1 (2\%) & \textbf{62 (98\%)} & 0 (0\%) & 0 (0\%) & 1 (4\%) & 23 (96\%) \\
 \hline
 \end{tabular}
-\caption{Like-for-like confusion matrix comparison, with both systems evaluated only on matched (detected) events. Bold highlights the higher diagonal accuracy. Zekany et al.\ counts are from their Table VIII; our row percentages are computed over the 84 true positive matches.}
+\caption{Like-for-like confusion matrix comparison, with both systems evaluated only on matched (detected) events. Bold highlights the higher diagonal accuracy; our row percentages are computed over the 84 true positive matches.}
 \label{tab:cm_matched}
 \end{table}
 
@@ -888,9 +901,8 @@ The system would benefit from integration with existing dual-channel dash-cam sy
 This suggests that the alternative applications outlined in the introduction may represent more practical deployment paths for the underlying detection pipeline. Usage-based insurance analytics and in-car alert systems both operate within contexts where dual-camera hardware is already present or can be justified by the application's commercial value. A further use-case, and the one motivating Zekany et al.\ \cite{zekany2022finding}, is automated extraction of manoeuvre clips from large-scale dash-cam datasets to generate training data for ADAS. Our system's higher F1 score on three of the four shared manoeuvre types, and its avoidance of their severe lane change directional confusion, makes it a viable candidate for such annotation tasks. In this context, the event detection pipeline would serve as an annotation tool rather than a safety monitor, and the barrier to entry is minimal since the input is existing fleet footage rather than user-recorded video.
 
 Taken together, these directions suggest that the core contribution of this project, a working multi-modal pipeline that correlates driver behaviour with vehicle movement, has value beyond the learner driver context in which it was developed. The technical foundations are sound, and the path from research prototype to practical deployment is largely one of reducing friction rather than solving fundamentally new problems.
+% This is quite a weak sentence to end on. Maybe end with a section going over the author's self-assessment of the work, with a positive outlook on the project, especially the user results.
 
-\section{Acknowledgements}
-The author wishes to express sincere gratitude to the project supervisor, Dr Greg Watson, and the external advisor, Sriya Roy, for their invaluable guidance and technical oversight throughout this research. Graditude is given to the DCS technical staff for their support with the web hosting infrastructure. Finally, the author thanks their parents for their emotional support and advice throughout the year.
 
 \newpage
 
