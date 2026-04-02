@@ -37,6 +37,8 @@
 % \AtEveryBibitem{%
 %   \clearfield{year}%
 % }
+\usepackage{longtable}
+\usepackage{eurosym}
 \usepackage[a4paper, total={7in, 10in}]{geometry}
 
 % Warwick 2025 Branding Colors
@@ -891,7 +893,7 @@ Returning to the research question posed in the Introduction, ``Can a multi-moda
 \label{sec:questionnaire_results}
 A separate questionnaire was distributed more broadly through the Nextdoor neighbourhood app, LinkedIn, and our personal contacts. This questionnaire did not require respondents to have used the application themselves. Instead, it presented demo videos of our driving footage and the corresponding analysis results, then asked respondents about their driving background, dash-cam ownership, preferred recording setup, likelihood of using such a system, desired features, and willingness to pay.
 
-The questionnaire received 17 responses (16 fully licensed drivers, 1 current learner). Table~\ref{tab:survey_results} summarises the key findings.
+The questionnaire received 23 responses (20 fully licensed drivers, 3 current or prospective learners). Table~\ref{tab:survey_results} summarises the key findings, and a complete breakdown of every question and response is provided in Appendix~\ref{appendix:questionnaire}.
 
 \begin{table}[H]
 \centering
@@ -900,18 +902,18 @@ The questionnaire received 17 responses (16 fully licensed drivers, 1 current le
 \hline
 \textbf{Question} & \textbf{Summary} \\
 \hline
-Currently own a dash-cam? & 5 Yes (29\%), 12 No (71\%) \\
-Would purchase one for this app? (of 12 non-owners) & 6 Yes (50\%), 5 No (42\%), 1 N/A \\
-Preferred recording setup & 10 dedicated 2-in-1 (59\%), 5 phone (29\%) \\
-Likelihood of use (1--10 scale) & Mean 6.4, Median 6 \\
-Willingness to pay (monthly) & 7 free only (41\%), 6 up to \pounds4.99 (35\%), 3 up to \pounds9.99 (18\%) \\
+Currently own a dash-cam? & 7 Yes (30\%), 16 No (70\%) \\
+Would purchase one for this app? (of 16 non-owners) & 9 Yes (56\%), 7 No (44\%) \\
+Preferred recording setup & 16 dedicated 2-in-1 (70\%), 6 phone (26\%), 1 none (4\%) \\
+Likelihood of use (1--10 scale) & Mean 6.7, Median 7 \\
+Willingness to pay (monthly) & 10 free only (43\%), 6 up to \pounds4.99 (26\%), 4 up to \pounds9.99 (17\%), 3 up to \pounds1.99 (13\%) \\
 \hline
 \end{tabular}
-\caption{Summary of questionnaire responses ($n = 17$).}
+\caption{Summary of questionnaire responses ($n = 23$).}
 \label{tab:survey_results}
 \end{table}
 
-The results indicate moderate to strong interest, with 10 of 17 respondents scoring their likelihood of use at 6 or above. The most common hesitations were the effort of transferring and uploading video files and the multi-step calibration process. Several respondents suggested that a condensed feedback report, detection of a broader range of manoeuvres, and awareness of nearby vehicles would increase their willingness to use the system. The low dash-cam ownership rate (29\%) and the split in willingness to purchase one reinforce the hardware barrier to adoption discussed in Section 6.2.
+The results indicate moderate to strong interest, with 17 of 23 respondents (74\%) scoring their likelihood of use at 6 or above and 13 (57\%) scoring 7 or higher. The most common hesitations centred on the effort of transferring and uploading video files, the multi-step calibration process, and privacy concerns about being recorded while driving. Several respondents suggested features that would increase their willingness to use the system: a condensed feedback report sent directly to the user's device rather than requiring manual video review; detection of a broader range of manoeuvres; awareness of nearby vehicles; speed analysis using GPS data from the dashcam; and a mock driving test mode that scores the user on majors and minors. One respondent noted that the system would be particularly valuable when practising with parents or siblings, since it could substitute for the feedback an instructor would normally provide. The low dash-cam ownership rate (30\%) and the split in willingness to purchase one reinforce the hardware barrier to adoption discussed in Section 6.2.
 
 \newpage
 
@@ -935,13 +937,111 @@ Returning to the research question posed in the Introduction, the results from b
 
 What proved most valuable, however, was the live deployment. The vast majority of detected events were accepted as accurate by users, and the system surfaced genuine mirror-check failures that drivers had not been aware of during their journeys. This is precisely the value the system was designed to deliver, and it validates the core hypothesis that synchronising driver state with vehicle movement can provide insights unachievable by either modality alone. The iterative improvements driven by user feedback, especially reducing the calibration workflow from several minutes to under a minute, reinforced that usability is as important as detection accuracy in determining whether a system like this can be adopted in practice.
 
-The positive reception from questionnaire respondents and the engagement of returning users suggest genuine demand for this type of tool. While the limitations identified above are real, they are well-characterised and have clear paths to resolution. The modular architecture provides a solid foundation for the extensions outlined in future work, and the project as a whole demonstrates that this multi-modal approach to driving mistake identification is both technically viable and practically valuable.
+The positive reception from questionnaire respondents (74\% scoring likelihood of use at 6 or above, with specific feature requests such as mock driving test scoring and speed analysis) and the engagement of returning users suggest genuine demand for this type of tool. While the limitations identified above are real, they are well-characterised and have clear paths to resolution. The modular architecture provides a solid foundation for the extensions outlined in future work, and the project as a whole demonstrates that this multi-modal approach to driving mistake identification is both technically viable and practically valuable.
 
 
 \newpage
 
 \bibliography{progress_report_bibliography}
 
-%========== Project specification left as appendix to document ==========%
+%========== Appendices ==========%
+\appendix
+
+\section{Questionnaire Results}
+\label{appendix:questionnaire}
+
+This appendix presents the full results of the interest and feedback questionnaire distributed to drivers and learner drivers. The questionnaire was completed by 23 respondents and consisted of 9 questions covering driving background, dash-cam ownership, recording preferences, likelihood of adoption, feature requests, willingness to pay, and general feedback. Responses were collected between 17 March and 1 April 2026.
+
+\subsection*{Q1: How would you describe yourself?}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\linewidth]{results_images/q1_driver_type.png}
+\end{figure}
+
+\subsection*{Q2: Do you currently own or use a dash-cam?}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\linewidth]{results_images/q2_dashcam.png}
+\end{figure}
+
+\subsection*{Q3: If you answered `No' to the previous question, would you be likely to purchase one in order to be able to use this application?}
+Answered by the 16 respondents who do not own a dash-cam.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\linewidth]{results_images/q3_purchase.png}
+\end{figure}
+
+\subsection*{Q4: If you were to use a dual-recording system (to record the road and yourself for feedback purposes), which setup would you most likely use?}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\linewidth]{results_images/q4_setup.png}
+\end{figure}
+
+\subsection*{Q5: Based on your experience with the application demo, how likely would you be to use this system during your driving practice, lessons or general driving to reduce your tendency to make mistakes? (1--10 scale)}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{results_images/q5_likelihood.png}
+\end{figure}
+
+\noindent Mean: 6.7 \quad Median: 7 \quad Respondents scoring 6 or above: 17 (74\%)
+
+\subsection*{Q6: If you answered `Not at all likely' (1--4 on the previous scale), please briefly explain why you would hesitate to use the system.}
+Four respondents provided answers to this question. Their responses are listed verbatim below.
+
+\begin{enumerate}
+\item ``Four main barriers to using the present the app on daily basis: 1.\ The hassle of transferring videos from the dashcam to the website (requires two transfers of huge files); 2.\ The hassle of learning how the website works (even though the author made it as easy as possible); 3.\ The need to recalibrate the analysis, possibly a few times, before obtaining reliable results. 4.\ For many people knowing that they are being recorded can be a factor of psychological distraction, introducing nervousness and/or bias in their driving method.''
+
+\item ``Not an issue with the system per se, I would simply be unlikely to watch back footage of my driving to see where mistakes occurred. To me, dashcams are a preventative measure for theft or useful as a form of proof if accidents occur, the additional time that it would take to review footage of driving where there is no accident makes me highly unlikely to use it.''
+
+\item ``There is a probability it could work against me.''
+
+\item One respondent gave a non-substantive answer.
+\end{enumerate}
+
+\subsection*{Q7: Are there any specific features or tools you would like to see added to this application?}
+Six respondents provided feature suggestions. Their responses are listed verbatim below.
+
+\begin{enumerate}
+\item ``I think a web-app is not the best realisation of the concept. It would make more sense and be easier to use if it was part of a 3-in-1 dashcam system/app. Additional features I would welcome: recognition and analysis of a broader set of manoeuvres, better suited for learner drivers.''
+
+\item ``A feedback report that could be sent directly to one's device. Instead of having to parse through the videos, if it highlights the mistakes (or frequent mistakes) and compiles them into a clean place to see, rather than having to go back to the old video, that may make one more likely to look.''
+
+\item ``More events including cars being in a nearby lane or in front of / behind the user's vehicle.''
+
+\item ``I think one of the issues for drivers for example is a specific sun light limiting visibility, or water condensation.''
+
+\item ``Possibly having speed analysis (where if the webcam has the GPS speed indicated on the video feed, it could be used to detect whether user slows down for speed limit signs, or debris/other dangerous items on the road).''
+
+\item ``Maybe a `Majors' and `Minors' system for students practicing for their test -- they can drive a test route and the system can act as an examiner and tell you how many majors and minors you would have gotten and what for. This would be extremely helpful for people wanting to take mock tests and not wanting to spend \pounds60 on an instructor if they have their own car!''
+\end{enumerate}
+
+\subsection*{Q8: What is the maximum you would be willing to pay (per month) for a premium version of this application?}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\linewidth]{results_images/q8_willingness_to_pay.png}
+\end{figure}
+
+\noindent 13 of 23 respondents (57\%) indicated a willingness to pay for a premium version.
+
+\subsection*{Q9: Do you have any other general feedback, concerns, or suggestions?}
+Five respondents provided general feedback. Their responses are listed verbatim below.
+
+\begin{enumerate}
+\item ``Would be interesting to see how well the system works with lower resolution footage from cheap dashcams.''
+
+\item ``It's not clear how somebody would set up the application with the dashcam.''
+
+\item ``I think it would be good to have such app during learning driving and discuss the outcomes of the lessons and app info with the instructor.''
+
+\item ``As I'm a fully licensed driver, the application would only be useful to assess my safety and give me tips on how I can be more safe, so I wouldn't be willing to spend lots of money on it, however, as a learner driver with my parents, I would have been very willing to use it and pay for it.''
+
+\item ``Good luck with your project report!''
+\end{enumerate}
 
 \end{document}
