@@ -63,7 +63,8 @@
     \vspace{1.5cm}
     
     {\Large \theauthor \par}
-    
+    \vspace*{0.5cm}
+    \rule{0.3\textwidth}{1.5pt}\par
     \vfill
     
     \includegraphics[width=0.7\textwidth]{title_page/warwick_uni_logo.jpg}\par
@@ -93,12 +94,10 @@ The author wishes to express sincere gratitude to the project supervisor, Dr Gre
 
 % In the abstract, reword ‘outperforming the closest comparable work’ since it’s not like-for-like (different datasets and labellers etc.)
 
-% First sentence reads like a second sentence. May start with something like 'Driving accidents are the 'X'th biggest cause of loss of life in the UK, with the majority caused by behavioural errors...
-
 \section*{Abstract}
-The majority of driving accidents are caused by behavioural errors, particularly a lack of awareness during manoeuvres. Identifying and assessing these errors in context is therefore critical, yet no current system directly correlates the driver's actions with the vehicle's behaviour and road environment to assess whether the driver responded appropriately to the driving situation. This project addresses that gap by developing a multi-modal system that synchronises road-facing and driver-facing video to identify specific driving mistakes, focusing on the case of failing to check mirrors before manoeuvres. The system combines deep learning-based lane detection; a visual odometry pipeline to detect turns; and head pose estimation to determine gaze direction. A rule-based Safety Monitor cross-references detected manoeuvres against the driver's gaze history to classify each event as safe or unsafe. The pipeline is deployed through a web application featuring job submission through an online GPU cluster and an interactive results display. 
+Driving accidents claim over 1,600 lives annually in the UK and are the leading cause of avoidable death in young people, with the majority caused by behavioural errors. Identifying and assessing these errors in context is therefore critical, yet no current system directly correlates the driver's actions with the vehicle's behaviour and road environment to assess whether the driver responded appropriately to the driving situation. This project addresses that gap by developing a multi-modal system that synchronises road-facing and driver-facing video to identify specific driving mistakes, focusing on the case of failing to check mirrors before manoeuvres. The system combines deep learning-based lane detection; a visual odometry pipeline to detect turns; and head pose estimation to determine gaze direction. A rule-based Safety Monitor cross-references detected manoeuvres against the driver's gaze history to classify each event as safe or unsafe. The pipeline is deployed through a web application featuring job submission through an online GPU cluster and an interactive results display. 
 
-Evaluated on 104 labelled manoeuvre events across approximately 350 video clips, the system achieved an F1 score of 0.81 for event detection and 92\% classification accuracy on matched events, outperforming the closest comparable work by Zekany et al.\ on three of four manoeuvre types. A live deployment with six external users over four weeks produced 170 events and confirmed that the system generalises to unseen drivers, vehicles, and camera setups.
+Evaluated on 104 labelled manoeuvre events across approximately 350 video clips, the system achieved an F1 score of 0.81 for event detection and 92\% classification accuracy on matched events, comparing favourably with Zekany et al. on three of four manoeuvre types, noting that the evaluations differ in dataset and labelling conditions. A live deployment with six external users over four weeks produced 170 events and confirmed that the system generalises to unseen drivers, vehicles, and camera setups.
 
 \newpage
 
@@ -226,7 +225,7 @@ Table \ref{tab:lane_model_comparison} details the performance results of several
 \centering
     \subfigure[TuSimple: US highway scene.]{\includegraphics[width=0.45\textwidth]{dataset_images/tusimple_lanes.jpg}}
     \subfigure[CULane: varied urban conditions with ground truth overlays.]{\includegraphics[width=0.45\textwidth]{dataset_images/culane_examples.png}}
-    \caption{Example frames from the TuSimple and CULane lane detection benchmarks. Sources: (a) \cite{TuSimple2017}, (b) \cite{CULane2018}.}
+    \caption{Example frames from the TuSimple and CULane lane detection benchmarks. Sources: (a) \cite{TuSimple2017}, (b) adapted from \cite{CULane2018}.}
     \label{fig:dataset_examples}
 \end{figure}
 
@@ -296,7 +295,7 @@ VO analyses sequential camera frames to estimate the camera's local motion incre
 
 \centering
     \includegraphics[width=0.75\linewidth]{research_images/optical_flow_ex.png}
-    \caption{Optical flow example. Source: \cite{mathworks_optical_flow}}
+    \caption{Optical flow example on a road scene, showing estimated motion vectors. Source: \cite{mathworks_optical_flow}}
     \label{fig:optical_flow_ex}
 
 \end{figure}
@@ -309,7 +308,9 @@ One approach for classifying manoeuvres from VO output, introduced by Zekany et 
 
 \section{Design and Development}
 
-The Background identified LaneATT for lane detection, Kalman filtering for temporal tracking, PnP with SVM classification for gaze estimation, and monocular visual odometry for turn detection. This section describes how each was implemented, the engineering challenges encountered, and how the components were integrated into an end-to-end pipeline deployed through a web application. Figure \ref{fig:pipeline_overview} provides an overview of the complete system.
+The project was implemented using a modular architecture, separating code into distinct sub-modules (Figure \ref{fig:pipeline_overview}), corresponding to the objectives: Lane Change Detection (FR1.2/3), Turn Detection (FR3.1.1), Gaze Estimation (FR1.4) and Web Application (FR2). This left room to extend the project with features, specifically those detailed in the Should-Have requirements, and to improve individual features further without affecting the rest of the system.
+
+We aggregate the results from each module in a Safety Monitor class, which maintains a buffer storing each detected event and gaze classification. This is cross-referenced when an event is detected, determining whether each manoeuvre is safe or unsafe.
 
 \begin{figure}[H]
 \centering
@@ -326,21 +327,18 @@ The Background identified LaneATT for lane detection, Kalman filtering for tempo
 ]
     % Inputs
     \node[input] (road) {Road-facing\\video};
-    \node[input, below=0.8cm of road] (cabin) {Driver-facing\\video};
-
-    % Audio sync
-    \node[block, right=1cm of $(road)!0.5!(cabin)$] (sync) {Audio\\Sync};
+    \node[input, below=0.8cm of road, yshift=-1.5cm] (cabin) {Driver-facing\\video};
 
     % Three parallel branches
-    \node[block, right=1.8cm of sync, yshift=1.1cm] (lane) {LaneATT\\Detection};
+    \node[block, right=1.8cm of road, yshift=1cm] (lane) {LaneATT\\Detection};
     \node[block, right=0.8cm of lane] (track) {Kalman\\Tracking};
     \node[block, right=0.8cm of track] (lc) {Lane Change\\Detection};
 
-    \node[block, right=1.8cm of sync] (mask) {Mask R-CNN\\Masking};
+    \node[block, right=1.8cm of road, yshift=-1cm] (mask) {Mask R-CNN\\Masking};
     \node[block, right=0.8cm of mask] (vo) {Visual\\Odometry};
     \node[block, right=0.8cm of vo] (turn) {Turn\\Detection};
 
-    \node[block, right=1.8cm of sync, yshift=-1.1cm] (face) {InsightFace\\Landmarks};
+    \node[block, right=1.8cm of cabin] (face) {InsightFace\\Landmarks};
     \node[block, right=0.8cm of face] (pnp) {PnP + PCA};
     \node[block, right=0.8cm of pnp] (svm) {SVM Gaze\\Classifier};
 
@@ -352,19 +350,15 @@ The Background identified LaneATT for lane detection, Kalman filtering for tempo
 
     % Groups
     \begin{scope}[on background layer]
-        \node[group, fit=(lane)(track)(lc), label={[label text, anchor=south west]north west:Road-facing pipeline}] {};
-        \node[group, fit=(mask)(vo)(turn), label={[label text, anchor=south west]north west:Visual odometry pipeline}] {};
-        \node[group, fit=(face)(pnp)(svm), label={[label text, anchor=south west]north west:Driver-facing pipeline}] {};
+        \node[group, fit=(lane)(track)(lc), label={[label text, anchor=south west]north west:Lane detection pipeline}] {};
+        \node[group, fit=(mask)(vo)(turn), label={[label text, anchor=south west]north west:Turn detection pipeline}] {};
+        \node[group, fit=(face)(pnp)(svm), label={[label text, anchor=south west]north west:Gaze classification pipeline}] {};
     \end{scope}
 
-    % Arrows - inputs to sync
-    \draw[myarrow] (road.east) -- ++(0.3,0) |- (sync.west);
-    \draw[myarrow] (cabin.east) -- ++(0.3,0) |- (sync.west);
-
     % Sync to branches
-    \draw[myarrow] (sync.east) -- ++(0.4,0) |- (lane.west);
-    \draw[myarrow] (sync.east) -- ++(0.4,0) |- (mask.west);
-    \draw[myarrow] (sync.east) -- ++(0.4,0) |- (face.west);
+    \draw[myarrow] (road.east) -- ++(0.4,0) |- (lane.west);
+    \draw[myarrow] (road.east) -- ++(0.4,0) |- (mask.west);
+    \draw[myarrow] (cabin.east) -- ++(0.4,0) |- (face.west);
 
     % Chain arrows
     \draw[myarrow] (lane) -- (track);
@@ -382,19 +376,9 @@ The Background identified LaneATT for lane detection, Kalman filtering for tempo
     % To web app
     \draw[myarrow] (sm) -- (web);
 \end{tikzpicture}
+
 \caption{End-to-end pipeline overview. Synchronised dual-camera footage is processed through three parallel branches, whose outputs are combined by the Safety Monitor to classify each manoeuvre as safe or unsafe. Results are presented through the web application.}
 \label{fig:pipeline_overview}
-\end{figure}
-
-The project was implemented using a modular architecture, separating code into distinct sub-modules (Figure \ref{fig:folders}), corresponding to the Must-Have objectives: Lane Detection/Tracking (FR1.2/3), Gaze Estimation (FR1.4) and Web Application (FR2). This left room to extend the project with features, specifically those detailed in the Should-Have requirements, and to improve individual features further without affecting the rest of the system. Features added on top of the Must-Have requirements were FR3.1 and FR4.1, since these were decided to have the largest impact for the project with the time remaining. While the modular approach did add some complexity with an additional necessary module to compile the outputs into the final analysis (`combined analysis’), the benefits to maintainability and extendibility were decided to outweigh this.
-
-\begin{figure}[H]
-
-\centering
-    \includegraphics[width=0.3\linewidth]{project_management_images/folder_structure.png}
-    \caption{Folder structure showcasing the modular structure of the project.}
-    \label{fig:folders}
-
 \end{figure}
 
 \subsection{Resources and Tools}
@@ -560,7 +544,7 @@ The raw angle data has three dimensions (yaw, pitch, roll), but not all contribu
 \centering
     \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/kmeans_clusters.png}} 
     \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/svm_classification.png}} 
-    \caption{(a) KMeans clustering results. (b) SVM classification results.}
+    \caption{(a) KMeans clustering results: some points in the `looking ahead' (purple) and `left mirror' (yellow) classes are mis-classified as `rear mirror' (blue). (b) SVM classification results: points are more accurately classified, as determined by visual inspection.}
     \label{fig:yawpitchroll_2}
 
 \end{figure}
@@ -621,14 +605,14 @@ The application is designed as a Client-Server-Worker system to handle the heavy
 
         % --- Groups ---
         \begin{scope}[on background layer]
-            \node[group, fit=(user) (ui), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:Frontend}] (frontend) {};
-            \node[group, fit=(api) (worker) (db), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:Backend}] (backend) {};
-            \node[group, fit=(lanes) (face) (vo) (report), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]north west:AI Engine}] (ai) {};
+            \node[group, fit=(user) (ui), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:Frontend}] (frontend) {};
+            \node[group, fit=(api) (worker) (db), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:Backend}] (backend) {};
+            \node[group, fit=(lanes) (face) (vo) (report), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:AI Engine}] (ai) {};
         \end{scope}
 
         % --- Edges ---
         \draw[myarrow] (user) -- (ui);
-        \draw[myarrow] (ui) to[bend left=45] (user);
+        \draw[myarrow] (ui) -- (user);
 
         \draw[myarrow] (ui) -- (api);
         \draw[myarrow] (api) -- (ui);
@@ -670,8 +654,8 @@ The frontend was built using React with Vite as the build tool and Bootstrap for
 \begin{figure}[H]
 
 \centering
-    \includegraphics[width=0.8\linewidth]{website_images/analysis_submission.png}
-    \caption{Screenshot of the video submission page.}
+    \includegraphics[width=1\linewidth]{website_images/analysis_submission.png}
+    \caption{Screenshot of the video submission page, showing video submission boxes for road-facing and cabin-facing video, as well as a checkbox for choosing whether to synchronise videos via audio.}
     \label{fig:video_submission}
 
 \end{figure}
@@ -706,7 +690,7 @@ After analysis is complete, the application presents the detected results to the
 \end{figure}
 
 \subsubsection{Per-User Gaze Calibration}
-The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person’s data frequently misclassified another’s gaze directions (Figure \ref{fig:uncalib_timeline}). Since the gaze classifier is the foundation of all safety judgements, poor classification accuracy renders the entire system unreliable. This motivated the development of a per-user calibration system as an extension.
+The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person’s data frequently misclassified another’s gaze directions (Figure \ref{fig:uncalib_timeline} shows uncalibrated gaze classifications, while Figure \ref{fig:calib_timeline} displays the timeline after calibration). Since the gaze classifier is the foundation of all safety judgements, poor classification accuracy renders the entire system unreliable. This motivated the development of a per-user calibration system as an extension.
 
 % These figures should be discussed in the text.
 
@@ -752,7 +736,7 @@ Evaluating the accuracy of the system’s safety judgements requires ground trut
 \begin{figure}[H]
 \centering
     \includegraphics[width=1\linewidth]{website_images/error_report.png}
-    \caption{Error reporting component.}
+    \caption{Error reporting component: Users can select the timestamp, the event type and whether it is a false positive or false negative, along with any additional comments.}
     \label{fig:error_report}
 \end{figure}
 
@@ -818,7 +802,6 @@ This section presents the results of the evaluation methodology described above,
 
 \subsection{Detection Accuracy and Literature Comparison}
 Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds. The closest comparable system in the literature is that of Zekany et al.\ \cite{zekany2022finding}. Table \ref{tab:f1_comparison} presents a direct per-manoeuvre comparison by taking the best (maximum F1) operating point for each of their individual classifiers from their Table III. It should be noted that the two systems were evaluated on entirely different datasets, though the evaluation procedure of Zekany et al. was followed as closely as possible.
-% Put citation to their work in the table heading. 
 
 \begin{table}[H]
 \centering
