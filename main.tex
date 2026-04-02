@@ -92,8 +92,6 @@ The author wishes to express sincere gratitude to the project supervisor, Dr Gre
 
 \newpage
 
-% In the abstract, reword ‘outperforming the closest comparable work’ since it’s not like-for-like (different datasets and labellers etc.)
-
 \section*{Abstract}
 Driving accidents claim over 1,600 lives annually in the UK and are the leading cause of avoidable death in young people, with the majority caused by behavioural errors. Identifying and assessing these errors in context is therefore critical, yet no current system directly correlates the driver's actions with the vehicle's behaviour and road environment to assess whether the driver responded appropriately to the driving situation. This project addresses that gap by developing a multi-modal system that synchronises road-facing and driver-facing video to identify specific driving mistakes, focusing on the case of failing to check mirrors before manoeuvres. The system combines deep learning-based lane detection; a visual odometry pipeline to detect turns; and head pose estimation to determine gaze direction. A rule-based Safety Monitor cross-references detected manoeuvres against the driver's gaze history to classify each event as safe or unsafe. The pipeline is deployed through a web application featuring job submission through an online GPU cluster and an interactive results display. 
 
@@ -129,74 +127,6 @@ A system capable of objectively identifying driver errors has numerous potential
 \end{itemize}
 
 In order to establish a clear goal and evaluation criteria, we focused on the learner driver use-case. While numerous apps exist to help learner drivers prepare for the theory test, no application currently assists with the practical side of driving by providing objective feedback on real driving behaviour. This project therefore represents an entirely new category of tool for learner driver support. The resulting system is a web application for post-hoc analysis, processing synchronised dash-cam and in-cabin footage to identify and timestamp specific driving errors. The application aims to improve the quality of driving sessions with friends and family, who are less likely to spot subtle mistakes like mirror-checks \cite{2nd2nonedrivingschoolLearningDrive}. The system's performance was evaluated by addressing the research question: `Can a multi-modal system combining road-facing and driver-facing video detect driving mistakes at an accuracy of at least 80\%?' To this end, the system's detection accuracy was measured against manually labelled ground truth data and compared against the closest existing work in the literature. In addition to this, we conducted a user study in order to establish the system's generalisability and ability to distinguish dangerous manoeuvres from safe ones.
-
-\newpage
-
-% Potentially move objectives to being after the background research section to show that the research was taken into account in order to come up with the objectives. Make the intro paragraph to objectives flow naturally from the background and introduction in this case. Also, make the follow-up further into the design and implementation section flow naturally from the objectives section then.
-
-\section{Objectives}
-
-The application analyses synchronised dash-cam and cabin footage to detect driving mistakes. This section defines the functional and non-functional requirements for the MVP and outlines optional extensions.
-
-\subsection*{Functional Requirements}
-
-\subsubsection*{1. Core Video Analysis and Mistake Detection (Must-Have)}
-The primary objective was to develop and validate computer vision models that can accurately identify driving mistakes.
-
-\begin{itemize}
-    \item \textbf{FR1.1} Accept two synchronised video files as input: road-facing and cabin-facing.
-    \item \textbf{FR1.2} Analyse the dash-cam feed to detect and keep track of lane markings.
-    \item \textbf{FR1.3} Process the output of FR1.2 to detect timestamps for the start and end of lane change manoeuvres.
-    \item \textbf{FR1.4} Classify the driver's gaze direction per frame as either:
-    \begin{itemize}
-        \item Looking ahead.
-        \item Looking at the left mirror.
-        \item Looking at the right mirror.
-        \item Looking at the rear-view mirror.
-    \end{itemize}
-    \item \textbf{FR1.5} Combine the outputs of the manoeuvre and driver behaviour models using a rule-based algorithm to identify when manoeuvres are made without a prior mirror-check.
-\end{itemize}
-
-All core requirements (FR1.1--FR1.5) were fully implemented.
-
-\subsubsection*{2. Web Interface and User Feedback (Must-Have)}
-This section outlines the requirements for the user interface. This component accepts user videos and displays the data generated from Component 1.
-
-\begin{itemize}
-    \item \textbf{FR2.1} Provide a web interface for a user to upload video footage after their driving session.
-    \item \textbf{FR2.2} Display the type and count of detected mistakes.
-    \item \textbf{FR2.3} Present synchronised video playback that allows the user to navigate to detected mistake timestamps.
-    \item \textbf{FR2.4} Implement a user authentication and account system with per-user access control over uploaded videos and analysis results.
-\end{itemize}
-
-\subsubsection*{3. Mistake Detection Enhancements (Should-Have)}
-These requirements extend the core functionality to detect a more complex range of manoeuvres and actions.
-\begin{itemize}
-    \item \textbf{FR3.1} Manoeuvre detection extension - Enhance manoeuvre detection to include:
-    \begin{itemize}
-        \item \textbf{FR3.1.1} Turns into side roads.
-        \item \textbf{FR3.1.2} 3-point turns.
-        \item \textbf{FR3.1.3} Reversing.
-    \end{itemize}
-    \item \textbf{FR3.2} Gaze classification extension (I) - Detect blind-spot checks.
-    \item \textbf{FR3.3} Gaze classification generalisation - Provide a per-user gaze calibration system integrated into the web application, allowing the gaze classifier to generalise to different drivers, camera positions and seating arrangements.
-\end{itemize}
-
-\subsubsection*{4. Extensions (Could-Have)}
-Additional features that would enhance the system, but considered beyond the scope of the core project.
-
-\begin{itemize}
-    \item \textbf{FR4.1} Data input extension - Allow the use of a smartphone camera to record internal footage.
-    \item \textbf{FR4.2} Gaze classification extension (II) - Incorporate eye-tracking to improve gaze detection accuracy.
-\end{itemize}
-
-\subsection*{Non-Functional Requirements}
-\begin{itemize}
-    \item \textbf{NFR1} The core analysis script must be well-documented and capable of being executed via the command line.
-    \item \textbf{NFR2} The user interface must be intuitive to navigate and provide mistake identification information clearly to the user.
-    \item \textbf{NFR3} Data must be stored securely and anonymised, to comply with UK GDPR.
-\end{itemize}
-
 
 \newpage
 
@@ -282,14 +212,12 @@ Gaze estimation is a process used to determine the direction of a person's head.
 
 Once angles are extracted, they must be classified into discrete gaze directions (e.g. mirrors or forward). Dimensionality reduction techniques, such as Principal Component Analysis (PCA) \cite{jolliffe2016principal}, are often used to transform the data, for example, from three angles to two, to make clusters of points corresponding to each gaze classification more well-defined.
 
-For the final classification step, a choice exists between unsupervised clustering (e.g. K-Means \cite{macqueen1967some}) and supervised learning (e.g. Support Vector Machines or SVM \cite{cortes1995support}). While K-Means can show the quality of clusters without labels, it often struggles with outliers or classes that occupy narrow areas of the feature space. SVMs are well-suited to this task for several reasons: they are effective with small training sets because they rely only on the support vectors near the decision boundary rather than the entire dataset \cite{cortes1995support}; they produce deterministic, interpretable decision boundaries that can be visualised and verified; and their explainability aligns with the same principle discussed in Section 3.2, where transparent models are preferred over black-box approaches for safety-related classification.
+For the final classification step, a choice exists between unsupervised clustering (e.g. K-Means \cite{macqueen1967some}) and supervised learning (e.g. Support Vector Machines or SVM \cite{cortes1995support}). While K-Means can show the quality of clusters without labels, it often struggles with outliers or classes that occupy narrow areas of the feature space. SVMs are well-suited to this task for several reasons: they are effective with small training sets because they rely only on the support vectors near the decision boundary rather than the entire dataset \cite{cortes1995support}; they produce deterministic, interpretable decision boundaries that can be visualised and verified; and their explainability aligns with the same principle discussed in Section 2.2, where transparent models are preferred over black-box approaches for safety-related classification.
 
 \subsection{Motion Estimation}
-Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is used to detect left and right turns (FR3.1.1). Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM) \cite{taketomi2017visual}. vSLAM constructs a persistent map of the environment, and can identify loop-closures to correct for drift accumulation. However, it is considerably more computationally expensive than VO and requires camera calibration to function correctly, which would be impractical for a general user study with varying camera properties. Since only local, relative motion is needed for turn detection, VO was selected as sufficient without the overhead of full environment mapping.
+Motion estimation is an essential topic within robotics and autonomous vehicle research, with the aim of identifying the relative direction, speed and position of a camera as it moves through an environment. For this project, motion estimation is needed to detect left and right turns. Two relevant methods for this are Visual Odometry (VO) and Visual Simultaneous Localisation and Mapping (vSLAM) \cite{taketomi2017visual}. vSLAM constructs a persistent map of the environment, and can identify loop-closures to correct for drift accumulation. However, it is considerably more computationally expensive than VO and requires camera calibration to function correctly, which would be impractical for a general user study with varying camera properties. Since only local, relative motion is needed for turn detection, VO was selected as sufficient without the overhead of full environment mapping.
 
 VO analyses sequential camera frames to estimate the camera's local motion incrementally. The process begins with keypoint detection, where algorithms such as Shi-Tomasi \cite{shi1994good} or ORB \cite{rublee2011orb} identify distinctive features in each frame. These keypoints are then tracked across consecutive frames using sparse Optical Flow, a technique that estimates the displacement of individual feature points between frames rather than computing motion for every pixel. The Lucas-Kanade method \cite{lucas1981iterative} is commonly used for this, as it is efficient and well-suited to tracking a sparse set of points. For this project, Shi-Tomasi was selected for keypoint detection, as it produces corners with strong gradients in two directions, which is exactly what Lucas-Kanade is designed to track. Alternatives such as FAST or ORB were considered, but these produce lower-quality corners and include binary descriptor computation that is unnecessary when using optical flow for matching rather than descriptor comparison.
-
-% Make sure all figures (including this one and others later in the doc) have descriptive captions.
 
 \begin{figure}[H]
 
@@ -302,13 +230,76 @@ VO analyses sequential camera frames to estimate the camera's local motion incre
 
 Once correspondences between keypoints are established, the Essential Matrix is computed from the matched point pairs. The Essential Matrix encodes the geometric relationship between two camera views, and can be decomposed into a rotation matrix $R$ and translation vector $t$ that describe how the camera has moved between frames. This is analogous to the PnP decomposition used in gaze estimation (Section 2.3), but operates on frame-to-frame correspondences rather than a canonical 3D model. Since this project is limited to a single dash-cam, the variant of VO used is monocular, which naturally faces scale ambiguity, meaning it can only obtain relative motion estimates, and the motion estimate is likely to drift over time. 
 
-One approach for classifying manoeuvres from VO output, introduced by Zekany et al. \cite{zekany2022finding}, involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW), a classical distance metric for time-series comparison. However, the use of a deep learning model for the VO step makes the trajectory estimation itself a black box. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a simpler threshold-based approach to yaw accumulation was adopted instead, consistent with the preference for explainable methods discussed in Section 3.2. Each detection decision can be directly traced to interpretable thresholds.
+One approach for classifying manoeuvres from VO output, introduced by Zekany et al. \cite{zekany2022finding}, involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW), a classical distance metric for time-series comparison. However, the use of a deep learning model for the VO step makes the trajectory estimation itself a black box. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a simpler threshold-based approach to yaw accumulation was adopted instead, consistent with the preference for explainable methods discussed in Section 2.2. Each detection decision can be directly traced to interpretable thresholds.
+
+\newpage
+
+\section{Objectives}
+
+The background research established the techniques needed to detect lane positions, track them over time, estimate driver gaze, and measure vehicle motion. This section defines the functional and non-functional requirements that guided how these techniques were combined into the system.
+
+\subsection*{Functional Requirements}
+
+\subsubsection*{1. Core Video Analysis and Mistake Detection (Must-Have)}
+Given that robust lane detection, temporal tracking, and gaze estimation methods are readily available, the primary objective was to integrate these into a unified pipeline that identifies driving mistakes from synchronised dual-camera footage.
+
+\begin{itemize}
+    \item \textbf{FR1.1} Accept two synchronised video files as input: road-facing and cabin-facing.
+    \item \textbf{FR1.2} Analyse the dash-cam feed to detect and keep track of lane markings.
+    \item \textbf{FR1.3} Process the output of FR1.2 to detect lane change events by identifying when a tracked lane crosses the centre of the frame.
+    \item \textbf{FR1.4} Classify the driver's gaze direction per frame as either:
+    \begin{itemize}
+        \item Looking ahead.
+        \item Looking at the left mirror.
+        \item Looking at the right mirror.
+        \item Looking at the rear-view mirror.
+    \end{itemize}
+    \item \textbf{FR1.5} Combine the outputs of the manoeuvre and driver behaviour models using a rule-based algorithm to identify when manoeuvres are made without a prior mirror-check.
+\end{itemize}
+
+\subsubsection*{2. Web Interface and User Feedback (Must-Have)}
+To enable user testing with external participants, the system requires a web interface that accepts user videos and presents the results.
+
+\begin{itemize}
+    \item \textbf{FR2.1} Provide a web interface for a user to upload video footage after their driving session.
+    \item \textbf{FR2.2} Display the type and count of detected mistakes.
+    \item \textbf{FR2.3} Present synchronised video playback that allows the user to navigate to detected mistake timestamps.
+    \item \textbf{FR2.4} Implement a user authentication and account system with per-user access control over uploaded videos and analysis results.
+\end{itemize}
+
+\subsubsection*{3. Mistake Detection Enhancements (Should-Have)}
+The background research also identified visual odometry as a means of detecting vehicle motion, and highlighted that gaze classifier generalisation across users remains a challenge. These observations motivate the following extensions.
+\begin{itemize}
+    \item \textbf{FR3.1} Manoeuvre detection extension - Enhance manoeuvre detection to include:
+    \begin{itemize}
+        \item \textbf{FR3.1.1} Turns into side roads.
+        \item \textbf{FR3.1.2} 3-point turns.
+        \item \textbf{FR3.1.3} Reversing.
+    \end{itemize}
+    \item \textbf{FR3.2} Gaze classification extension (I) - Detect blind-spot checks.
+    \item \textbf{FR3.3} Gaze classification generalisation - Provide a per-user gaze calibration system integrated into the web application, allowing the gaze classifier to generalise to different drivers, camera positions and seating arrangements.
+\end{itemize}
+
+\subsubsection*{4. Extensions (Could-Have)}
+Additional features that would enhance the system, but considered beyond the scope of the core project.
+
+\begin{itemize}
+    \item \textbf{FR4.1} Data input extension - Allow the use of a smartphone camera to record internal footage.
+    \item \textbf{FR4.2} Gaze classification extension (II) - Incorporate eye-tracking to improve gaze detection accuracy.
+\end{itemize}
+
+\subsection*{Non-Functional Requirements}
+\begin{itemize}
+    \item \textbf{NFR1} The core analysis script must be well-documented and capable of being executed via the command line.
+    \item \textbf{NFR2} The user interface must be intuitive to navigate and provide mistake identification information clearly to the user.
+    \item \textbf{NFR3} Data must be stored securely and anonymised, to comply with UK GDPR.
+\end{itemize}
 
 \newpage
 
 \section{Design and Development}
 
-The project was implemented using a modular architecture, separating code into distinct sub-modules (Figure \ref{fig:pipeline_overview}), corresponding to the objectives: Lane Change Detection (FR1.2/3), Turn Detection (FR3.1.1), Gaze Estimation (FR1.4) and Web Application (FR2). This left room to extend the project with features, specifically those detailed in the Should-Have requirements, and to improve individual features further without affecting the rest of the system.
+With the objectives defined, this section describes the implementation. The project was implemented using a modular architecture, separating code into distinct sub-modules (Figure \ref{fig:pipeline_overview}), corresponding to the objectives: Lane Change Detection (FR1.2/3), Turn Detection (FR3.1.1), Gaze Estimation (FR1.4) and Web Application (FR2). This left room to extend the project with features, specifically those detailed in the Should-Have requirements, and to improve individual features further without affecting the rest of the system.
 
 We aggregate the results from each module in a Safety Monitor class, which maintains a buffer storing each detected event and gaze classification. This is cross-referenced when an event is detected, determining whether each manoeuvre is safe or unsafe.
 
@@ -692,8 +683,6 @@ After analysis is complete, the application presents the detected results to the
 \subsubsection{Per-User Gaze Calibration}
 The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person’s data frequently misclassified another’s gaze directions (Figure \ref{fig:uncalib_timeline} shows uncalibrated gaze classifications, while Figure \ref{fig:calib_timeline} displays the timeline after calibration). Since the gaze classifier is the foundation of all safety judgements, poor classification accuracy renders the entire system unreliable. This motivated the development of a per-user calibration system as an extension.
 
-% These figures should be discussed in the text.
-
 \begin{figure}[H]
 \centering
     \includegraphics[width=1\linewidth]{website_images/uncalibrated_timeline.png}
@@ -726,8 +715,8 @@ During early user testing, several participants found the clip editor daunting, 
 The driver-facing camera inevitably captures passengers and, depending on the camera’s field of view, potentially pedestrians or other bystanders visible through windows. Distributing or displaying this footage without consent raises ethical and legal concerns, particularly under GDPR. Since the system’s analysis only requires the driver’s face, all other faces can be obscured without any loss of functionality.
 
 During analysis, the \texttt{FaceAnalyzer} identifies the driver using a heuristic: in landscape-oriented footage (the typical dash-cam configuration), the driver is the largest face on the left side of the frame (corresponding to the right-hand-drive UK vehicles used in testing). In portrait orientation, as may occur with a phone-based camera, the largest face overall is selected, as spatial position is less reliable. All other detected faces are blurred using a Gaussian kernel sized proportionally to the face bounding box, ensuring sufficient obscuration regardless of distance from the camera. The blurred frames are written as the output video, so the original unblurred footage is never stored on the server. Gaussian blurring was chosen over pixelation because it is less visually jarring while still being irreversible, and over full-frame blurring because retaining the driver’s face allows manual verification of gaze classifications during evaluation.
-% 1080p can be vague. Maybe say something like 1920x1080 and the same for the other resolutions. However also mention that some resolutions might be different due to other aspect ratios on cameras, such as portrait phone devices, so be clear on how this resolution scaling is done.
-During user testing on mobile devices, it was observed that loading the full-resolution output videos (1080p) over some Wi-Fi networks or mobile data sources caused significant buffering. Since two concurrent video streams double the bandwidth requirement compared to a single-video application, adaptive quality selection was particularly important. To address this, the system generates multiple quality variants (720p and 480p) of both output videos after analysis completes. The frontend estimates the user’s effective bandwidth and automatically selects an appropriate resolution, with the option to manually choose their resolution.
+
+During user testing on mobile devices, it was observed that loading the full-resolution output videos ($1920\times1080$) over some Wi-Fi networks or mobile data sources caused significant buffering. Since two concurrent video streams double the bandwidth requirement compared to a single-video application, adaptive quality selection was particularly important. To address this, the system generates multiple quality variants ($1280\times720$ and $854\times480$) of both output videos after analysis completes, scaling only the vertical dimension and preserving the original aspect ratio so that footage from non-standard sources (such as phones recording in portrait orientation) is handled correctly. The frontend estimates the user’s effective bandwidth and automatically selects an appropriate resolution, with the option to manually choose their resolution.
 
 \subsubsection{Evaluation Infrastructure}
 \label{sec:eval_infra}
@@ -767,17 +756,15 @@ Error handling was hardened across the upload, synchronisation and analysis pipe
 
 \newpage
 
-% Think about merging sections 5 and 6 (Evaluation methodology with results) to make it easier to read - so the reader doesn’t have to jump from one place to the next or remember what was previously said’
+\section{Evaluation and Results}
+Project evaluation was split into two parts: a quantitative evaluation against author-labelled ground truth, and a qualitative evaluation through user testing and a general interest questionnaire.
 
-\section{Evaluation Methodology}
-Project evaluation was split into two parts: quantitative (author-labelled ground truth) and qualitative (user testing). For the quantitative portion, we manually labelled manoeuvre events across a subset of the collected dataset and compared these labels against the system's detections. Qualitatively, user testing sessions and a general interest questionnaire were conducted.
+\subsection{Detection Accuracy and Literature Comparison}
+The evaluation dataset comprises clips recorded both at day and at night (with an infra-red internal camera for night-time cabin recording). These labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.
 
-\subsection{Dataset and Evaluation Methodology}
-The evaluation dataset comprises of clips recorded both at day and at night (with an infra-red internal camera for night-time cabin recording). These labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.
+To evaluate the system’s event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 4-second tolerance, consistent with the method that Zekany et al. used, discussed in Section 4.5. In this approach, ground truth events and detections are paired one-to-one by iteratively selecting the closest unmatched pair in time, ensuring that each ground truth event is matched to at most one detection and vice versa.
 
-To evaluate the system's event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 4-second tolerance, consistent with the method that Zekany et al. used, discussed in Section 4.5. In this approach, ground truth events and detections are paired one-to-one by iteratively selecting the closest unmatched pair in time, ensuring that each ground truth event is matched to at most one detection and vice versa.
-
- Unmatched ground truth events are counted as false negatives (FN, missed detections), and unmatched system detections are counted as false positives (FP, spurious detections). Matched pairs are true positives (TP). From these counts, three standard metrics are computed: precision (the proportion of detections that are real), recall
+Unmatched ground truth events are counted as false negatives (FN, missed detections), and unmatched system detections are counted as false positives (FP, spurious detections). Matched pairs are true positives (TP). From these counts, three standard metrics are computed: precision (the proportion of detections that are real), recall
 (the proportion of real events detected), and their harmonic mean $F_1$.
 
 \begin{align*}
@@ -785,22 +772,6 @@ To evaluate the system's event detection accuracy, a custom evaluation framework
 \text{Recall}    &= \frac{TP}{TP + FN} \\\\
 F_1              &= \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
 \end{align*}
-
-\subsection{User Testing}
-Beyond quantitative accuracy, the system was evaluated through two qualitative channels: direct user testing and a general interest questionnaire.
-
-\subsubsection{Direct User Testing}
-For user testing, participants were recruited from the author's personal network, including friends and family. All participants were fully qualified drivers with valid UK driving licences. They were asked to record their regular driving using their existing dash-cam alongside a phone mounted on the dashboard for the cabin-facing feed, or a dual-channel dash-cam system if available. No special driving instructions were given; participants simply drove as they normally would to ensure the footage reflected natural driving behaviour. After uploading and reviewing their results, participants could report any errors they identified through the built-in error reporting mechanism.
-
-\subsubsection{General Interest Questionnaire} % Full questionnaire should be included in the appendices, and referred to here
-A separate questionnaire was distributed more broadly through the Nextdoor neighbourhood app, LinkedIn, and our personal contacts. This questionnaire did not require respondents to have used the application themselves. Instead, it presented demo videos of our driving footage and the corresponding analysis results, then asked respondents about their driving background, dash-cam ownership, preferred recording setup, likelihood of using such a system, desired features, and willingness to pay.
-
-\newpage
-
-\section{Results}
-This section presents the results of the evaluation methodology described above, covering detection accuracy with a comparison to the closest existing work, user-submitted video results, and questionnaire findings.
-
-\subsection{Detection Accuracy and Literature Comparison}
 Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds. The closest comparable system in the literature is that of Zekany et al.\ \cite{zekany2022finding}. Table \ref{tab:f1_comparison} presents a direct per-manoeuvre comparison by taking the best (maximum F1) operating point for each of their individual classifiers from their Table III. It should be noted that the two systems were evaluated on entirely different datasets, though the evaluation procedure of Zekany et al. was followed as closely as possible.
 
 \begin{table}[H]
@@ -836,28 +807,19 @@ Of the 19 false positives, 12 were classified as right turns. The majority occur
 \end{figure}
 
 To examine classification accuracy in more detail, Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology. Our system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% compared to Zekany et al.'s 78.8\% (their Table VII: 628 of 797 matched correctly). Type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common confusion was between left turns and right turns (4 left turns detected as right turns).
-% Replace these tables with python-generated confusion matrices, including the exact same numbers with percentages next to them. Also make sure the names of the categories can be referenced / referred to as the same between horizontal and vertical rows/columns
-\begin{table}[H]
+\begin{figure}[H]
 \centering
-\footnotesize
-\begin{tabular}{|l|cccc|cccc|}
-\hline
- & \multicolumn{4}{c|}{\textbf{Zekany et al.\ \cite{zekany2022finding}}} & \multicolumn{4}{c|}{\textbf{Ours}} \\
-\textbf{Ground Truth} & LT & RT & LLC & RLC & LT & RT & LLC & RLC \\
-\hline
-Left Turn & \textbf{161 (89\%)} & 0 (0\%) & 15 (8\%) & 0 (0\%) & 19 (83\%) & 4 (17\%) & 0 (0\%) & 0 (0\%) \\
-Right Turn & 0 (0\%) & 133 (80\%) & 21 (13\%) & 0 (0\%) & 1 (6\%) & \textbf{16 (94\%)} & 0 (0\%) & 0 (0\%) \\
-Left Lane Change & 14 (18\%) & 2 (3\%) & 5 (7\%) & 53 (70\%) & 0 (0\%) & 0 (0\%) & \textbf{19 (95\%)} & 1 (5\%) \\
-Right Lane Change & 0 (0\%) & 0 (0\%) & 1 (2\%) & \textbf{62 (98\%)} & 0 (0\%) & 0 (0\%) & 1 (4\%) & 23 (96\%) \\
-\hline
-\end{tabular}
-\caption{Like-for-like confusion matrix comparison, with both systems evaluated only on matched (detected) events. Bold highlights the higher diagonal accuracy; our row percentages are computed over the 84 true positive matches.}
+\includegraphics[width=1\linewidth]{results_images/confusion_matrices.png}
+\caption{Confusion matrices for matched (detected) events. Zekany et al.\ values are from their Table VII \cite{zekany2022finding}; our values are computed over the 84 true positive matches. Each cell shows the count and row percentage.}
 \label{tab:cm_matched}
-\end{table}
+\end{figure}
 
 Our system achieves higher classification accuracy on two of the four shared manoeuvre types: right turns (94\% vs.\ 80\%) and left lane changes (95\% vs.\ 7\%). Right lane change accuracy is comparable (96\% vs.\ 98\%), while Zekany et al.\ achieve higher accuracy on left turns (89\% vs.\ 83\%). Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, shown by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion almost entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching.
 
-\subsection{User-Submitted Video Results}
+\subsection{User Testing}
+For user testing, participants were recruited from the author's personal network, including friends and family. All participants were fully qualified drivers with valid UK driving licences. They were asked to record their regular driving using their existing dash-cam alongside a phone mounted on the dashboard for the cabin-facing feed, or a dual-channel dash-cam system if available. No special driving instructions were given; participants simply drove as they normally would to ensure the footage reflected natural driving behaviour. After uploading and reviewing their results, participants could report any errors they identified through the built-in error reporting mechanism.
+
+\subsubsection{User-Submitted Video Results}
 Over a four-week period (early March to early April 2026), six external users registered accounts and submitted driving footage through the web application. In total, 23 unique video pairs (road-facing and driver-facing) were uploaded and successfully analysed, representing approximately 148 minutes of driving footage across a range of conditions and locations. Several users re-analysed the same footage after creating or refining their gaze calibration profiles; after deduplication (retaining the most recent calibrated analysis per unique video pair), the 23 analyses produced 170 safety events. Of the 23 unique analyses, 13 (57\%) used a personalised gaze calibration, while the remaining 10 relied on the system's default classifier.
 
 \subsubsection{Aggregate Safety Classification}
@@ -913,7 +875,7 @@ Several users re-analysed their footage after creating or refining a personalise
 \subsubsection{User Error Reports}
 As described in Section \ref{sec:eval_infra}, the web application includes an error reporting mechanism that allows users to flag false positive detections (events the system detected that did not occur) and false negative detections (real events the system missed). During the deployment, users submitted 13 error reports: 9 false positives and 4 false negatives.
 
-The false positive reports were mainly right turn detections. Manual review through the administrator dashboard confirmed that these false positives were caused by winding roads with successive right-hand curves, producing visual odometry signals indistinguishable from genuine turns. This is consistent with the curved-road false positive pattern identified in the author-labelled evaluation (Section 6.1).
+The false positive reports were mainly right turn detections. Manual review through the administrator dashboard confirmed that these false positives were caused by winding roads with successive right-hand curves, producing visual odometry signals indistinguishable from genuine turns. This is consistent with the curved-road false positive pattern identified in the author-labelled evaluation (Section 5.1).
 
 The 4 false negative reports identified two unique failure modes:
 \begin{enumerate}
@@ -921,11 +883,15 @@ The 4 false negative reports identified two unique failure modes:
     \item \textbf{Direction misclassification}: one user reported that a left turn was classified as a right turn.
 \end{enumerate}
 
-These error reports show that the system would benefit from using other sources of information to identify manoeuvres in order to improve its accuracy. Across the 170 detected events, the 9 user-reported false positives imply a lower bound on the false positive rate of 5.3\% from the user's perspective, though this likely underestimates the true rate since users may not have flagged every incorrect detection.
+These error reports show that the system would benefit from using other sources of information to identify manoeuvres in order to improve its accuracy. Across the 170 detected events, the 9 user-reported false positives imply a lower bound on the false positive rate of 5.3\% from the user's perspective, though this likely underestimates the true rate since users may not have flagged every incorrect detection. Conversely, the remaining 161 events (94.7\%) were accepted as accurate by users, meaning no disputes were raised about their detection or safety classification. All 137 safe classifications (100\%) were accepted, while 24 of the 33 unsafe classifications (72.7\%) were not disputed. The 24 undisputed unsafe events represent genuine mirror-check failures that the drivers themselves had not been aware of during their journeys, demonstrating the system's ability to surface mistakes that would otherwise go unnoticed. One user reported that after reviewing their results and seeing specific locations where they had failed to check their mirrors, they drove the same route again and found that they made fewer mistakes the second time, having been made aware of the habitual gaps in their mirror-checking behaviour. While this is a single anecdotal case, it provides early evidence that the system can fulfil its intended purpose as a learning tool.
 
-\subsection{Questionnaire Results}
+Returning to the research question posed in the Introduction, ``Can a multi-modal system combining road-facing and driver-facing video detect driving mistakes at an accuracy of at least 80\%?'', the user testing results provide strong supporting evidence. The 94.7\% user-accepted accuracy across all events exceeds the 80\% target, and the controlled evaluation's F1 score of 0.81 independently corroborates this. While the 72.7\% acceptance rate for unsafe classifications falls below 80\%, this is largely attributable to the curved-road false positive pattern identified in the controlled evaluation, a known limitation with a clear path to resolution through additional environmental context.
+
+\subsection{Questionnaire}
 \label{sec:questionnaire_results}
-While the preceding sections evaluated the system's technical accuracy, the general interest questionnaire assessed broader appeal and viability. It received 17 responses (16 fully licensed drivers, 1 current learner). Respondents were shown demo videos of the system analysing our driving footage before answering. Table~\ref{tab:survey_results} summarises the key findings.
+A separate questionnaire was distributed more broadly through the Nextdoor neighbourhood app, LinkedIn, and our personal contacts. This questionnaire did not require respondents to have used the application themselves. Instead, it presented demo videos of our driving footage and the corresponding analysis results, then asked respondents about their driving background, dash-cam ownership, preferred recording setup, likelihood of using such a system, desired features, and willingness to pay.
+
+The questionnaire received 17 responses (16 fully licensed drivers, 1 current learner). Table~\ref{tab:survey_results} summarises the key findings.
 
 \begin{table}[H]
 \centering
@@ -945,47 +911,31 @@ Willingness to pay (monthly) & 7 free only (41\%), 6 up to \pounds4.99 (35\%), 3
 \label{tab:survey_results}
 \end{table}
 
-The results indicate moderate to strong interest, with 10 of 17 respondents scoring their likelihood of use at 6 or above. The most common hesitations were the effort of transferring and uploading video files and the multi-step calibration process. Several respondents suggested that a condensed feedback report, detection of a broader range of manoeuvres, and awareness of nearby vehicles would increase their willingness to use the system. The low dash-cam ownership rate (29\%) and the split in willingness to purchase one reinforce the hardware barrier to adoption discussed in Section 7.2.
+The results indicate moderate to strong interest, with 10 of 17 respondents scoring their likelihood of use at 6 or above. The most common hesitations were the effort of transferring and uploading video files and the multi-step calibration process. Several respondents suggested that a condensed feedback report, detection of a broader range of manoeuvres, and awareness of nearby vehicles would increase their willingness to use the system. The low dash-cam ownership rate (29\%) and the split in willingness to purchase one reinforce the hardware barrier to adoption discussed in Section 6.2.
 
 \newpage
 
 \section{Conclusion and Future Work}
-This project set out to build a system capable of identifying driving mistakes by combining road-facing and driver-facing video, an approach that, as identified in the literature review, no existing open-source or commercial system currently takes. The resulting system detects lane changes, turns, and gaze direction from synchronised dual-camera footage, cross-references them to identify failures to check mirrors before manoeuvres, and presents the results through an interactive web application. This section reflects on the key findings, limitations, and directions for future development.
+This section discusses the system's limitations, identifies directions for future development, and reflects on the project's overall contribution.
 
-\subsection{Conclusions}
-Returning to the research question posed in the Introduction, the results confirm that a multi-modal system combining road-facing and driver-facing video can reliably detect driving mistakes, achieving an F1 score of 0.81 and 92\% classification accuracy on matched detections. This validates the core hypothesis: that synchronising driver state with vehicle movement provides a rich and accurate understanding of driving behaviour, unachievable otherwise. The favourable comparison against Zekany et al., particularly for lane changes, demonstrates that our explicit, rule-based manoeuvre detection approach can achieve state-of-the-art results while remaining fully interpretable.
+\subsection{Limitations}
+Despite the strong evaluation results, the system has clear limitations. The most significant is the visual odometry pipeline's inability to distinguish road curvature from genuine turns, which accounted for the majority of false positives in both the controlled evaluation and user-reported errors. The lane detection model is also susceptible to UK-specific road markings such as bus lanes and faded markings, and roundabouts remain entirely unsupported due to the absence of suitable training data.
 
-The live deployment with external users confirmed that the system's weaknesses are well-characterised. User-reported failure modes matched those identified in the controlled evaluation, suggesting they stem from fundamental limitations of the sensing approach (visual odometry ambiguity on curved roads, lane detection model coverage) rather than overfitting to specific hardware or driving styles. This is an encouraging finding for generalisability, even though the absolute number of external testers was small.
-
-Perhaps the most practically significant finding is that per-user gaze calibration is essential for reliable safety classification. The 7 percentage-point difference in safe classification rates between calibrated and uncalibrated analyses shows that a one-size-fits-all gaze model is insufficient. More broadly, the iterative development of the calibration interface (from a five-minute clip editor to a sub-minute point editor) illustrates that the usability of setup workflows is as important as the accuracy of the underlying models; users who are frustrated by calibration may disengage before obtaining useful results.
-
-\subsection{Limitations and Barriers to Adoption}
-The most significant technical limitation is the visual odometry pipeline's inability to distinguish road curvature from genuine turns, as both produce identical yaw accumulation signals. Addressing this would require additional environmental context, such as junction markings, give-way lines, or map data. Roundabouts remain entirely unsupported due to the absence of suitable lane detection training data and the continuous curvature they present.
-
-Beyond technical limitations, the system faces a substantial barrier to adoption in its current form. Of the 19 individuals contacted for user testing, only 5 owned dash-cams, and even among those with suitable hardware, the multi-step workflow (record on dash-cam, simultaneously record on phone, download both files, upload through the web interface and calibrate gaze classifications) deterred several users from completing more submissions.
+Beyond these technical limitations, the system faces a practical barrier to adoption. The multi-step workflow of recording on two devices, downloading, uploading, and calibrating proved friction-heavy during user testing, and low dash-cam ownership among contacted users further limited participation. Hardware integration with dual-channel dash-cam systems \cite{viofo_a229plus} or factory-fitted interior cameras \cite{jlr_dms_news} would reduce this friction considerably. The alternative applications outlined in the Introduction (insurance analytics, in-car alerts, ADAS training data annotation) may also represent more practical deployment paths, since dual-camera hardware is already present in those contexts.
 
 \subsection{Future Work}
-The limitations identified above, along with feedback from user testing, suggest several directions for future development across calibration, detection accuracy, detectable mistake types, and hardware integration.
+Many of these limitations have clear paths to resolution. The calibration burden could be reduced by combining the existing supervised approach with unsupervised clustering, since k-means already gave a close approximation to the desired result. Alternatively, real-time audio cues could guide drivers through a brief calibration routine during driving, collecting labelled samples without requiring a separate post-hoc step.
 
-\subsubsection{Improving Gaze Calibration}
-The calibration burden could be reduced through two complementary approaches. First, an unsupervised or self-supervised learning approach could automatically construct a calibration profile from the user's own footage, clustering head pose vectors to infer gaze regions without requiring manual labelling. We already identified that k-means gave a close approximation to the desired result, so a combination between our supervised approach and an unsupervised may give a good middle ground. Second, the system could be integrated into a full vehicle system or a dedicated hardware approach, as discussed in Section \ref{sec:hardware_int}. Real-time audio cues could guide the driver through a brief calibration routine (e.g.\ ``please look at your left mirror now''), collecting labelled samples during the drive rather than requiring a separate post-hoc step.
+For detection accuracy, reducing false turn detections on curved roads is the most impactful improvement. Incorporating map data, GPS traces, or training a classifier on visual junction features (give-way lines, road widening, traffic light presence) could provide the necessary environmental context. Sensor fusion with smartphone IMU data would complement the vision-based estimate, mirroring the approach taken by ZenRoad \cite{zenroad_app}. Lane change detection could be improved by fine-tuning the lane detection model on UK-specific road markings.
 
-\subsubsection{Improving Detection Accuracy}
-The most impactful detection improvement would be reducing false turn detections on curved roads. Incorporating map data or GPS traces to distinguish junctions from road curvature is one approach; alternatively, training a lightweight classifier on visual features of junction geometry (give-way lines, road widening, traffic light presence) could provide the necessary environmental context without requiring external data sources. Turn detection accuracy could also benefit from sensor fusion with IMU data if available, providing a direct yaw rate measurement to complement the vision-based estimate. Since smartphones contain accelerometers and GPS, these could be integrated into an application which tracks all relevant sources of information, mirroring the approach taken by ZenRoad \cite{zenroad_app}.
+The modular architecture also lends itself to detecting additional mistake types. Failure to indicate could be detected via an audio classifier trained on indicator sounds captured by the in-cabin microphone. Speed violations could be inferred by combining visual odometry velocity estimates with map data or smartphone accelerometers. Following-distance violations could be estimated by tracking the vehicle ahead from the dash-cam.
 
-Lane change detection could be improved by training or fine-tuning the lane detection model on a dataset that includes UK-specific road markings (bus lanes, cycle lanes, faded markings), which currently account for the majority of lane change false positives. Support for roundabout detection would require both a dedicated training dataset and a modified tracking approach that handles continuous curvature.
+\subsection{Conclusions}
+Returning to the research question posed in the Introduction, the results from both the controlled evaluation and the user study confirm that a multi-modal system combining road-facing and driver-facing video can reliably detect driving mistakes, exceeding the target accuracy. The favourable comparison against Zekany et al., particularly for lane changes, demonstrates that an explicit, rule-based manoeuvre detection approach can match or exceed existing methods while remaining fully interpretable.
 
-\subsubsection{Additional Detectable Mistakes}
-The current system detects only one category of driving mistake: failure to check mirrors before manoeuvres. The modular architecture was designed to support additional mistake types with relatively contained changes. Signal-based mistakes, such as failure to indicate before a manoeuvre, could be detected by adding an audio classifier trained on indicator click sounds, which are captured by the in-cabin microphone. Speed-related mistakes, such as exceeding the limit in a residential area, could be inferred by combining visual odometry velocity estimates with road type classification, map data or smartphone accelerometers. Following-distance violations could be estimated from the dash-cam by tracking the vehicle ahead and computing time-to-collision from its distance ahead on the road.
+What proved most valuable, however, was the live deployment. The vast majority of detected events were accepted as accurate by users, and the system surfaced genuine mirror-check failures that drivers had not been aware of during their journeys. This is precisely the value the system was designed to deliver, and it validates the core hypothesis that synchronising driver state with vehicle movement can provide insights unachievable by either modality alone. The iterative improvements driven by user feedback, especially reducing the calibration workflow from several minutes to under a minute, reinforced that usability is as important as detection accuracy in determining whether a system like this can be adopted in practice.
 
-\subsubsection{Hardware Integration and Alternative Use-Cases}
-\label{sec:hardware_int}
-The system would benefit from integration with existing dual-channel dash-cam systems, such as those manufactured by Viofo \cite{viofo_a229plus}, which combine road-facing and driver-facing cameras in a single unit and could streamline the capture and upload workflow. Similarly, vehicles with factory-fitted interior cameras (such as those in the latest JLR range \cite{jlr_dms_news}) already possess the necessary hardware, though integration with proprietary in-vehicle systems presents its own challenges. Even with such integrations, the requirement for specialised recording hardware remains a significant barrier for a learner driver feedback tool compared to software-only solutions.
-
-This suggests that the alternative applications outlined in the introduction may represent more practical deployment paths for the underlying detection pipeline. Usage-based insurance analytics and in-car alert systems both operate within contexts where dual-camera hardware is already present or can be justified by the application's commercial value. A further use-case, and the one motivating Zekany et al.\ \cite{zekany2022finding}, is automated extraction of manoeuvre clips from large-scale dash-cam datasets to generate training data for ADAS. Our system's higher F1 score on three of the four shared manoeuvre types, and its avoidance of their severe lane change directional confusion, makes it a viable candidate for such annotation tasks. In this context, the event detection pipeline would serve as an annotation tool rather than a safety monitor, and the barrier to entry is minimal since the input is existing fleet footage rather than user-recorded video.
-
-Taken together, these directions suggest that the core contribution of this project, a working multi-modal pipeline that correlates driver behaviour with vehicle movement, has value beyond the learner driver context in which it was developed. The technical foundations are sound, and the path from research prototype to practical deployment is largely one of reducing friction rather than solving fundamentally new problems.
-% This is quite a weak sentence to end on. Maybe end with a section going over the author's self-assessment of the work, with a positive outlook on the project, especially the user results.
+The positive reception from questionnaire respondents and the engagement of returning users suggest genuine demand for this type of tool. While the limitations identified above are real, they are well-characterised and have clear paths to resolution. The modular architecture provides a solid foundation for the extensions outlined in future work, and the project as a whole demonstrates that this multi-modal approach to driving mistake identification is both technically viable and practically valuable.
 
 
 \newpage

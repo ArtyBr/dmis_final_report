@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.14)  1 APR 2026 16:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.14)  2 APR 2026 15:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -664,7 +664,7 @@ File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 <title_page/warwick_uni_logo.jpg, id=4, 1824.8175pt x 740.7675pt>
 File: title_page/warwick_uni_logo.jpg Graphic file (type jpg)
 <use title_page/warwick_uni_logo.jpg>
-Package pdftex.def Info: title_page/warwick_uni_logo.jpg  used on input line 69
+Package pdftex.def Info: title_page/warwick_uni_logo.jpg  used on input line 70
 .
 (pdftex.def)             Requested size: 354.12144pt x 143.74263pt.
  [1
@@ -681,329 +681,328 @@ st/fonts/enc/dvips/base/8r.enc} <./title_page/warwick_uni_logo.jpg>] [1] [2] (.
 File: research_images/smarteye_landing.png Graphic file (type png)
 <use research_images/smarteye_landing.png>
 Package pdftex.def Info: research_images/smarteye_landing.png  used on input li
-ne 117.
+ne 114.
 (pdftex.def)             Requested size: 227.64894pt x 93.52821pt.
 <research_images/zenroad_tracking_landing.png, id=25, 1093.83656pt x 573.64313p
 t>
 File: research_images/zenroad_tracking_landing.png Graphic file (type png)
 <use research_images/zenroad_tracking_landing.png>
 Package pdftex.def Info: research_images/zenroad_tracking_landing.png  used on 
-input line 118.
+input line 115.
 (pdftex.def)             Requested size: 227.64894pt x 119.38322pt.
  [4 <./research_images/smarteye_landing.png (PNG copy)> <./research_images/zenr
-oad_tracking_landing.png (PNG copy)>] [5] [6]
-<research_images/cnn_explanation.png, id=38, 1259.70625pt x 425.59pt>
+oad_tracking_landing.png (PNG copy)>]
+<research_images/cnn_explanation.png, id=31, 1259.70625pt x 425.59pt>
 File: research_images/cnn_explanation.png Graphic file (type png)
 <use research_images/cnn_explanation.png>
 Package pdftex.def Info: research_images/cnn_explanation.png  used on input lin
-e 215.
+e 144.
 (pdftex.def)             Requested size: 505.89pt x 170.91484pt.
-<dataset_images/tusimple_lanes.jpg, id=40, 2569.6pt x 1445.4pt>
+<dataset_images/tusimple_lanes.jpg, id=33, 2569.6pt x 1445.4pt>
 File: dataset_images/tusimple_lanes.jpg Graphic file (type jpg)
 <use dataset_images/tusimple_lanes.jpg>
 Package pdftex.def Info: dataset_images/tusimple_lanes.jpg  used on input line 
-227.
+156.
 (pdftex.def)             Requested size: 227.64894pt x 128.05132pt.
-<dataset_images/culane_examples.png, id=41, 599.99156pt x 221.32687pt>
+<dataset_images/culane_examples.png, id=34, 599.99156pt x 221.32687pt>
 File: dataset_images/culane_examples.png Graphic file (type png)
 <use dataset_images/culane_examples.png>
 Package pdftex.def Info: dataset_images/culane_examples.png  used on input line
- 228.
+ 157.
 (pdftex.def)             Requested size: 227.64894pt x 83.97336pt.
- [7 <./research_images/cnn_explanation.png>]
-<research_images/kalman_vis.png, id=46, 1284.8pt x 722.7pt>
+ [5 <./research_images/cnn_explanation.png>]
+<research_images/kalman_vis.png, id=39, 1284.8pt x 722.7pt>
 File: research_images/kalman_vis.png Graphic file (type png)
 <use research_images/kalman_vis.png>
-Package pdftex.def Info: research_images/kalman_vis.png  used on input line 265
+Package pdftex.def Info: research_images/kalman_vis.png  used on input line 194
 .
 (pdftex.def)             Requested size: 379.4175pt x 213.41519pt.
- [8 <./dataset_images/tusimple_lanes.jpg> <./dataset_images/culane_examples.png
+ [6 <./dataset_images/tusimple_lanes.jpg> <./dataset_images/culane_examples.png
 >]
-<research_images/pnp.png, id=51, 602.25pt x 421.575pt>
+<research_images/pnp.png, id=45, 602.25pt x 421.575pt>
 File: research_images/pnp.png Graphic file (type png)
 <use research_images/pnp.png>
-Package pdftex.def Info: research_images/pnp.png  used on input line 278.
+Package pdftex.def Info: research_images/pnp.png  used on input line 207.
 (pdftex.def)             Requested size: 252.94499pt x 177.06029pt.
- [9 <./research_images/kalman_vis.png> <./research_images/pnp.png>]
-<research_images/optical_flow_ex.png, id=59, 1445.4pt x 657.2053pt>
+ [7 <./research_images/kalman_vis.png> <./research_images/pnp.png>]
+<research_images/optical_flow_ex.png, id=53, 1445.4pt x 657.2053pt>
 File: research_images/optical_flow_ex.png Graphic file (type png)
 <use research_images/optical_flow_ex.png>
 Package pdftex.def Info: research_images/optical_flow_ex.png  used on input lin
-e 298.
+e 225.
 (pdftex.def)             Requested size: 379.4175pt x 172.51396pt.
- [10 <./research_images/optical_flow_ex.png (PNG copy)>]
-<project_management_images/folder_structure.png, id=63, 196.48407pt x 368.87813
-pt>
-File: project_management_images/folder_structure.png Graphic file (type png)
-<use project_management_images/folder_structure.png>
-Package pdftex.def Info: project_management_images/folder_structure.png  used o
-n input line 394.
-(pdftex.def)             Requested size: 151.76854pt x 284.94885pt.
- [11 <./project_management_images/folder_structure.png (PNG copy)>]
-<driving_images/poly_drive.png, id=68, 1922.18124pt x 1082.0425pt>
+
+[8 <./research_images/optical_flow_ex.png (PNG copy)>] [9] [10]
+<driving_images/poly_drive.png, id=63, 1922.18124pt x 1082.0425pt>
 File: driving_images/poly_drive.png Graphic file (type png)
 <use driving_images/poly_drive.png>
-Package pdftex.def Info: driving_images/poly_drive.png  used on input line 413.
+Package pdftex.def Info: driving_images/poly_drive.png  used on input line 388.
 
 (pdftex.def)             Requested size: 166.43515pt x 93.68124pt.
-<driving_images/ufld_drive.png, id=69, 2428.07124pt x 1366.10374pt>
+<driving_images/ufld_drive.png, id=64, 2428.07124pt x 1366.10374pt>
 File: driving_images/ufld_drive.png Graphic file (type png)
 <use driving_images/ufld_drive.png>
-Package pdftex.def Info: driving_images/ufld_drive.png  used on input line 414.
+Package pdftex.def Info: driving_images/ufld_drive.png  used on input line 389.
 
 (pdftex.def)             Requested size: 166.43515pt x 93.63591pt.
-<driving_images/laneatt_drive.png, id=70, 1927.2pt x 1083.04625pt>
+<driving_images/laneatt_drive.png, id=65, 1927.2pt x 1083.04625pt>
 File: driving_images/laneatt_drive.png Graphic file (type png)
 <use driving_images/laneatt_drive.png>
-Package pdftex.def Info: driving_images/laneatt_drive.png  used on input line 4
-15.
+Package pdftex.def Info: driving_images/laneatt_drive.png  used on input line 3
+90.
 (pdftex.def)             Requested size: 166.43515pt x 93.52025pt.
-
+ [11]
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 432.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 407.
  [12 <./driving_images/poly_drive.png> <./driving_images/ufld_drive.png> <./dri
 ving_images/laneatt_drive.png>]
-<driving_images/car_obstruction_marsland.png, id=81, 641.39626pt x 363.3575pt>
+<driving_images/car_obstruction_marsland.png, id=80, 641.39626pt x 363.3575pt>
 File: driving_images/car_obstruction_marsland.png Graphic file (type png)
 <use driving_images/car_obstruction_marsland.png>
 Package pdftex.def Info: driving_images/car_obstruction_marsland.png  used on i
-nput line 474.
+nput line 449.
 (pdftex.def)             Requested size: 227.64894pt x 128.96231pt.
-<driving_images/car_obstruction_2.png, id=82, 641.39626pt x 363.3575pt>
+<driving_images/car_obstruction_2.png, id=81, 641.39626pt x 363.3575pt>
 File: driving_images/car_obstruction_2.png Graphic file (type png)
 <use driving_images/car_obstruction_2.png>
 Package pdftex.def Info: driving_images/car_obstruction_2.png  used on input li
-ne 475.
+ne 450.
 (pdftex.def)             Requested size: 227.64894pt x 128.96231pt.
  [13 <./driving_images/car_obstruction_marsland.png> <./driving_images/car_obst
 ruction_2.png>]
-<driving_images/house_without_grid.png, id=89, 489.83pt x 276.03125pt>
+<driving_images/house_without_grid.png, id=88, 489.83pt x 276.03125pt>
 File: driving_images/house_without_grid.png Graphic file (type png)
 <use driving_images/house_without_grid.png>
 Package pdftex.def Info: driving_images/house_without_grid.png  used on input l
-ine 497.
+ine 472.
 (pdftex.def)             Requested size: 227.64894pt x 128.2858pt.
-<driving_images/houses_with_grid.png, id=90, 489.83pt x 276.03125pt>
+<driving_images/houses_with_grid.png, id=89, 489.83pt x 276.03125pt>
 File: driving_images/houses_with_grid.png Graphic file (type png)
 <use driving_images/houses_with_grid.png>
 Package pdftex.def Info: driving_images/houses_with_grid.png  used on input lin
-e 498.
+e 473.
 (pdftex.def)             Requested size: 227.64894pt x 128.2858pt.
- [14 <./driving_images/house_without_grid.png> <./driving_images/houses_with_gr
-id.png>]
-<driving_images/tracking_without_kalman.png, id=96, 534.99875pt x 511.9125pt>
+<driving_images/tracking_without_kalman.png, id=90, 534.99875pt x 511.9125pt>
 File: driving_images/tracking_without_kalman.png Graphic file (type png)
 <use driving_images/tracking_without_kalman.png>
 Package pdftex.def Info: driving_images/tracking_without_kalman.png  used on in
-put line 511.
+put line 486.
 (pdftex.def)             Requested size: 227.64894pt x 217.82942pt.
-<driving_images/tracking_with_kalman.png, id=97, 534.99875pt x 511.9125pt>
+<driving_images/tracking_with_kalman.png, id=91, 534.99875pt x 511.9125pt>
 File: driving_images/tracking_with_kalman.png Graphic file (type png)
 <use driving_images/tracking_with_kalman.png>
 Package pdftex.def Info: driving_images/tracking_with_kalman.png  used on input
- line 512.
+ line 487.
 (pdftex.def)             Requested size: 227.64894pt x 217.82942pt.
-<driving_images/tracking_with_turn_dets.png, id=98, 722.7pt x 578.16pt>
+ [14 <./driving_images/house_without_grid.png> <./driving_images/houses_with_gr
+id.png>]
+<driving_images/tracking_with_turn_dets.png, id=97, 722.7pt x 578.16pt>
 File: driving_images/tracking_with_turn_dets.png Graphic file (type png)
 <use driving_images/tracking_with_turn_dets.png>
 Package pdftex.def Info: driving_images/tracking_with_turn_dets.png  used on in
-put line 524.
+put line 499.
 (pdftex.def)             Requested size: 227.64894pt x 182.12135pt.
-<research_images/vo_gps_comparison.png, id=99, 561.59813pt x 494.59781pt>
+<research_images/vo_gps_comparison.png, id=98, 561.59813pt x 494.59781pt>
 File: research_images/vo_gps_comparison.png Graphic file (type png)
 <use research_images/vo_gps_comparison.png>
 Package pdftex.def Info: research_images/vo_gps_comparison.png  used on input l
-ine 525.
+ine 500.
 (pdftex.def)             Requested size: 227.64894pt x 200.48459pt.
  [15 <./driving_images/tracking_without_kalman.png> <./driving_images/tracking_
-with_kalman.png>]
+with_kalman.png> <./driving_images/tracking_with_turn_dets.png> <./research_ima
+ges/vo_gps_comparison.png (PNG copy)>]
 <face_analysis_images/head_angles_graph.png, id=105, 570.13pt x 456.70625pt>
 File: face_analysis_images/head_angles_graph.png Graphic file (type png)
 <use face_analysis_images/head_angles_graph.png>
 Package pdftex.def Info: face_analysis_images/head_angles_graph.png  used on in
-put line 538.
+put line 513.
 (pdftex.def)             Requested size: 247.88887pt x 198.56804pt.
 <face_analysis_images/pca_yaw_pitch_roll.png, id=106, 571.13374pt x 456.70625pt
 >
 File: face_analysis_images/pca_yaw_pitch_roll.png Graphic file (type png)
 <use face_analysis_images/pca_yaw_pitch_roll.png>
 Package pdftex.def Info: face_analysis_images/pca_yaw_pitch_roll.png  used on i
-nput line 539.
+nput line 514.
 (pdftex.def)             Requested size: 247.88887pt x 198.2196pt.
 <driving_images/left_mirror.png, id=107, 641.39626pt x 363.3575pt>
 File: driving_images/left_mirror.png Graphic file (type png)
 <use driving_images/left_mirror.png>
-Package pdftex.def Info: driving_images/left_mirror.png  used on input line 548
+Package pdftex.def Info: driving_images/left_mirror.png  used on input line 523
 .
 (pdftex.def)             Requested size: 161.8885pt x 91.70961pt.
 <driving_images/looking_forward.png, id=108, 641.39626pt x 363.3575pt>
 File: driving_images/looking_forward.png Graphic file (type png)
 <use driving_images/looking_forward.png>
 Package pdftex.def Info: driving_images/looking_forward.png  used on input line
- 549.
+ 524.
 (pdftex.def)             Requested size: 161.8885pt x 91.70961pt.
 <driving_images/right_mirror.png, id=109, 641.39626pt x 363.3575pt>
 File: driving_images/right_mirror.png Graphic file (type png)
 <use driving_images/right_mirror.png>
-Package pdftex.def Info: driving_images/right_mirror.png  used on input line 55
-0.
+Package pdftex.def Info: driving_images/right_mirror.png  used on input line 52
+5.
 (pdftex.def)             Requested size: 161.8885pt x 91.70961pt.
- [16 <./driving_images/tracking_with_turn_dets.png> <./research_images/vo_gps_c
-omparison.png (PNG copy)> <./face_analysis_images/head_angles_graph.png> <./fac
-e_analysis_images/pca_yaw_pitch_roll.png>]
-<face_analysis_images/kmeans_clusters.png, id=114, 563.10374pt x 456.70625pt>
+<face_analysis_images/kmeans_clusters.png, id=110, 563.10374pt x 456.70625pt>
 File: face_analysis_images/kmeans_clusters.png Graphic file (type png)
 <use face_analysis_images/kmeans_clusters.png>
 Package pdftex.def Info: face_analysis_images/kmeans_clusters.png  used on inpu
-t line 561.
+t line 536.
 (pdftex.def)             Requested size: 247.88887pt x 201.04892pt.
-<face_analysis_images/svm_classification.png, id=115, 691.58376pt x 549.05125pt
+<face_analysis_images/svm_classification.png, id=111, 691.58376pt x 549.05125pt
 >
 File: face_analysis_images/svm_classification.png Graphic file (type png)
 <use face_analysis_images/svm_classification.png>
 Package pdftex.def Info: face_analysis_images/svm_classification.png  used on i
-nput line 562.
+nput line 537.
 (pdftex.def)             Requested size: 247.88887pt x 196.79538pt.
- [17 <./driving_images/left_mirror.png> <./driving_images/looking_forward.png> 
-<./driving_images/right_mirror.png> <./face_analysis_images/kmeans_clusters.png
-> <./face_analysis_images/svm_classification.png>]
-<driving_images/lanes+face.png, id=122, 1445.4pt x 813.0375pt>
+
+[16 <./face_analysis_images/head_angles_graph.png> <./face_analysis_images/pca_
+yaw_pitch_roll.png> <./driving_images/left_mirror.png> <./driving_images/lookin
+g_forward.png> <./driving_images/right_mirror.png>]
+<driving_images/lanes+face.png, id=118, 1445.4pt x 813.0375pt>
 File: driving_images/lanes+face.png Graphic file (type png)
 <use driving_images/lanes+face.png>
-Package pdftex.def Info: driving_images/lanes+face.png  used on input line 578.
+Package pdftex.def Info: driving_images/lanes+face.png  used on input line 553.
 
 (pdftex.def)             Requested size: 404.71353pt x 227.64894pt.
- [18 <./driving_images/lanes+face.png (PNG copy)>]
-<website_images/analysis_submission.png, id=127, 1116.17pt x 1083.04625pt>
+ [17 <./face_analysis_images/kmeans_clusters.png> <./face_analysis_images/svm_c
+lassification.png>] [18 <./driving_images/lanes+face.png (PNG copy)>]
+<website_images/analysis_submission.png, id=126, 992.20688pt x 853.68938pt>
 File: website_images/analysis_submission.png Graphic file (type png)
 <use website_images/analysis_submission.png>
 Package pdftex.def Info: website_images/analysis_submission.png  used on input 
-line 673.
-(pdftex.def)             Requested size: 404.71353pt x 392.70576pt.
- [19] [20 <./website_images/analysis_submission.png>]
-<website_images/audio_sync_screen.png, id=135, 804.75656pt x 680.5425pt>
+line 648.
+(pdftex.def)             Requested size: 505.89pt x 435.27162pt.
+ [19] [20 <./website_images/analysis_submission.png (PNG copy)>]
+<website_images/audio_sync_screen.png, id=133, 804.75656pt x 680.5425pt>
 File: website_images/audio_sync_screen.png Graphic file (type png)
 <use website_images/audio_sync_screen.png>
 Package pdftex.def Info: website_images/audio_sync_screen.png  used on input li
-ne 690.
+ne 665.
 (pdftex.def)             Requested size: 404.71353pt x 342.24341pt.
-<website_images/web_display_1.png, id=136, 1375.1375pt x 1159.33125pt>
+<website_images/web_display_1.png, id=134, 1375.1375pt x 1159.33125pt>
 File: website_images/web_display_1.png Graphic file (type png)
 <use website_images/web_display_1.png>
-Package pdftex.def Info: website_images/web_display_1.png  used on input line 7
-02.
+Package pdftex.def Info: website_images/web_display_1.png  used on input line 6
+77.
 (pdftex.def)             Requested size: 505.89pt x 426.48695pt.
  [21 <./website_images/audio_sync_screen.png (PNG copy)>]
-<website_images/uncalibrated_timeline.png, id=140, 1024.57782pt x 243.91125pt>
+<website_images/uncalibrated_timeline.png, id=138, 1024.57782pt x 243.91125pt>
 File: website_images/uncalibrated_timeline.png Graphic file (type png)
 <use website_images/uncalibrated_timeline.png>
 Package pdftex.def Info: website_images/uncalibrated_timeline.png  used on inpu
-t line 715.
+t line 688.
 (pdftex.def)             Requested size: 505.89pt x 120.4331pt.
  [22 <./website_images/web_display_1.png>]
-<website_images/calibrated_timeline.png, id=145, 1017.04968pt x 244.66406pt>
+<website_images/calibrated_timeline.png, id=143, 1017.04968pt x 244.66406pt>
 File: website_images/calibrated_timeline.png Graphic file (type png)
 <use website_images/calibrated_timeline.png>
 Package pdftex.def Info: website_images/calibrated_timeline.png  used on input 
-line 722.
+line 695.
 (pdftex.def)             Requested size: 505.89pt x 121.69707pt.
-<website_images/clip_editor.png, id=146, 772.8875pt x 1192.455pt>
+<website_images/clip_editor.png, id=144, 772.8875pt x 1192.455pt>
 File: website_images/clip_editor.png Graphic file (type png)
 <use website_images/clip_editor.png>
-Package pdftex.def Info: website_images/clip_editor.png  used on input line 734
+Package pdftex.def Info: website_images/clip_editor.png  used on input line 707
 .
 (pdftex.def)             Requested size: 247.88887pt x 382.44858pt.
-<website_images/point_editor.png, id=147, 772.8875pt x 1250.6725pt>
+<website_images/point_editor.png, id=145, 772.8875pt x 1250.6725pt>
 File: website_images/point_editor.png Graphic file (type png)
 <use website_images/point_editor.png>
-Package pdftex.def Info: website_images/point_editor.png  used on input line 73
-5.
+Package pdftex.def Info: website_images/point_editor.png  used on input line 70
+8.
 (pdftex.def)             Requested size: 247.88887pt x 401.12032pt.
  [23 <./website_images/uncalibrated_timeline.png (PNG copy)> <./website_images/
 calibrated_timeline.png (PNG copy)>] [24 <./website_images/clip_editor.png> <./
 website_images/point_editor.png>]
-<website_images/error_report.png, id=157, 1038.88126pt x 663.98062pt>
+<website_images/error_report.png, id=155, 1038.88126pt x 663.98062pt>
 File: website_images/error_report.png Graphic file (type png)
 <use website_images/error_report.png>
-Package pdftex.def Info: website_images/error_report.png  used on input line 75
-4.
+Package pdftex.def Info: website_images/error_report.png  used on input line 72
+7.
 (pdftex.def)             Requested size: 505.89pt x 323.32704pt.
-<website_images/admin_user_reports.png, id=158, 1068.99374pt x 550.30594pt>
+[25 <./website_images/error_report.png (PNG copy)>]
+<website_images/admin_user_reports.png, id=159, 1068.99374pt x 550.30594pt>
 File: website_images/admin_user_reports.png Graphic file (type png)
 <use website_images/admin_user_reports.png>
 Package pdftex.def Info: website_images/admin_user_reports.png  used on input l
-ine 767.
+ine 740.
 (pdftex.def)             Requested size: 505.89pt x 260.42398pt.
-<website_images/admin_user_accounts.png, id=159, 1044.15094pt x 107.65219pt>
+<website_images/admin_user_accounts.png, id=160, 1044.15094pt x 107.65219pt>
 File: website_images/admin_user_accounts.png Graphic file (type png)
 <use website_images/admin_user_accounts.png>
 Package pdftex.def Info: website_images/admin_user_accounts.png  used on input 
-line 769.
+line 742.
 (pdftex.def)             Requested size: 505.89pt x 52.15703pt.
- [25 <./website_images/error_report.png (PNG copy)>]
-<website_images/user_guide.png, id=163, 1063.72406pt x 379.4175pt>
+<website_images/user_guide.png, id=161, 1063.72406pt x 379.4175pt>
 File: website_images/user_guide.png Graphic file (type png)
 <use website_images/user_guide.png>
-Package pdftex.def Info: website_images/user_guide.png  used on input line 779.
+Package pdftex.def Info: website_images/user_guide.png  used on input line 752.
 
 (pdftex.def)             Requested size: 505.89pt x 180.44518pt.
  [26 <./website_images/admin_user_reports.png (PNG copy)> <./website_images/adm
-in_user_accounts.png (PNG copy)> <./website_images/user_guide.png (PNG copy)>] 
-[27]
-<results_images/right_turn_misclass.png, id=171, 482.55281pt x 271.0125pt>
+in_user_accounts.png (PNG copy)>] [27 <./website_images/user_guide.png (PNG cop
+y)>] [28]
+<results_images/right_turn_misclass.png, id=174, 482.55281pt x 271.0125pt>
 File: results_images/right_turn_misclass.png Graphic file (type png)
 <use results_images/right_turn_misclass.png>
 Package pdftex.def Info: results_images/right_turn_misclass.png  used on input 
-line 849.
+line 803.
 (pdftex.def)             Requested size: 247.88887pt x 139.21942pt.
-<results_images/right_turn_misclass_vo.png, id=172, 722.7pt x 578.16pt>
+<results_images/right_turn_misclass_vo.png, id=175, 722.7pt x 578.16pt>
 File: results_images/right_turn_misclass_vo.png Graphic file (type png)
 <use results_images/right_turn_misclass_vo.png>
 Package pdftex.def Info: results_images/right_turn_misclass_vo.png  used on inp
-ut line 850.
+ut line 804.
 (pdftex.def)             Requested size: 247.88887pt x 198.30972pt.
- [28] [29 <./results_images/right_turn_misclass.png (PNG copy)> <./results_imag
-es/right_turn_misclass_vo.png>]
-[30] [31] [32] [33] (./main.bbl [34] [35]) [36] (./main.aux)
+<results_images/confusion_matrices.png, id=176, 732.0951pt x 317.62665pt>
+File: results_images/confusion_matrices.png Graphic file (type png)
+<use results_images/confusion_matrices.png>
+Package pdftex.def Info: results_images/confusion_matrices.png  used on input l
+ine 812.
+(pdftex.def)             Requested size: 505.89pt x 219.49219pt.
+ [29 <./results_images/right_turn_misclass.png (PNG copy)> <./results_images/ri
+ght_turn_misclass_vo.png>] [30 <./results_images/confusion_matrices.png>] [31] 
+[32] [33]
+(./main.bbl [34] [35]) [36] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18742 strings out of 476182
- 372000 string characters out of 5795595
- 2146975 words of memory out of 5000000
- 40406 multiletter control sequences out of 15000+600000
- 579177 words of font info for 80 fonts, out of 8000000 for 9000
+ 18703 strings out of 476182
+ 371269 string characters out of 5795595
+ 2123975 words of memory out of 5000000
+ 40371 multiletter control sequences out of 15000+600000
+ 578032 words of font info for 76 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,11n,93p,1353b,1870s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,11n,93p,1393b,1872s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/arty/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0900.600p
 k> </home/arty/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
 k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/urw/helvetic/uhvr8a.pfb>
-Output written on main.pdf (37 pages, 27711028 bytes).
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/urw/helvetic/uhvr8a.pfb>
+Output written on main.pdf (37 pages, 27781353 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
- 152 compressed objects within 2 object streams
+ 291 PDF objects out of 1000 (max. 8388607)
+ 149 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  223 words of extra memory for PDF output out of 10000 (max. 10000000)
 
