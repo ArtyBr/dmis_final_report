@@ -97,7 +97,7 @@ The author wishes to express sincere gratitude to the project supervisor, Dr Gre
 \section*{Abstract}
 Driving accidents claim over 1,600 lives annually in the UK and are the leading cause of avoidable death in young people, with the majority caused by behavioural errors. Identifying and assessing these errors in context is therefore critical, yet no current system directly correlates the driver's actions with the vehicle's behaviour and road environment to assess whether the driver responded appropriately to the driving situation. This project addresses that gap by developing a multi-modal system that synchronises road-facing and driver-facing video to identify specific driving mistakes, focusing on the case of failing to check mirrors before manoeuvres. The system combines deep learning-based lane detection; a visual odometry pipeline to detect turns; and head pose estimation to determine gaze direction. A rule-based Safety Monitor cross-references detected manoeuvres against the driver's gaze history to classify each event as safe or unsafe. The pipeline is deployed through a web application featuring job submission through an online GPU cluster and an interactive results display. 
 
-Evaluated on 104 labelled manoeuvre events across approximately 350 video clips, the system achieved an F1 score of 0.81 for event detection and 92\% classification accuracy on matched events, comparing favourably with Zekany et al. on three of four manoeuvre types, noting that the evaluations differ in dataset and labelling conditions. A live deployment with six external users over four weeks produced 170 events and confirmed that the system generalises to unseen drivers, vehicles, and camera setups.
+Evaluated on 104 labelled manoeuvre events across approximately 350 video clips, the system achieved an F1 score of 0.81 for event detection and 92\% classification accuracy on matched events, comparing favourably with Zekany et al. on three of four manoeuvre types, noting that the evaluations differ in dataset and labelling conditions. A live deployment with six external users over four weeks produced 170 events, confirming that the system identifies mistakes users were not aware of.
 
 \newpage
 
@@ -232,7 +232,7 @@ VO analyses sequential camera frames to estimate the camera's local motion incre
 
 Once correspondences between keypoints are established, the Essential Matrix is computed from the matched point pairs. The Essential Matrix encodes the geometric relationship between two camera views, and can be decomposed into a rotation matrix $R$ and translation vector $t$ that describe how the camera has moved between frames. This is analogous to the PnP decomposition used in gaze estimation (Section 2.3), but operates on frame-to-frame correspondences rather than a canonical 3D model. Since this project is limited to a single dash-cam, the variant of VO used is monocular, which naturally faces scale ambiguity, meaning it can only obtain relative motion estimates, and the motion estimate is likely to drift over time. 
 
-One approach for classifying manoeuvres from VO output, introduced by Zekany et al. \cite{zekany2022finding}, involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW), a classical distance metric for time-series comparison. However, the use of a deep learning model for the VO step makes the trajectory estimation itself a black box. Since this project requires only binary left/right turn detection rather than classification of a broad range of complex manoeuvres, a simpler threshold-based approach to yaw accumulation was adopted instead, consistent with the preference for explainable methods discussed in Section 2.2. Each detection decision can be directly traced to interpretable thresholds.
+One approach for classifying manoeuvres from VO output, introduced by Zekany et al. \cite{zekany2022finding}, involves using a deep learning VO model to estimate the ego-vehicle trajectory and comparing a sliding window of this trajectory against a predefined library of reference manoeuvres using Dynamic Time Warping (DTW), a classical distance metric for time-series comparison. However, the use of a deep learning model for the VO step makes the trajectory estimation itself a black box. Since this project requires the detection of a small subset of manoeuvres, rather than classification of a broad range of complex ones, a simpler heuristic-based approach can be adopted instead, consistent with the preference for explainable methods discussed in Section 2.2. This would mean that each detection decision can be traced to interpretable thresholds.
 
 \newpage
 
@@ -256,7 +256,7 @@ Given that robust lane detection, temporal tracking, and gaze estimation methods
         \item Looking at the right mirror.
         \item Looking at the rear-view mirror.
     \end{itemize}
-    \item \textbf{FR1.5} Combine the outputs of the manoeuvre and driver behaviour models using a rule-based algorithm to identify when manoeuvres are made without a prior mirror-check.
+    \item \textbf{FR1.5} Combine the outputs of the manoeuvre detection and driver behaviour models using a rule-based algorithm to identify when manoeuvres are made without a prior mirror-check.
 \end{itemize}
 
 \subsubsection*{2. Web Interface and User Feedback (Must-Have)}
@@ -323,7 +323,7 @@ We aggregate the results from each module in a Safety Monitor class, which maint
     \node[input, below=0.8cm of road, yshift=-1.5cm] (cabin) {Driver-facing\\video};
 
     % Three parallel branches
-    \node[block, right=1.8cm of road, yshift=1cm] (lane) {LaneATT\\Detection};
+    \node[block, right=1.8cm of road, yshift=1cm] (lane) {Lane\\Detection};
     \node[block, right=0.8cm of lane] (track) {Kalman\\Tracking};
     \node[block, right=0.8cm of track] (lc) {Lane Change\\Detection};
 
@@ -380,8 +380,6 @@ Rather than training models from scratch, the project utilises pre-trained model
 \subsection{Lane Change Detection (FR1.2 \& FR1.3)}
 Lane detection allows us to represent the position of the car relative to the road, which in turn informs us of the vehicle’s movement, and specifically any manoeuvres that it performs. While the model we chose to use in the end was LaneATT, the process to come to this conclusion came with several challenges.
 
-One problem was that the datasets that are used for training models (TuSimple, CULane) contain only straight or slightly curved road examples. Because of this, roundabouts and roads with significant curvature fail to be detected. Additionally, there do not exist any specific datasets or research papers that investigate the specific case of driving on roundabouts. As such, roundabouts remain a limitation of the project.
-
 In order to establish if benchmark models would generalise to British streets and consumer hardware (dash-cams), all models were qualitatively tested on our self-collected driving dataset. Figure \ref{fig:drive_examples} displays the output on a representative frame from our dataset of 3 of the models: PolyLaneNet \cite{tabelini_polylanenet_2020}, Ultra-Fast Lane Detection (UFLD) \cite{qin2020ultra} and LaneATT \cite{tabelini2021keep}. A quantitative benchmark was infeasible, as this would require extensive manual labelling, taking time away from feature development. LaneATT was found to perform the most accurately and reliably.
 
 \begin{figure}[H]
@@ -395,7 +393,9 @@ In order to establish if benchmark models would generalise to British streets an
 
 \end{figure}
 
-A key limitation identified was the generalisability of many models to consumer dash-cam hardware, with several models showing poor performance on the self-collected dataset. A possible explanation is over-fitting to the camera parameters used during dataset collection. When tested on footage from cameras with different fields of view, warped lenses or compression artefacts, detection accuracy degraded significantly. The attention mechanism used by the LaneATT model may explain its increased robustness under these conditions, although this topic is not discussed in the literature. Specialising the models to our hardware would require manual labelling for re-training and would be impractical for a general user study, so the most generalisable model, LaneATT, was chosen for the project.
+A key limitation identified was the generalisability of many models to consumer dash-cam hardware, with several models showing poor performance on the self-collected dataset. A possible explanation is over-fitting to the camera parameters used during dataset collection. When applying these models to footage from cameras with different fields of view, warped lenses or compression artefacts, detection accuracy degrades significantly (Figures \ref{fig:drive_examples}a, \ref{fig:drive_examples}b). The attention mechanism used by the LaneATT model may explain its increased robustness under these conditions, although this topic is not discussed in the literature. Specialising the models to our hardware would require manual labelling for re-training and would be impractical for a general user study, so the most generalisable model, LaneATT, was chosen for the project.
+
+Another problem was that the datasets that are used for training models (TuSimple, CULane) contain only straight or slightly curved road examples. Because of this, roundabouts and roads with significant curvature fail to be detected. Additionally, there do not exist any specific datasets or research papers that investigate the specific case of driving on roundabouts. As such, roundabouts remain a limitation of the project.
 
 Lane tracking was implemented by storing lane information in `LaneTrack’ objects, which use a Kalman filter to store and update their state. An overall `LaneTracker’ object is responsible for matching previously stored lanes to newly detected lanes. Initially, the Hungarian algorithm \cite{kuhn1955hungarian} was used for this matching process, however it always produces a complete matching even when distances between lanes are very large. This resulted in scenarios where the system matched lanes across the entire image if a lane on the left side of the image stopped being tracked, and a new lane was detected on the right side. 
 
@@ -464,7 +464,7 @@ Two established open-source VO systems were evaluated: TartanVO \cite{wang2021ta
 
 Because the project only requires yaw-based turn detection rather than metrically accurate 3D reconstruction, a custom lightweight VO pipeline was developed instead, as suggested by the external advisor at JLR. This offered full control over each processing stage, making it straightforward to diagnose and fix failure modes as they arose, an advantage that proved critical during iterative development. Existing functions provided by the OpenCV Python library made creating this pipeline straightforward to implement. The pipeline operates by extracting and matching visual features between consecutive frames, then estimating the relative camera motion from the resulting point correspondences. 
 
-Frame-by-frame, we perform a centre crop (75\%) of the road video. The crop removes peripheral objects which otherwise introduced significant noise, such as radial lens distortion, stickers on the windscreen and the hood of the car. For each frame, a Mask R-CNN \cite{he2017mask} instance segmentation model identifies dynamic objects (cars, cyclists and pedestrians) and produces a binary mask. This masking step is essential because optical flow from moving vehicles would otherwise be interpreted as camera ego-motion, causing large errors in the estimated rotation. Early iterations without dynamic masking produced frequent false turn detections when vehicles overtook or braked ahead, as the dominant flow from these objects overwhelmed the static background signal.
+Frame-by-frame, we perform a centre crop (75\%) of the road video. The crop removes peripheral objects which otherwise introduced significant noise, such as radial lens distortion, stickers on the windscreen and the hood of the car. For each frame, a Mask R-CNN \cite{he2017mask} instance segmentation model identifies dynamic objects (cars, cyclists and pedestrians) and produces a binary mask. This masking step is essential because optical flow from moving vehicles would otherwise be interpreted as camera ego-motion, causing large errors in the estimated rotation. Early iterations without dynamic masking produced frequent false turn detections during surrounding vehicle movement while the recording car was stationary.
 
 Features are detected only on the unmasked (static) regions using a grid-based bucketing strategy, which divides the image into a $4 \times 6$ grid and runs feature tracking independently in each cell. Without bucketing, detected features would be evenly spread out through the image, with many points detected in non-feature-rich areas of the image, such as repeating textures on housing tiles and roads (Figure \ref{fig:points_houses}). In such regions, visually similar patches across consecutive frames caused incorrect point correspondences, introducing substantial noise into the tracking algorithm. When the car was stationary or moving very slowly, the noise took over the tracking and caused extremely sharp, inaccurate pose predictions.
 
@@ -478,7 +478,7 @@ Features are detected only on the unmasked (static) regions using a grid-based b
 
 \end{figure}
 
-Features are tracked between consecutive frames using Lucas-Kanade optical flow. A forward-backward consistency check \cite{kalal2010forward} is applied. This means that points are tracked forward to the current frame, then backward to the previous frame, and only matches with a re-projection error below 0.5 pixels are retained. This eliminates poorly tracked points that would otherwise introduce noise into the pose estimate, particularly near the edges of the dynamic object mask, where partial occlusions by cars and people caused errors in tracking. The essential matrix is then estimated via RANSAC \cite{fischler1981random}, and the relative rotation and translation are recovered using \texttt{cv2.recoverPose}. One major improvement was to reject pose estimations between frames which are deemed physically implausible. A common example was if the calculated rotation exceeded an unrealistic threshold ($\sim$28\textdegree\ ), which often occurred during slow-moving sequences due to still unaccounted-for sources of noise.
+Features are tracked between consecutive frames using Lucas-Kanade optical flow. A forward-backward consistency check \cite{kalal2010forward} is applied. This means that points are tracked forward to the current frame, then backward to the previous frame, and only matches with a re-projection error below 0.5 pixels are retained. This eliminates poorly tracked points that would otherwise introduce noise into the pose estimate, particularly near the edges of the dynamic object mask, where partial occlusions by cars and people caused errors in tracking. The essential matrix is then estimated via RANSAC \cite{fischler1981random}, and the relative rotation and translation are recovered using \texttt{cv2.recoverPose}. One major improvement was to reject pose estimations between frames which are deemed physically implausible. A common example was if the calculated rotation exceeded an unrealistic threshold ($\sim$28\textdegree), which often occurred during slow-moving sequences due to still unaccounted-for sources of noise.
 
 Raw pose estimates are accumulated and fused through a 12-state Kalman filter tracking position ($x, y, z$), orientation (roll, pitch, yaw) and their velocities. The Kalman filter serves two purposes: it smooths the noisy frame-to-frame VO estimates into a coherent trajectory, and it maintains a reasonable state estimate during periods where VO measurements are unreliable (Figure \ref{fig:kalman_comparison}). To achieve the latter, the measurement noise covariance is adjusted dynamically based on tracking confidence. When the vehicle is moving and tracking is successful, standard noise is applied. When the vehicle is stationary (low optical flow), higher confidence is placed on the prediction to prevent drift from noisy near-zero estimates. When the segmentation mask covers most of the frame (a ``blind'' condition occurring in heavy traffic), the filter almost entirely trusts its own prediction, as there are insufficient static features to produce a meaningful VO measurement.
 
@@ -492,7 +492,7 @@ Raw pose estimates are accumulated and fused through a 12-state Kalman filter tr
 
 \end{figure}
 
-Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetector} class. A turn event is triggered under one of two conditions: (1) the accumulated yaw exceeds 80\textdegree\ regardless of sharpness, to capture long sweeping turns such as roundabout exits; or (2) the accumulated yaw exceeds 15\textdegree\ combined with a sudden spike ($>$8\textdegree\ in a single frame), catching aggressive but more subtle manoeuvres such as roundabout exits. A straightness reset clears the accumulator if rotation remains below 0.1\textdegree/frame for 30 consecutive frames ($\sim$1 second), preventing slow drift from eventually triggering a false detection. A 60-frame cooldown after each detection prevents duplicate events from the same turn. Detected turns are classified as \texttt{LEFT} or \texttt{RIGHT} and fed into the Safety Monitor, which validates them against the driver's gaze history using the same 5-second look-back window and mirror-check rules as lane changes.
+Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetector} class. A turn event is triggered under one of two conditions: (1) the accumulated yaw exceeds 80\textdegree\ regardless of sharpness, to capture regular turns out of or into side-streets; or (2) the accumulated yaw exceeds 15\textdegree\ combined with a sudden spike ($>$8\textdegree\ in a single frame), catching aggressive but more subtle manoeuvres such as roundabout exits. A straightness reset clears the accumulator if rotation remains below 0.1\textdegree/frame for 30 consecutive frames ($\sim$1 second), preventing slow drift from eventually triggering a false detection. A 60-frame cooldown after each detection prevents duplicate events from the same turn. Detected turns are classified as \texttt{LEFT} or \texttt{RIGHT} and fed into the Safety Monitor, which validates them against the driver's gaze history using the same 5-second look-back window and mirror-check rules as lane changes.
 
 \begin{figure}[H]
 
@@ -500,7 +500,7 @@ Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetecto
 
     \subfigure[]{\includegraphics[width=0.45\textwidth]{driving_images/tracking_with_turn_dets.png}}
     \subfigure[]{\includegraphics[width=0.45\textwidth]{research_images/vo_gps_comparison.png}} 
-    \caption{(a) Turn detections from full VO pipeline. Purple and Blue stars show Right and Left turns respectively. (b) Comparison of the visual odometry estimated trajectory against a GPS trace of the same route, used to verify the VO pipeline.}
+    \caption{(a) Turn detections from full VO pipeline. Purple and blue stars show right and left turns respectively. (b) Comparison of the visual odometry estimated trajectory against a GPS trace of the same route, used to verify the VO pipeline's accuracy.}
     \label{fig:vo_gps}
 \end{figure}
 
@@ -508,6 +508,8 @@ Turn detection monitors the accumulated yaw rotation via the \texttt{TurnDetecto
 Facial landmark extraction was implemented using the InsightFace \cite{deng2019arcface} library, which was selected due to its robustness under varying lighting conditions and large face rotations. Google’s MediaPipe \cite{lugaresi2019mediapipe} was also tested, however it frequently failed to maintain landmark tracking when the face rotated too far, making it unsuitable for this application. This is likely because MediaPipe is mainly used for front-facing phone camera applications such as Snapchat filters, whereas InsightFace was designed for face recognition and tracking from sources such as CCTV footage, requiring robust tracking under more challenging conditions. 
 
 Using the landmarks extracted by InsightFace, head pose angles were calculated using the PnP algorithm. To classify discrete gaze directions, a sample video clip containing all required face directions was analysed (Figure \ref{fig:yawpitchroll_1}a). The yaw angle provided the most useful information for determining gaze direction, while pitch was found to be correlated with yaw due to the camera perspective. The estimated direction is visualised in Figure \ref{fig:gaze_examples} with a line coming from the nose.
+
+The raw angle data has three dimensions (yaw, pitch, roll), but not all contribute equally to distinguishing gaze directions. PCA was applied to project the data onto its two principal components (Figure \ref{fig:yawpitchroll_1}b), removing the least informative axis and producing tighter, more separable clusters for each gaze direction. The resulting two-dimensional representation also makes the classification boundaries easier to visualise and interpret during calibration. 
 
 \begin{figure}[H]
 
@@ -530,7 +532,7 @@ Using the landmarks extracted by InsightFace, head pose angles were calculated u
 
 \end{figure}
 
-The raw angle data has three dimensions (yaw, pitch, roll), but not all contribute equally to distinguishing gaze directions. PCA was applied to project the data onto its two principal components (Figure \ref{fig:yawpitchroll_1}b), removing the least informative axis and producing tighter, more separable clusters for each gaze direction. The resulting two-dimensional representation also makes the classification boundaries easier to visualise and interpret during calibration. Initial experiments using K-Means clustering showed poor performance for outlying and ambiguous points, with several samples from the looking ahead and left mirror classes incorrectly grouped as rear mirror (Figure \ref{fig:yawpitchroll_2}a). In practice, the region corresponding to rear mirror checks occupies a much narrower area of the feature space than the other classes. For this reason, the data was manually labelled and an SVM classifier was trained instead, resulting in significantly more reliable classification (Figure \ref{fig:yawpitchroll_2}b).
+Initial experiments using K-Means clustering showed poor performance for outlying and ambiguous points, with several samples from the looking ahead and left mirror classes incorrectly grouped as rear mirror (Figure \ref{fig:yawpitchroll_2}a). In practice, the region corresponding to rear mirror checks occupies a much narrower area of the feature space than the other classes. For this reason, the data was manually labelled and an SVM classifier was trained instead, resulting in significantly more reliable classification (Figure \ref{fig:yawpitchroll_2}b). We then compared the models by running them on another labelled video clip, confirming that the SVM model achieves higher accuracy than KMeans (95.2\% vs 82.9\%), with the majority of incorrect labels occurring from rear-mirror mis-classifications (Figure \ref{fig:face_confusion_matrices}).
 
 \begin{figure}[H]
 
@@ -539,6 +541,15 @@ The raw angle data has three dimensions (yaw, pitch, roll), but not all contribu
     \subfigure[]{\includegraphics[width=0.49\textwidth]{face_analysis_images/svm_classification.png}} 
     \caption{(a) KMeans clustering results: some points in the `looking ahead' (purple) and `left mirror' (yellow) classes are mis-classified as `rear mirror' (blue). (b) SVM classification results: points are more accurately classified, as determined by visual inspection.}
     \label{fig:yawpitchroll_2}
+
+\end{figure}
+
+\begin{figure}[H]
+
+\centering
+    \includegraphics[width=1\linewidth]{face_analysis_images/confusion_matrices.png}
+    \caption{Comparison of confusion matrices: KMeans (82.9\% accuracy), SVM (95.2\% accuracy).}
+    \label{fig:face_confusion_matrices}
 
 \end{figure}
 
@@ -906,7 +917,7 @@ Currently own a dash-cam? & 7 Yes (30\%), 16 No (70\%) \\
 Would purchase one for this app? (of 16 non-owners) & 9 Yes (56\%), 7 No (44\%) \\
 Preferred recording setup & 16 dedicated 2-in-1 (70\%), 6 phone (26\%), 1 none (4\%) \\
 Likelihood of use (1--10 scale) & Mean 6.7, Median 7 \\
-Willingness to pay (monthly) & 10 free only (43\%), 6 up to \pounds4.99 (26\%), 4 up to \pounds9.99 (17\%), 3 up to \pounds1.99 (13\%) \\
+Willingness to pay (monthly) & 10 free only (43\%), 13 from \pounds1.99 to \pounds9.99 (57\%) \\
 \hline
 \end{tabular}
 \caption{Summary of questionnaire responses ($n = 23$).}
@@ -945,6 +956,7 @@ The positive reception from questionnaire respondents (74\% scoring likelihood o
 \bibliography{progress_report_bibliography}
 
 %========== Appendices ==========%
+\newpage
 \appendix
 
 \section{Questionnaire Results}
@@ -965,7 +977,7 @@ This appendix presents the full results of the interest and feedback questionnai
 \centering
 \includegraphics[width=0.55\linewidth]{results_images/q2_dashcam.png}
 \end{figure}
-
+\newpage
 \subsection*{Q3: If you answered `No' to the previous question, would you be likely to purchase one in order to be able to use this application?}
 Answered by the 16 respondents who do not own a dash-cam.
 
