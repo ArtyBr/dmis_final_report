@@ -575,77 +575,92 @@ The web application was built to facilitate a user study and obtain general feed
 Iterative user testing was conducted in order to find the right balance between giving users enough control to calibrate and verify their results while keeping the interface intuitive. The resulting application allows users to upload their footage, which is analysed and the results presented on an interactive display with synchronised video playback and navigation to detected events.
 
 \subsubsection{Overall System and Backend Design}
-The application is designed as a Client-Server-Worker system to handle the heavy video processing requirements while keeping the UI smooth and responsive. A Python-based FastAPI server accepts requests from the React-based web app. The server offloads individual analysis work to sub-processes, which save the results on a centralised drive accessible by the server. These results can then be sent back to the web interface for viewing (Figure \ref{fig:architecture}).
+The application is designed as a Client-Server-Worker system to handle the heavy video processing requirements while keeping the UI smooth and responsive (Figure \ref{fig:architecture}). A React-based frontend communicates with a Python-based FastAPI backend running on a separate port on the same host. Users upload video footage via \texttt{POST} requests and retrieve job status and analysis results via \texttt{GET} requests. The frontend and backend are separated into distinct servers so that static asset serving does not compete with API request handling, and both run behind TLS certificates to secure user data in transit. The university's DCS large storage provides centralised storage for uploaded videos, analysis results, and the SQLite application database, ensuring all components can access the same data without requiring file transfers between machines.
 
 \begin{figure}[H]
 
 \centering
     % TIKZ DIAGRAM START
     \begin{tikzpicture}[
-        node distance=1.5cm and 1cm,
+        scale=0.78, every node/.style={transform shape},
+        node distance=1.2cm and 1.4cm,
         font=\sffamily\footnotesize,
         % Define styles for the nodes
         process/.style={rectangle, draw=black, fill=blue!10, thick, minimum width=2cm, minimum height=0.8cm, rounded corners, align=center},
         user/.style={circle, draw=black, fill=orange!20, thick, minimum size=1cm, align=center},
-        storage/.style={cylinder, shape border rotate=90, draw=black, fill=green!10, thick, aspect=0.25, minimum width=1.5cm, minimum height=1.2cm, align=center},
-        group/.style={rectangle, draw=gray, thick, dashed, inner sep=8pt, rounded corners, fill=gray!5},
+        storage/.style={cylinder, shape border rotate=90, draw=black, fill=green!10, thick, aspect=0.25, minimum width=1.8cm, minimum height=1.2cm, align=center},
+        group/.style={rectangle, draw=gray, thick, dashed, inner sep=10pt, rounded corners, fill=gray!5},
         myarrow/.style={->, >=Stealth, thick, shorten >=2pt, shorten <=2pt},
+        dualarrow/.style={<->, >=Stealth, thick, shorten >=2pt, shorten <=2pt},
         label text/.style={midway, fill=white, font=\scriptsize\itshape, text=black, inner sep=1pt}
     ]
 
-        % --- Nodes ---
+        % --- User ---
         \node[user] (user) {User};
-        \node[process, right=of user] (ui) {Web Interface};
 
-        \node[process, right=of ui] (api) {API Server};
-        \node[storage, below=of api] (db) {SQLite\\Database};
-        \node[process, right=of api] (worker) {Background\\Worker};
+        % --- Frontend ---
+        \node[process, right=1.8cm of user] (ui) {React Frontend};
 
-        % AI task nodes stacked vertically
-        \node[process, above right=1cm and 1.5cm of worker] (lanes) {Lane\\Detection};
-        \node[process, right=1.5cm of worker] (vo) {Turn\\Detection};
-        \node[process, below right=1cm and 1.5cm of worker] (face) {Face\\Analysis};
-        \node[process, right=1.5cm of vo] (report) {Safety Report};
+        % --- Backend ---
+        \node[process, right=2.5cm of ui] (api) {FastAPI\\Backend};
+
+        % --- Shared Storage (below, spanning middle) ---
+        \node[storage, below=2cm of api] (storage) {Large Video\\Storage};
+        \node[storage, left=0.8cm of storage] (db) {SQLite\\Database};
+
+        % --- SLURM cluster nodes (right side) ---
+        \node[process, right=2.5cm of api] (login) {sbatch\\Script};
+        \node[process, above right=0.8cm and 1.5cm of login] (lanes) {Lane\\Detection};
+        \node[process, right=1.5cm of login] (vo) {Turn\\Detection};
+        \node[process, below right=0.8cm and 1.5cm of login] (face) {Face\\Analysis};
+        \node[process, right=1.5cm of vo] (report) {Safety\\Report};
 
         % --- Groups ---
         \begin{scope}[on background layer]
-            \node[group, fit=(user) (ui), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:Frontend}] (frontend) {};
-            \node[group, fit=(api) (worker) (db), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:Backend}] (backend) {};
-            \node[group, fit=(lanes) (face) (vo) (report), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:AI Engine}] (ai) {};
+            \node[group, fit=(ui), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:Web Server}] (wsgroup) {};
+            \node[group, fit=(api), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:Application Server}] (asgroup) {};
+            \node[group, fit=(login) (lanes) (face) (vo) (report), label={[anchor=south west, inner sep=2pt, font=\scriptsize\bfseries]north west:GPU Cluster (SLURM)}] (slurm) {};
+            \node[group, fit=(db) (storage), label={[anchor=north west, inner sep=2pt, font=\scriptsize\bfseries]south west:DCS Large Storage}] (nfs) {};
         \end{scope}
 
         % --- Edges ---
-        \draw[myarrow] (user) -- (ui);
-        \draw[myarrow] (ui) -- (user);
+        % User <-> Frontend
+        \draw[dualarrow] (user) -- (ui) node[label text] {HTTPS};
 
-        \draw[myarrow] (ui) -- (api);
-        \draw[myarrow] (api) -- (ui);
-        \draw[myarrow] (api) -- (worker);
-        \draw[myarrow] (api) -- (db);
-        \draw[myarrow] (db) -- (api);
+        % Frontend <-> Backend (HTTP methods)
+        \draw[myarrow] ([yshift=3pt]ui.east) -- ([yshift=3pt]api.west) node[label text, above] {POST / PUT};
+        \draw[myarrow] ([yshift=-3pt]api.west) -- ([yshift=-3pt]ui.east) node[label text, below] {GET};
 
-        % 1. Worker to AI tasks
-        \draw[myarrow] (worker) -- (lanes);
-        \draw[myarrow] (worker) -- (vo);
-        \draw[myarrow] (worker) -- (face);
+        % Backend <-> Storage
+        \draw[dualarrow] (api.south) -- (storage.north) node[label text, right, pos=0.4] {Read/Write};
+        \draw[dualarrow] (api.south west) -- (db.north) node[label text, left, pos=0.4] {SQL};
 
-        % 2. AI tasks to Report
+        % Backend -> SLURM login node
+        \draw[myarrow] (api) -- (login) node[label text] {SSH};
+
+        % Login node -> GPU tasks
+        \draw[myarrow] (login) -- (lanes);
+        \draw[myarrow] (login) -- (vo);
+        \draw[myarrow] (login) -- (face);
+
+        % AI tasks -> Report
         \draw[myarrow] (lanes) -- (report);
         \draw[myarrow] (vo) -- (report);
         \draw[myarrow] (face) -- (report);
 
-        \draw[myarrow] (report.south) -- ++(0,-2cm) |- (db.east);
+        % Report -> Storage (90-degree: down then left)
+        \draw[myarrow] (report.south) |- (storage.east) node[label text, below, pos=0.2] {Results};
 
     \end{tikzpicture}
     % TIKZ DIAGRAM END
-    \caption{System Architecture Diagram showing the data flow between Frontend, Backend, and AI Workers.}
+    \caption{Deployment architecture. The frontend and backend run on the university’s shared server, communicating over HTTPS. The backend submits analysis jobs to the GPU cluster via SSH. All components share the DCS large storage for videos and the application database.}
     \label{fig:architecture}
 
 \end{figure}
 
-When the server receives a request for an analysis job, it creates a new job object in a SQLite database. This job entry can be queried by the front-end to determine the current progress of the analysis or whether any errors have occurred. The server then spawns a new Python process to complete the analysis task. By using separate processes rather than threads, the system avoids memory management-based limitations imposed by Python’s Global Interpreter Lock, allowing multiple analysis jobs to run in parallel. This design allows multiple jobs to be queued and processed without overloading the server, ensuring that the application remains responsive.
+When the server receives a request for an analysis job, it creates a new job entry in the SQLite database. This entry can be queried by the frontend to determine the current progress of the analysis or whether any errors have occurred. The server then offloads the analysis to the university’s SLURM-managed GPU cluster via an SSH tunnel, rather than running it locally, as the analysis pipeline requires GPU acceleration that is not available on the shared web server. The pipeline executes entirely on the GPU node, reading input from and writing results back to the DCS large storage. Upon completion, the safety report is generated and the database is updated, allowing the frontend to retrieve and display the results.
 
-For the user study, the application was deployed to the university’s DCS shared server infrastructure.  SLURM cluster integration was added via SSH tunnelling, allowing analysis jobs to be offloaded to the university’s GPU cluster for significantly faster processing. However, this also comes with the drawback that jobs from the application are queued alongside all other requests from university students, meaning it can take an unknown amount of time before a job is processed. To mitigate user frustration, the backend manages job submission, polls SLURM job status, and relays queue position and estimated wait times to the frontend.
+Because the application’s jobs are queued alongside all other university workloads on the shared cluster, processing times can be unpredictable. To mitigate user frustration, the backend periodically polls the SLURM queue status via SSH and relays queue position and estimated wait times to the frontend.
 
 \subsubsection{User Authentication and Account System (FR2.4)}
 The initial prototype operated without user accounts, meaning anyone with the URL could upload videos and view all results. This was acceptable during development but inadequate for real-world use, where analysis results contain sensitive footage and users need to manage their own history. A user account system was therefore added, with registration, login, and per-user access control over uploaded videos and results.
