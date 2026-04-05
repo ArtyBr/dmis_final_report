@@ -45,7 +45,7 @@ def make_pie(labels, sizes, title, filename, colors=None, use_legend=False):
 # Q1: Driver type
 make_pie(
     ['Fully licensed\ndriver', 'Current/prospective\nlearner driver'],
-    [20, 3],
+    [22, 3],
     'Q1: Driver Type',
     'q1_driver_type.png',
 )
@@ -53,7 +53,7 @@ make_pie(
 # Q2: Dash-cam ownership
 make_pie(
     ['Yes', 'No'],
-    [7, 16],
+    [7, 18],
     'Q2: Dash-cam Ownership',
     'q2_dashcam.png',
 )
@@ -61,15 +61,15 @@ make_pie(
 # Q3: Would purchase (non-owners only)
 make_pie(
     ['Yes', 'No'],
-    [9, 7],
-    'Q3: Would Purchase a Dash-cam\nfor This Application (n=16)',
+    [10, 8],
+    'Q3: Would Purchase a Dash-cam\nfor This Application (n=18)',
     'q3_purchase.png',
 )
 
 # Q4: Preferred recording setup
 make_pie(
     ['Dedicated 2-in-1 dashcam system', 'Smartphone with holder', 'Would not use a dual system'],
-    [16, 6, 1],
+    [18, 6, 1],
     'Q4: Preferred Recording Setup',
     'q4_setup.png',
     use_legend=True,
@@ -78,7 +78,7 @@ make_pie(
 # Q5: Likelihood of use (bar chart)
 fig, ax = plt.subplots(figsize=(6, 4))
 scores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-counts = [1, 0, 1, 0, 4, 4, 4, 5, 1, 3]
+counts = [1, 1, 1, 0, 4, 5, 4, 5, 1, 3]
 bars = ax.bar(scores, counts, color=plt.cm.Set2.colors[0], edgecolor='white', width=0.8)
 for bar, count in zip(bars, counts):
     if count > 0:
@@ -99,7 +99,7 @@ print('  Saved q5_likelihood.png')
 # Q8: Willingness to pay
 make_pie(
     ['Free (ad-supported)', 'Up to £1.99/mo', 'Up to £4.99/mo', 'Up to £9.99/mo'],
-    [10, 3, 6, 4],
+    [11, 3, 7, 4],
     'Q8: Maximum Willingness to Pay (Monthly)',
     'q8_willingness_to_pay.png',
     use_legend=True,
