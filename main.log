@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.14)  5 APR 2026 13:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.3.14)  5 APR 2026 13:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -899,7 +899,12 @@ File: driving_images/lanes+face.png Graphic file (type png)
 Package pdftex.def Info: driving_images/lanes+face.png  used on input line 566.
 
 (pdftex.def)             Requested size: 404.71353pt x 227.64894pt.
- [18 <./driving_images/lanes+face.png (PNG copy)>]
+
+Overfull \hbox (1.00006pt too wide) in paragraph at lines 654--656
+ [][] 
+ []
+
+[18 <./driving_images/lanes+face.png (PNG copy)>]
 <website_images/analysis_submission.png, id=128, 992.20688pt x 853.68938pt>
 File: website_images/analysis_submission.png Graphic file (type png)
 <use website_images/analysis_submission.png>
@@ -912,131 +917,129 @@ File: website_images/audio_sync_screen.png Graphic file (type png)
 <use website_images/audio_sync_screen.png>
 Package pdftex.def Info: website_images/audio_sync_screen.png  used on input li
 ne 693.
-(pdftex.def)             Requested size: 404.71353pt x 342.24341pt.
-<website_images/web_display_1.png, id=137, 1375.1375pt x 1159.33125pt>
+(pdftex.def)             Requested size: 505.89pt x 427.79907pt.
+<website_images/user_guide.png, id=137, 1063.72406pt x 379.4175pt>
+File: website_images/user_guide.png Graphic file (type png)
+<use website_images/user_guide.png>
+Package pdftex.def Info: website_images/user_guide.png  used on input line 703.
+
+(pdftex.def)             Requested size: 505.89pt x 180.44518pt.
+ [21 <./website_images/audio_sync_screen.png (PNG copy)>]
+<website_images/web_display_1.png, id=141, 1375.1375pt x 1159.33125pt>
 File: website_images/web_display_1.png Graphic file (type png)
 <use website_images/web_display_1.png>
 Package pdftex.def Info: website_images/web_display_1.png  used on input line 7
-05.
+14.
 (pdftex.def)             Requested size: 505.89pt x 426.48695pt.
-
-[21 <./website_images/audio_sync_screen.png (PNG copy)>]
-<website_images/uncalibrated_timeline.png, id=141, 1024.57782pt x 243.91125pt>
+ [22 <./website_images/user_guide.png (PNG copy)>]
+<website_images/uncalibrated_timeline.png, id=145, 1024.57782pt x 243.91125pt>
 File: website_images/uncalibrated_timeline.png Graphic file (type png)
 <use website_images/uncalibrated_timeline.png>
 Package pdftex.def Info: website_images/uncalibrated_timeline.png  used on inpu
-t line 716.
+t line 725.
 (pdftex.def)             Requested size: 505.89pt x 120.4331pt.
- [22 <./website_images/web_display_1.png>]
-<website_images/calibrated_timeline.png, id=146, 1017.04968pt x 244.66406pt>
+ [23 <./website_images/web_display_1.png>]
+<website_images/calibrated_timeline.png, id=150, 1017.04968pt x 244.66406pt>
 File: website_images/calibrated_timeline.png Graphic file (type png)
 <use website_images/calibrated_timeline.png>
 Package pdftex.def Info: website_images/calibrated_timeline.png  used on input 
-line 723.
+line 732.
 (pdftex.def)             Requested size: 505.89pt x 121.69707pt.
-<website_images/clip_editor.png, id=147, 772.8875pt x 1192.455pt>
+<website_images/clip_editor.png, id=151, 772.8875pt x 1192.455pt>
 File: website_images/clip_editor.png Graphic file (type png)
 <use website_images/clip_editor.png>
-Package pdftex.def Info: website_images/clip_editor.png  used on input line 735
+Package pdftex.def Info: website_images/clip_editor.png  used on input line 744
 .
 (pdftex.def)             Requested size: 247.88887pt x 382.44858pt.
-<website_images/point_editor.png, id=148, 772.8875pt x 1250.6725pt>
+<website_images/point_editor.png, id=152, 772.8875pt x 1250.6725pt>
 File: website_images/point_editor.png Graphic file (type png)
 <use website_images/point_editor.png>
-Package pdftex.def Info: website_images/point_editor.png  used on input line 73
-6.
+Package pdftex.def Info: website_images/point_editor.png  used on input line 74
+5.
 (pdftex.def)             Requested size: 247.88887pt x 401.12032pt.
- [23 <./website_images/uncalibrated_timeline.png (PNG copy)> <./website_images/
-calibrated_timeline.png (PNG copy)>] [24 <./website_images/clip_editor.png> <./
+ [24 <./website_images/uncalibrated_timeline.png (PNG copy)> <./website_images/
+calibrated_timeline.png (PNG copy)>] [25 <./website_images/clip_editor.png> <./
 website_images/point_editor.png>]
-<website_images/error_report.png, id=158, 1038.88126pt x 663.98062pt>
+<website_images/error_report.png, id=162, 1038.88126pt x 663.98062pt>
 File: website_images/error_report.png Graphic file (type png)
 <use website_images/error_report.png>
-Package pdftex.def Info: website_images/error_report.png  used on input line 75
-5.
+Package pdftex.def Info: website_images/error_report.png  used on input line 76
+4.
 (pdftex.def)             Requested size: 505.89pt x 323.32704pt.
- [25 <./website_images/error_report.png (PNG copy)>]
-<website_images/admin_user_reports.png, id=162, 1068.99374pt x 550.30594pt>
+<website_images/admin_user_reports.png, id=163, 1068.99374pt x 550.30594pt>
 File: website_images/admin_user_reports.png Graphic file (type png)
 <use website_images/admin_user_reports.png>
 Package pdftex.def Info: website_images/admin_user_reports.png  used on input l
-ine 768.
+ine 777.
 (pdftex.def)             Requested size: 505.89pt x 260.42398pt.
-<website_images/admin_user_accounts.png, id=163, 1044.15094pt x 107.65219pt>
+<website_images/admin_user_accounts.png, id=164, 1044.15094pt x 107.65219pt>
 File: website_images/admin_user_accounts.png Graphic file (type png)
 <use website_images/admin_user_accounts.png>
 Package pdftex.def Info: website_images/admin_user_accounts.png  used on input 
-line 770.
+line 779.
 (pdftex.def)             Requested size: 505.89pt x 52.15703pt.
-<website_images/user_guide.png, id=164, 1063.72406pt x 379.4175pt>
-File: website_images/user_guide.png Graphic file (type png)
-<use website_images/user_guide.png>
-Package pdftex.def Info: website_images/user_guide.png  used on input line 780.
-
-(pdftex.def)             Requested size: 505.89pt x 180.44518pt.
- [26 <./website_images/admin_user_reports.png (PNG copy)> <./website_images/adm
-in_user_accounts.png (PNG copy)>] [27 <./website_images/user_guide.png (PNG cop
-y)>] [28]
+ [26 <./website_images/error_report.png (PNG copy)>] [27 <./website_images/admi
+n_user_reports.png (PNG copy)> <./website_images/admin_user_accounts.png (PNG c
+opy)>] [28]
 <results_images/right_turn_misclass.png, id=177, 482.55281pt x 271.0125pt>
 File: results_images/right_turn_misclass.png Graphic file (type png)
 <use results_images/right_turn_misclass.png>
 Package pdftex.def Info: results_images/right_turn_misclass.png  used on input 
-line 831.
+line 828.
 (pdftex.def)             Requested size: 247.88887pt x 139.21942pt.
 <results_images/right_turn_misclass_vo.png, id=178, 722.7pt x 578.16pt>
 File: results_images/right_turn_misclass_vo.png Graphic file (type png)
 <use results_images/right_turn_misclass_vo.png>
 Package pdftex.def Info: results_images/right_turn_misclass_vo.png  used on inp
-ut line 832.
+ut line 829.
 (pdftex.def)             Requested size: 247.88887pt x 198.30972pt.
 <results_images/confusion_matrices.png, id=179, 732.0951pt x 317.62665pt>
 File: results_images/confusion_matrices.png Graphic file (type png)
 <use results_images/confusion_matrices.png>
 Package pdftex.def Info: results_images/confusion_matrices.png  used on input l
-ine 840.
+ine 837.
 (pdftex.def)             Requested size: 505.89pt x 219.49219pt.
  [29 <./results_images/right_turn_misclass.png (PNG copy)> <./results_images/ri
-ght_turn_misclass_vo.png>] [30 <./results_images/confusion_matrices.png>] [31] 
-[32] [33] (./main.bbl [34] [35]) [36]
+ght_turn_misclass_vo.png> <./results_images/confusion_matrices.png>] [30] [31] 
+[32]
+[33] (./main.bbl [34] [35]) [36]
 <results_images/q1_driver_type.png, id=210, 433.62pt x 361.35pt>
 File: results_images/q1_driver_type.png Graphic file (type png)
 <use results_images/q1_driver_type.png>
 Package pdftex.def Info: results_images/q1_driver_type.png  used on input line 
-986.
+980.
 (pdftex.def)             Requested size: 278.24104pt x 231.88075pt.
 <results_images/q2_dashcam.png, id=211, 433.62pt x 361.35pt>
 File: results_images/q2_dashcam.png Graphic file (type png)
 <use results_images/q2_dashcam.png>
-Package pdftex.def Info: results_images/q2_dashcam.png  used on input line 993.
+Package pdftex.def Info: results_images/q2_dashcam.png  used on input line 987.
 
 (pdftex.def)             Requested size: 278.24104pt x 231.88075pt.
-
-[37 <./results_images/q1_driver_type.png> <./results_images/q2_dashcam.png>]
+ [37 <./results_images/q1_driver_type.png> <./results_images/q2_dashcam.png>]
 <results_images/q3_purchase.png, id=217, 433.62pt x 361.35pt>
 File: results_images/q3_purchase.png Graphic file (type png)
 <use results_images/q3_purchase.png>
-Package pdftex.def Info: results_images/q3_purchase.png  used on input line 100
-1.
+Package pdftex.def Info: results_images/q3_purchase.png  used on input line 995
+.
 (pdftex.def)             Requested size: 278.24104pt x 231.88075pt.
 <results_images/q4_setup.png, id=218, 433.62pt x 397.485pt>
 File: results_images/q4_setup.png Graphic file (type png)
 <use results_images/q4_setup.png>
-Package pdftex.def Info: results_images/q4_setup.png  used on input line 1008.
+Package pdftex.def Info: results_images/q4_setup.png  used on input line 1002.
 (pdftex.def)             Requested size: 278.24104pt x 255.06882pt.
 <results_images/q5_likelihood.png, id=219, 433.62pt x 289.08pt>
 File: results_images/q5_likelihood.png Graphic file (type png)
 <use results_images/q5_likelihood.png>
 Package pdftex.def Info: results_images/q5_likelihood.png  used on input line 1
-015.
+009.
 (pdftex.def)             Requested size: 354.12144pt x 236.09435pt.
-
-[38 <./results_images/q3_purchase.png> <./results_images/q4_setup.png>]
-[39 <./results_images/q5_likelihood.png>]
+ [38 <./results_images/q3_purchase.png> <./results_images/q4_setup.png>] [39 <.
+/results_images/q5_likelihood.png>]
 <results_images/q8_willingness_to_pay.png, id=229, 433.62pt x 397.485pt>
 File: results_images/q8_willingness_to_pay.png Graphic file (type png)
 <use results_images/q8_willingness_to_pay.png>
 Package pdftex.def Info: results_images/q8_willingness_to_pay.png  used on inpu
-t line 1054.
+t line 1048.
 (pdftex.def)             Requested size: 278.24104pt x 255.06882pt.
  [40 <./results_images/q8_willingness_to_pay.png>] (./main.aux)
  ***********
@@ -1045,13 +1048,13 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18956 strings out of 476182
- 376368 string characters out of 5795595
+ 18955 strings out of 476182
+ 376357 string characters out of 5795595
  2093975 words of memory out of 5000000
- 40616 multiletter control sequences out of 15000+600000
+ 40615 multiletter control sequences out of 15000+600000
  578381 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,11n,93p,1393b,1872s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,11n,93p,1353b,1872s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/arty/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0900.600p
 k> </home/arty/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
 k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
@@ -1071,7 +1074,7 @@ xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/urw/helvetic/uhvr8a.pfb>
-Output written on main.pdf (41 pages, 28158556 bytes).
+Output written on main.pdf (41 pages, 28157371 bytes).
 PDF statistics:
  323 PDF objects out of 1000 (max. 8388607)
  160 compressed objects within 2 object streams
