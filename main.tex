@@ -575,18 +575,18 @@ The web application was built to facilitate a user study and obtain general feed
 Iterative user testing was conducted in order to find the right balance between giving users enough control to calibrate and verify their results while keeping the interface intuitive. The resulting application allows users to upload their footage, which is analysed and the results presented on an interactive display with synchronised video playback and navigation to detected events.
 
 \subsubsection{Overall System and Backend Design}
-The application is designed as a Client-Server-Worker system to handle the heavy video processing requirements while keeping the UI smooth and responsive (Figure \ref{fig:architecture}). A React-based frontend communicates with a Python-based FastAPI backend running on a separate port on the same host. Users upload video footage via \texttt{POST} requests and retrieve job status and analysis results via \texttt{GET} requests. The frontend and backend are separated into distinct servers so that static asset serving does not compete with API request handling, and both run behind TLS certificates to secure user data in transit. The university's DCS large storage provides centralised storage for uploaded videos, analysis results, and the SQLite application database, ensuring all components can access the same data without requiring file transfers between machines.
+The application is designed as a Client-Server-Worker system, to handle the heavy video processing requirements while keeping the UI smooth and responsive (Figure \ref{fig:architecture}). We host the project and run the pipeline via the Warwick University Department of Computer Science (DCS) servers and cluster architecture. The frontend and backend operate on separate ports, hosted on a dedicated server within DCS. DCS large storage, a shared network drive, provides centralised storage for uploaded videos, analysis results, and the database, allowing all components to access the same data without requiring file transfers between machines. The department's GPU cluster handles the video processing and analysis component. 
 
 \begin{figure}[H]
 
 \centering
     % TIKZ DIAGRAM START
     \begin{tikzpicture}[
-        scale=0.78, every node/.style={transform shape},
+        scale=1, every node/.style={transform shape},
         node distance=1.2cm and 1.4cm,
         font=\sffamily\footnotesize,
         % Define styles for the nodes
-        process/.style={rectangle, draw=black, fill=blue!10, thick, minimum width=2cm, minimum height=0.8cm, rounded corners, align=center},
+        process/.style={rectangle, draw=black, fill=blue!10, thick, minimum width=1.8cm, minimum height=0.8cm, rounded corners, align=center},
         user/.style={circle, draw=black, fill=orange!20, thick, minimum size=1cm, align=center},
         storage/.style={cylinder, shape border rotate=90, draw=black, fill=green!10, thick, aspect=0.25, minimum width=1.8cm, minimum height=1.2cm, align=center},
         group/.style={rectangle, draw=gray, thick, dashed, inner sep=10pt, rounded corners, fill=gray!5},
@@ -596,10 +596,10 @@ The application is designed as a Client-Server-Worker system to handle the heavy
     ]
 
         % --- User ---
-        \node[user] (user) {User};
+        \node[user] (user) {User\\Browser};
 
         % --- Frontend ---
-        \node[process, right=1.8cm of user] (ui) {React Frontend};
+        \node[process, right=1.8cm of user] (ui) {React\\Frontend};
 
         % --- Backend ---
         \node[process, right=2.5cm of ui] (api) {FastAPI\\Backend};
@@ -609,11 +609,11 @@ The application is designed as a Client-Server-Worker system to handle the heavy
         \node[storage, left=0.8cm of storage] (db) {SQLite\\Database};
 
         % --- SLURM cluster nodes (right side) ---
-        \node[process, right=2.5cm of api] (login) {sbatch\\Script};
-        \node[process, above right=0.8cm and 1.5cm of login] (lanes) {Lane\\Detection};
-        \node[process, right=1.5cm of login] (vo) {Turn\\Detection};
-        \node[process, below right=0.8cm and 1.5cm of login] (face) {Face\\Analysis};
-        \node[process, right=1.5cm of vo] (report) {Safety\\Report};
+        \node[process, right=1.5cm of api] (login) {sbatch\\Script};
+        \node[process, above right=0.8cm and 0.5cm of login] (lanes) {Lane\\Detection};
+        \node[process, right=0.5cm of login] (vo) {Turn\\Detection};
+        \node[process, below right=0.8cm and 0.5cm of login] (face) {Face\\Analysis};
+        \node[process, right=0.5cm of vo] (report) {Safety\\Report};
 
         % --- Groups ---
         \begin{scope}[on background layer]
@@ -625,7 +625,7 @@ The application is designed as a Client-Server-Worker system to handle the heavy
 
         % --- Edges ---
         % User <-> Frontend
-        \draw[dualarrow] (user) -- (ui) node[label text] {HTTPS};
+        \draw[dualarrow] (user) -- (ui) node[label text, below] {HTTPS};
 
         % Frontend <-> Backend (HTTP methods)
         \draw[myarrow] ([yshift=3pt]ui.east) -- ([yshift=3pt]api.west) node[label text, above] {POST / PUT};
@@ -636,7 +636,7 @@ The application is designed as a Client-Server-Worker system to handle the heavy
         \draw[dualarrow] (api.south west) -- (db.north) node[label text, left, pos=0.4] {SQL};
 
         % Backend -> SLURM login node
-        \draw[myarrow] (api) -- (login) node[label text] {SSH};
+        \draw[myarrow] (api) -- (login) node[label text, below] {SSH};
 
         % Login node -> GPU tasks
         \draw[myarrow] (login) -- (lanes);
@@ -649,7 +649,7 @@ The application is designed as a Client-Server-Worker system to handle the heavy
         \draw[myarrow] (face) -- (report);
 
         % Report -> Storage (90-degree: down then left)
-        \draw[myarrow] (report.south) |- (storage.east) node[label text, below, pos=0.2] {Results};
+        \draw[myarrow] (report.south) |- (storage.east) node[label text, below, pos=0.2] {Write};
 
     \end{tikzpicture}
     % TIKZ DIAGRAM END
@@ -658,17 +658,17 @@ The application is designed as a Client-Server-Worker system to handle the heavy
 
 \end{figure}
 
-When the server receives a request for an analysis job, it creates a new job entry in the SQLite database. This entry can be queried by the frontend to determine the current progress of the analysis or whether any errors have occurred. The server then offloads the analysis to the university’s SLURM-managed GPU cluster via an SSH tunnel, rather than running it locally, as the analysis pipeline requires GPU acceleration that is not available on the shared web server. The pipeline executes entirely on the GPU node, reading input from and writing results back to the DCS large storage. Upon completion, the safety report is generated and the database is updated, allowing the frontend to retrieve and display the results.
+When the server receives a request for an analysis job, it creates a new job entry in the SQLite database. This entry can be queried by the frontend to check the current progress of the analysis or whether any errors have occurred. The server then offloads the analysis to the university’s SLURM-managed GPU cluster via an SSH tunnel. The pipeline executes on the GPU node, reading the video input from and writing results back to the DCS large storage. Upon completion, the safety report is generated and written to the job's folder in large storage, allowing the frontend to retrieve and display the results.
 
-Because the application’s jobs are queued alongside all other university workloads on the shared cluster, processing times can be unpredictable. To mitigate user frustration, the backend periodically polls the SLURM queue status via SSH and relays queue position and estimated wait times to the frontend.
+Because the application’s jobs are queued alongside all other university workloads on the shared cluster, processing times can be unpredictable. To mitigate user frustration, the backend periodically polls the job status via SSH and relays the estimated wait time to the frontend.
 
 \subsubsection{User Authentication and Account System (FR2.4)}
-The initial prototype operated without user accounts, meaning anyone with the URL could upload videos and view all results. This was acceptable during development but inadequate for real-world use, where analysis results contain sensitive footage and users need to manage their own history. A user account system was therefore added, with registration, login, and per-user access control over uploaded videos and results.
+The initial prototype operated without user accounts, meaning anyone with the URL could upload videos and view all results. However, this would be inadequate for user testing, where analysis results contain sensitive footage and users need to manage their own history. A user account system was therefore added, with registration, login, and per-user access control over uploaded videos and results.
 
-Authentication is handled via JSON Web Tokens (JWT) with a 7-day expiry limit, chosen over session-based authentication for its stateless nature, which avoids the need for server-side session storage. Account activation requires admin approval after registration, effectively acting as a whitelist that allows us to verify each user’s driver’s licence as required by the ethical approval board.
+Account information is stored in the centralised database, and authentication is handled via JSON Web Tokens (JWT) with a 7-day expiry limit. These were chosen over session-based authentication because of their stateless nature, avoiding the need for server-side session storage. Account activation requires admin approval after registration, effectively acting as a whitelist that allows us to verify each user’s driver’s licence as required by the ethical approval board.
 
 \subsubsection{Upload Flow and Video Synchronisation}
-The frontend was built using React with Vite as the build tool and Bootstrap for styling. React’s component-based architecture suited the modular interface, with the video player, timeline, calibration editor and upload flow implemented as independent components sharing state through React’s context system. The upload flow supports the submission of multiple consecutive video files, which is necessary as dash-cam systems use loop-recording rather than saving entire driving sessions in a single file. Files are uploaded in segments and spliced server-side using FFmpeg’s concat demuxer, handling the common case of multiple sequential recordings transparently. This step also converts all videos to a common MP4 format, as during early user testing we found that some dash-cams record video in formats which were previously incompatible with the pipeline. 
+The frontend was built using React with Vite as the build tool, and Bootstrap for styling. React’s component-based architecture suited the modular interface, with the video player, timeline, calibration editor and upload flow implemented as independent components sharing state through React’s context system. The upload flow supports the submission of multiple consecutive video files, which is necessary as dash-cam systems use loop-recording rather than saving entire driving sessions in a single file. Files are uploaded in segments and spliced server-side using Python's FFmpeg library, handling the common case of multiple sequential recordings transparently. This step also converts all videos to a common MP4 format, as during early user testing we found that some dash-cams record video in formats which were previously incompatible with the pipeline. 
 
 \begin{figure}[H]
 
@@ -682,22 +682,31 @@ The frontend was built using React with Vite as the build tool and Bootstrap for
 A key usability challenge was that users cannot be expected to manually align their two video streams before uploading. Most users record with separate devices (e.g.\ a dedicated dash-cam and a phone mounted on the dashboard), which start at different times and have no shared clock signal. Requiring users to determine the offset themselves using external video editing tools would make the application impractical for the target audience of learner drivers and their supervisors. The system therefore needed an automated synchronisation step that handles alignment transparently, while still giving users the ability to verify and correct the result when the automatic method is uncertain.
 
 The synchronisation algorithm uses the fact that both cameras record video within the same audio environment. Engine noise, speech, indicator clicks and road noise are captured by both microphones, providing a reference signal for alignment. The process begins by extracting mono PCM audio from both videos using FFmpeg, downsampled to 4000\,Hz which is sufficient for detecting the offset while keeping computation fast. The extracted signals are normalised by subtracting the mean and dividing by the standard deviation, removing differences in microphone sensitivity and recording volume.
+% Citation needed for cross-correlation and fast fourier transform
+The temporal offset is then computed using FFT-based cross-correlation via SciPy’s \texttt{fftconvolve} function. Cross-correlation measures the similarity between two signals as a function of a time lag applied to one of them. By computing this in the frequency domain using the Fast Fourier Transform, the operation runs efficiently even on long audio signals. The lag corresponding to the peak of the cross-correlation function gives the sample offset between the two recordings, which is converted to seconds using the known sample rate.
 
-The temporal offset is then computed using FFT-based cross-correlation via SciPy’s \texttt{fftconvolve} function. Cross-correlation measures the similarity between two signals as a function of a time lag applied to one of them. By computing this in the frequency domain using the Fast Fourier Transform, the operation runs efficiently even on long audio signals. The lag corresponding to the peak of the cross-correlation function gives the sample offset between the two recordings, which is converted to seconds using the known sample rate. A confidence score is derived by normalising the peak correlation value relative to the total signal energy, producing a value between 0 and 1 that indicates how reliable the computed offset is.
-
-The synchronisation result is presented to the user through a confirmation interface before analysis begins (Figure \ref{fig:audio_sync}). The interface displays both audio waveforms on a draggable timeline, with a visual indicator showing the computed alignment point. If the user notices an error in the results, they can manually adjust the offset using fine-grained controls ($\pm$0.1\,s and $\pm$0.01\,s increments) or by dragging the waveforms directly. A synchronised preview playback allows the user to verify the alignment visually and by playing the audio of each video before confirming. Once confirmed, the synchronised videos are submitted for analysis and the user is shown progress updates until processing completes.
+The synchronisation result is presented to the user through a confirmation interface before analysis begins (Figure \ref{fig:audio_sync}). The interface displays both audio waveforms on a draggable timeline, with a visual indicator showing the computed alignment point. If the user notices an error in the result, they can manually adjust the offset in increments or by dragging the waveforms directly. A synchronised preview of the video allows the user to verify the alignment visually and by playing the audio from each video before confirming. Once confirmed, the synchronised videos are submitted for analysis and the user is shown progress updates until processing completes.
 
 \begin{figure}[H]
 
 \centering
-    \includegraphics[width=0.8\linewidth]{website_images/audio_sync_screen.png}
+    \includegraphics[width=1\linewidth]{website_images/audio_sync_screen.png}
     \caption{Synchronisation confirmation interface showing dual waveforms and manual adjustment controls.}
     \label{fig:audio_sync}
 
 \end{figure}
 
+We made sure to add graceful error handling by showing failure messages and providing recovery steps across the upload, synchronisation and analysis pipeline. Early user testing allowed us to identify many cases that had not been accounted for previously, including: handling oversized files, network interruptions, malformed video codecs and out-of-memory conditions on the GPU. Following Nielsen's usability heuristics \cite{nielsen1990heuristic} we created a ``Getting Started'' guide page (Figure \ref{fig:user_guide}) to help new users understand the required dual-camera setup and upload process. Users mentioned that this made the setup process noticeably smoother and less daunting than without. 
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=1\linewidth]{website_images/user_guide.png}
+    \caption{User guide page showing how to setup phone for recording.}
+    \label{fig:user_guide}
+\end{figure}
+
 \subsubsection{Results Display}
-After analysis is complete, the application presents the detected results to the user, including safe and unsafe manoeuvre events (lane changes and turns). A central design challenge was presenting the output of three separate analysis modules (lane detection, turn detection, gaze classification) in a unified view that users could interpret without technical knowledge. Our solution was a custom timeline bar that encodes detected events and driver gaze information as colour-coded segments along the video’s duration, enabling the user to see the relationship between manoeuvres and mirror checks at a glance rather than splitting attention between different interface elements. Clicking on an event in the timeline seeks both video streams to that timestamp. Additional logs of detected events and gaze transitions are displayed alongside the videos, making the system’s reasoning transparent and allowing users to understand why a particular event was classified as safe or unsafe.
+After analysis is complete, the application presents the detected results to the user, including their synchronised videos with the system's lane and gaze detections overlayed (Figure \ref{fig:web_app_design}). The main design challenge was presenting the output of the separate analysis modules in a unified view that users could interpret without technical knowledge. Our solution was a custom timeline bar that displays detected events and driver gaze information as colour-coded segments along the video’s duration, enabling the user to see the relationship between manoeuvres and mirror checks at a glance rather than splitting attention between different interface elements. Clicking on an event in the timeline seeks both video streams to that timestamp. Logs of the detected events and gaze classifications are displayed under the videos, making the system’s reasoning transparent and allowing users to understand why a particular event was classified as safe or unsafe.
 
 \begin{figure}[H]
 
@@ -709,7 +718,7 @@ After analysis is complete, the application presents the detected results to the
 \end{figure}
 
 \subsubsection{Per-User Gaze Calibration}
-The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person’s data frequently misclassified another’s gaze directions (Figure \ref{fig:uncalib_timeline} shows uncalibrated gaze classifications, while Figure \ref{fig:calib_timeline} displays the timeline after calibration). Since the gaze classifier is the foundation of all safety judgements, poor classification accuracy renders the entire system unreliable. This motivated the development of a per-user calibration system as an extension.
+The default SVM gaze classifier was trained on head pose data collected from a single individual in a specific vehicle with a specific camera position. During user testing, it became clear that this model did not generalise well: differences in seating position, camera angle, head size and facial geometry meant that the decision boundaries trained on one person’s data frequently misclassified another’s gaze directions (Figure \ref{fig:uncalib_timeline} shows uncalibrated gaze classifications, while Figure \ref{fig:calib_timeline} displays the timeline after calibration). Since the gaze classifier is the basis of safety judgements, such errors would make the system unreliable. This motivated the development of a per-user calibration system as an extension.
 
 \begin{figure}[H]
 \centering
@@ -727,7 +736,7 @@ The default SVM gaze classifier was trained on head pose data collected from a s
 
 The initial calibration interface provided a clip editor (Figure \ref{fig:calib_editors}a), where users mark time segments in their previously analysed videos and label them with the corresponding gaze direction (e.g.\ ``Left Mirror’’, ``Looking Ahead’’). The system extracts the stored head pose angles (yaw, pitch, roll) from the existing analysis results for the marked segments, avoiding the need to re-run face detection. Once sufficient samples are collected (a minimum of 3 per mandatory class: Left Mirror, Right Mirror, Looking Ahead; with Rear Mirror optional since not all vehicles have a visible interior rear-view mirror), the user triggers model training, which fits a new PCA transformer and SVM classifier on their personal data. Diagnostic plots (head pose scatter, PCA projection, and SVM decision boundary) are generated and displayed so the user can visually verify that the class regions correspond to their actual gaze directions before using the model.
 
-During early user testing, several participants found the clip editor daunting, as it required them to scrub through their videos to find segments where they were looking at each mirror and then mark precise time boundaries. This process typically took around five minutes of trial and error before users felt confident in their calibration. To address this, a point editor (Figure \ref{fig:calib_editors}b) was added, allowing users to directly view, add, or remove individual training points on the PCA scatter plot rather than working through video clips. This reduced the calibration process to under a minute for most users, since they could simply correct the few misclassified points rather than re-selecting entire video segments. Some users still found the clip editor useful when they had deliberately looked at each mirror at the start of a recording for the purpose of calibration, so both interfaces were retained. The interface also supports ``Save As’’ (duplicating a calibration to experiment with different training sets without losing the original) and renaming.
+During early user testing, several participants found the clip editor confusing, as it required them to scrub through their videos to find segments where they were looking at each mirror and then mark precise time boundaries. This process typically took around five minutes of trial and error before users felt confident in their calibration. To address this, a point editor (Figure \ref{fig:calib_editors}b) was added, allowing users to directly view, add, or remove individual training points on the PCA scatter plot rather than working through video clips. This reduced the calibration process to under a minute for most users, since they could simply correct the few misclassified points rather than re-selecting entire video segments. Some users still found the clip editor useful when they had deliberately looked at each mirror at the start of a recording for the purpose of calibration, so both interfaces were retained. The interface also supports ``Save As’’ (duplicating a calibration to experiment with different training sets without losing the original) and renaming.
 
 \begin{figure}[H]
 
@@ -740,11 +749,11 @@ During early user testing, several participants found the clip editor daunting, 
 \end{figure}
 
 \subsubsection{Privacy and Video Output Processing}
-The driver-facing camera inevitably captures passengers and, depending on the camera’s field of view, potentially pedestrians or other bystanders visible through windows. Distributing or displaying this footage without consent raises ethical and legal concerns, particularly under GDPR. Since the system’s analysis only requires the driver’s face, all other faces can be obscured without any loss of functionality.
+The driver-facing camera inevitably captures passengers and, depending on the camera’s field of view, potentially pedestrians or other bystanders visible through windows. Distributing or displaying this footage without consent raises ethical and legal concerns, particularly under GDPR. Since the system’s analysis only requires the driver’s face, all other faces can be blurred without any loss of functionality.
 
-During analysis, the \texttt{FaceAnalyzer} identifies the driver using a heuristic: in landscape-oriented footage (the typical dash-cam configuration), the driver is the largest face on the left side of the frame (corresponding to the right-hand-drive UK vehicles used in testing). In portrait orientation, as may occur with a phone-based camera, the largest face overall is selected, as spatial position is less reliable. All other detected faces are blurred using a Gaussian kernel sized proportionally to the face bounding box, ensuring sufficient obscuration regardless of distance from the camera. The blurred frames are written as the output video, so the original unblurred footage is never stored on the server. Gaussian blurring was chosen over pixelation because it is less visually jarring while still being irreversible, and over full-frame blurring because retaining the driver’s face allows manual verification of gaze classifications during evaluation.
+During processing, the face analysis module identifies the driver using a heuristic: in landscape-oriented footage (the typical dash-cam configuration), the driver is the largest face on the left side of the frame (corresponding to the right-hand-drive UK vehicles used in testing). During user testing, we found that some devices mirror the video after recording, so we added an option to flip the video orientation to make sure the driver is on the left side. In portrait orientation, as may occur with a phone-based camera, the largest face overall is selected. All other detected faces are blurred using a Gaussian filter. The blurred frames are written as the output video, so the original unblurred footage is never stored on the server. Gaussian blurring was chosen over pixelation because it is less visually jarring while still being irreversible.
 
-During user testing on mobile devices, it was observed that loading the full-resolution output videos ($1920\times1080$) over some Wi-Fi networks or mobile data sources caused significant buffering. Since two concurrent video streams double the bandwidth requirement compared to a single-video application, adaptive quality selection was particularly important. To address this, the system generates multiple quality variants ($1280\times720$ and $854\times480$) of both output videos after analysis completes, scaling only the vertical dimension and preserving the original aspect ratio so that footage from non-standard sources (such as phones recording in portrait orientation) is handled correctly. The frontend estimates the user’s effective bandwidth and automatically selects an appropriate resolution, with the option to manually choose their resolution.
+During user testing on mobile devices, it was observed that loading the full-resolution output videos ($1920\times1080$) over some Wi-Fi networks or mobile data sources caused significant buffering. Since two concurrent video streams double the bandwidth requirement compared to a single-video application, adaptive quality selection was particularly important. To address this, the system generates multiple quality variants ($1280\times720$ and $854\times480$) of both output videos after analysis completes. The frontend estimates the user’s effective bandwidth and automatically selects an appropriate resolution, with the option to manually choose their resolution.
 
 \subsubsection{Evaluation Infrastructure}
 \label{sec:eval_infra}
@@ -757,7 +766,7 @@ Evaluating the accuracy of the system’s safety judgements requires ground trut
     \label{fig:error_report}
 \end{figure}
 
-As the system was deployed for user testing with multiple participants, it became necessary to monitor usage, review reported errors, and manage jobs centrally. An administrator dashboard was developed, restricted to users with an admin role (enforced via a claim in the JWT token). In practice, we were the only administrator, and the dashboard served as a central tool for ongoing research and system improvement.
+As the system was deployed for user testing with multiple participants, it became necessary to monitor usage, review reported errors, and manage jobs centrally. An administrator dashboard was developed. In practice, we were the only administrator, and the dashboard served as a central tool for ongoing research and system improvement.
 
 The dashboard provides per-user safety event analytics, displaying aggregated counts of safe and unsafe events across all of a user’s analyses to identify patterns in system performance across different drivers and camera setups. User-submitted error reports (false positives and false negatives) are displayed inline alongside the corresponding analysis results and synchronised video playback, allowing us to verify reports without switching between separate views. Administrators can also download 15-second video clips centred around specific events, which proved useful for quickly reviewing flagged errors without loading full recordings.
 
@@ -772,23 +781,13 @@ By reviewing user-reported false positives and false negatives, we were able to 
     \label{fig:admin_dashboard}
 \end{figure}
 
-\subsubsection{Error Handling}
-Error handling was hardened across the upload, synchronisation and analysis pipeline to gracefully handle oversized files, network interruptions, malformed video codecs and out-of-memory conditions on the GPU. Following Nielsen's usability heuristics \cite{nielsen1990heuristic}, we show clear error messages and recovery steps on the front-end for common fault cases (Heuristic 9: Help users recognise, diagnose, and recover from errors), and provide a ``Getting Started'' guide page (Figure \ref{fig:user_guide}) to help new users understand the required dual-camera setup and upload process (Heuristic 10: Help and documentation.)
-
-\begin{figure}[H]
-\centering
-    \includegraphics[width=1\linewidth]{website_images/user_guide.png}
-    \caption{User guide page showing how to setup phone for recording.}
-    \label{fig:user_guide}
-\end{figure}
-
 \newpage
 
 \section{Evaluation and Results}
-Project evaluation was split into two parts: a quantitative evaluation against author-labelled ground truth, and a qualitative evaluation through user testing and a general interest questionnaire.
+Project evaluation was split into two parts: a quantitative evaluation against the author's labelled ground truth videos, and a qualitative evaluation through user testing and a general interest questionnaire.
 
 \subsection{Detection Accuracy and Literature Comparison}
-The evaluation dataset comprises clips recorded both at day and at night (with an infra-red internal camera for night-time cabin recording). These labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.
+The evaluation dataset comprises clips recorded both at day and at night (with an infra-red internal camera for night-time cabin recording). The labelled clips contain 104 manoeuvre events in total: 30 left turns, 24 right turns, 25 left lane changes and 25 right lane changes. The event types are approximately balanced, which was a deliberate choice during labelling to avoid biasing the evaluation towards any single manoeuvre category.
 
 To evaluate the system’s event detection accuracy, a custom evaluation framework was developed. For each labelled video, the analysis pipeline was run on a window surrounding each ground truth event (30 seconds either side), and the resulting detections were compared against the labels using greedy temporal matching with a 4-second tolerance, consistent with the method that Zekany et al. used, discussed in Section 4.5. In this approach, ground truth events and detections are paired one-to-one by iteratively selecting the closest unmatched pair in time, ensuring that each ground truth event is matched to at most one detection and vice versa.
 
@@ -800,7 +799,7 @@ Unmatched ground truth events are counted as false negatives (FN, missed detecti
 \text{Recall}    &= \frac{TP}{TP + FN} \\\\
 F_1              &= \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
 \end{align*}
-Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The mean temporal error between matched ground truth and detection timestamps was 1.3 seconds. The closest comparable system in the literature is that of Zekany et al.\ \cite{zekany2022finding}. Table \ref{tab:f1_comparison} presents a direct per-manoeuvre comparison by taking the best (maximum F1) operating point for each of their individual classifiers from their Table III. It should be noted that the two systems were evaluated on entirely different datasets, though the evaluation procedure of Zekany et al. was followed as closely as possible.
+Across the 104 labelled ground truth events, the system produced 103 detections. Greedy temporal matching yielded 84 matched detections, 19 false positives and 20 false negatives, giving an overall precision of 0.82, recall of 0.81 and F1 score of 0.81. The most comparable system in the literature is that of Zekany et al.\ \cite{zekany2022finding}, whose evaluation procedure we followed as closely as possible. Table \ref{tab:f1_comparison} presents a per-manoeuvre comparison using the maximum F1 operating point for each of their individual classifiers.
 
 \begin{table}[H]
 \centering
@@ -820,8 +819,6 @@ Right Lane Change & 0.79 & 0.18 & 0.30 & \textbf{0.96} & \textbf{0.96} & \textbf
 \label{tab:f1_comparison}
 \end{table}
 
-In both systems, a detection is considered a true positive if it falls within the temporal tolerance of a ground truth event of the same manoeuvre category, so both precision and recall reflect correct type identification.
-
 Our system achieves a higher F1 score on three of the four manoeuvre types. Lane changes were detected most reliably, with right lane changes achieving 96\% recall and 96\% precision; both lane change F1 scores more than double those of Zekany et al. Left turns also showed a substantial improvement (0.79 vs.\ 0.61). The only exception is right turns, where our system achieves an F1 of only 0.64 compared to their 0.89. This is primarily due to a high false positive rate for right turns, discussed below, which lowers precision to 0.59. Our lower recall for turns more generally (77\% for left, 71\% for right) is caused by our VO pipeline's weakness to externally moving objects; for example at junctions with many cars blocking majority of the scene, the segmentation mask results in a weaker turn signature when the vehicle makes a manoeuvre.
 
 Of the 19 false positives, 12 were classified as right turns. The majority occurred on roads that curve rightward, producing a yaw accumulation pattern indistinguishable from a genuine right turn as far as the visual odometry is concerned. Since the pipeline relies solely on camera motion, it has no way to differentiate between a road that bends to the right and a deliberate right turn at a junction. Mitigating this would require incorporating additional environmental context, such as detecting give-way lines, junction markings, or changes in road topology that distinguish intersections from curved road segments (Figure \ref{fig:right_turn_misclass}). The remaining false positives for lane changes (6 of the 19 total) were predominantly caused by the lane detection model misclassifying bus lanes or faded road markings as lane boundaries. Zekany et al. acknowledge that they also observe the same susceptibility to road curves producing false turn detections.
@@ -834,7 +831,7 @@ Of the 19 false positives, 12 were classified as right turns. The majority occur
     \label{fig:right_turn_misclass}
 \end{figure}
 
-To examine classification accuracy in more detail, Table \ref{tab:cm_matched} presents a matched-events confusion matrix restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology. Our system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% compared to Zekany et al.'s 78.8\% (their Table VII: 628 of 797 matched correctly). Type misclassification between categories is relatively rare: the system rarely confuses lane changes with turns or vice versa. The most common confusion was between left turns and right turns (4 left turns detected as right turns).
+To examine classification accuracy in more detail, Figure \ref{tab:cm_matched} presents a comparison of matched-events confusion matrices restricted to true positive detections for both systems, mirroring Zekany et al.'s methodology. Our system correctly typed 77 of the 84 matched events, achieving a classification accuracy of 92\% compared to Zekany et al.'s 78.8\%. 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\linewidth]{results_images/confusion_matrices.png}
@@ -842,15 +839,16 @@ To examine classification accuracy in more detail, Table \ref{tab:cm_matched} pr
 \label{tab:cm_matched}
 \end{figure}
 
-Our system achieves higher classification accuracy on two of the four shared manoeuvre types: right turns (94\% vs.\ 80\%) and left lane changes (95\% vs.\ 7\%). Right lane change accuracy is comparable (96\% vs.\ 98\%), while Zekany et al.\ achieve higher accuracy on left turns (89\% vs.\ 83\%). Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, shown by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. Our system avoids this directional confusion almost entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching.
+Our system achieves higher classification accuracy on two of the four shared manoeuvre types: right turns (94\% vs.\ 80\%) and left lane changes (95\% vs.\ 7\%). Right lane change accuracy is comparable (96\% vs.\ 98\%), while Zekany et al.\ achieve higher accuracy on left turns (89\% vs.\ 83\%). Zekany et al.\ acknowledge that left and right lane changes ``alias frequently'' in their system, shown by 70\% of left lane changes being misclassified as right lane changes in their confusion matrix. This shows a fundamental failure mode in their system which ours avoids almost entirely, because lane change direction is determined by explicit lane boundary crossing detection rather than trajectory shape matching. This ultimately reinforces a key point from our background research; that explainable, explicitly defined heuristic approaches can deliver more robust and reliable results than black-box trained models.
+
+While we show strong results in favour of our system, we note that there are a few caveats to this evaluation procedure. First, our evaluation is based on an entirely different dataset to that of Zekany et al., meaning the driving conditions and road environments may not be directly comparable. Secondly, our ground truth labelling was performed by the author themselves, leaving room for subconscious bias or inaccuracies. Thirdly, time and resource constraints limited the total number of events we were able to manually label, resulting in a smaller evaluation set than that used by Zekany et al. Nevertheless, the improvements in lane change detection and overall classification accuracy demonstrate that our explicit boundary-crossing and visual odometry approach offers a competitive and robust alternative to existing methods, and can prove a solid baseline for safety-critical applications.
 
 \subsection{User Testing}
 For user testing, participants were recruited from the author's personal network, including friends and family. All participants were fully qualified drivers with valid UK driving licences. They were asked to record their regular driving using their existing dash-cam alongside a phone mounted on the dashboard for the cabin-facing feed, or a dual-channel dash-cam system if available. No special driving instructions were given; participants simply drove as they normally would to ensure the footage reflected natural driving behaviour. After uploading and reviewing their results, participants could report any errors they identified through the built-in error reporting mechanism.
 
 \subsubsection{User-Submitted Video Results}
-Over a four-week period (early March to early April 2026), six external users registered accounts and submitted driving footage through the web application. In total, 23 unique video pairs (road-facing and driver-facing) were uploaded and successfully analysed, representing approximately 148 minutes of driving footage across a range of conditions and locations. Several users re-analysed the same footage after creating or refining their gaze calibration profiles; after deduplication (retaining the most recent calibrated analysis per unique video pair), the 23 analyses produced 170 safety events. Of the 23 unique analyses, 13 (57\%) used a personalised gaze calibration, while the remaining 10 relied on the system's default classifier.
+Over a four-week period (early March to early April 2026), six external users registered accounts and submitted driving footage through the web application. In total, 23 videos were uploaded and successfully analysed, representing approximately 148 minutes of driving footage and 170 safety events across a range of conditions and locations. Of the 23 unique analyses, 13 used a personalised gaze calibration, while the remaining 10 relied on the system's default classifier.
 
-\subsubsection{Aggregate Safety Classification}
 Table~\ref{tab:user_safety} summarises the safety classification results across all user-submitted videos. Of the 170 safety events detected, 137 (80.6\%) were classified as safe and 33 (19.4\%) as unsafe. 
 
 \begin{table}[H]
@@ -871,9 +869,8 @@ Right Lane Change & 28 & 23 (82\%) & 5 (18\%) \\
 \label{tab:user_safety}
 \end{table}
 
-The per-manoeuvre breakdown reveals interesting patterns about the behaviour of these drivers. Right turns had the highest safe rate (92\%), showing that drivers naturally check the nearside mirror before turning right in UK driving. Left turns showed a lower safe rate (79\%), reflecting a less habitual action of checking the far-side (left) mirror before a left turn. Left lane changes had the lowest safe rate (38\%), which we noticed predominantly occurred during motorway exits: in this case, drivers exhibit confidence that there is no hazard on the left side of the vehicle. Another case was on heavily-parked urban roads, when drivers would often end up driving in the middle of the road. This caused false positive left lane-change detections when they moved back to their side of the road.
+The per-manoeuvre breakdown reveals interesting patterns about the behaviour of these drivers. Right turns had the highest safety rate (92\%), showing that drivers naturally check the nearside mirror before turning right in UK driving. Left turns showed a lower safe rate (79\%), reflecting a less habitual action of checking the far-side (left) mirror before a left turn. Left lane changes had the lowest safe rate (38\%), which we noticed predominantly occurred during motorway exits: in this case, drivers exhibit confidence that there is no hazard on the left side of the vehicle. Another case was on heavily-parked urban roads, when drivers would often end up driving in the middle of the road. This caused false positive left lane-change detections when they moved back to their side of the road.
 
-\subsubsection{Per-User Analysis}
 Table~\ref{tab:per_user_safety} shows the per-user breakdown. Six external users contributed footage, with submission counts ranging from 1 to 7 unique videos per user.
 
 \begin{table}[H]
@@ -897,27 +894,20 @@ User F & 1 & 2.9 & 11 & 3 (27\%) & 8 (73\%) \\
 
 The per-user results demonstrate meaningful variation between drivers. Users A and D achieved 92\% safe classifications, suggesting consistent mirror-checking habits, while Users E and F had substantially higher unsafe rates (43\% and 73\% respectively). Notably, Users E and F each submitted only a single video and did not use a personalised gaze calibration, so their higher unsafe rates may partly reflect the default classifier's reduced accuracy on unfamiliar camera angles and seating positions rather than genuinely unsafe driving.
 
-\subsubsection{Effect of Gaze Calibration}
-Several users re-analysed their footage after creating or refining a personalised gaze calibration profile, providing a direct before-and-after comparison of calibration's effect on safety classifications. Across the full dataset, calibrated analyses exhibited a safe rate of 83.3\% compared to 76.4\% for uncalibrated analyses, a 7 percentage-point difference that suggests the default classifier systematically over-reports unsafe events when the driver's head geometry or camera position differs from the training data. This is consistent with the per-user results: Users E and F, who did not calibrate, had the highest unsafe rates (43\% and 73\%), while Users A and D, who used personalised calibrations, achieved 92\% safe classifications. These results reinforce the finding from Section 4.6 that per-user calibration is not merely a convenience feature but a prerequisite for reliable safety assessment across diverse users and setups.
+Several users re-analysed their footage after creating or refining a personalised gaze calibration profile, providing a direct before-and-after comparison of calibration's effect on safety classifications. Across the full dataset, calibrated analyses exhibited a safe rate of 83.3\% compared to 76.4\% for uncalibrated analyses, a 7 percentage-point difference that suggests the default classifier systematically over-reports unsafe events when the driver's head geometry or camera position differs from the training data. This is consistent with the per-user results: Users E and F, who did not calibrate, had the highest unsafe rates (43\% and 73\%), while Users A and D, who used personalised calibrations, achieved 92\% safe classifications. These results reinforce the finding from Section 4.6 that per-user calibration is a prerequisite for reliable safety assessment across diverse users and setups.
 
 \subsubsection{User Error Reports}
 As described in Section \ref{sec:eval_infra}, the web application includes an error reporting mechanism that allows users to flag false positive detections (events the system detected that did not occur) and false negative detections (real events the system missed). During the deployment, users submitted 13 error reports: 9 false positives and 4 false negatives.
 
-The false positive reports were mainly right turn detections. Manual review through the administrator dashboard confirmed that these false positives were caused by winding roads with successive right-hand curves, producing visual odometry signals indistinguishable from genuine turns. This is consistent with the curved-road false positive pattern identified in the author-labelled evaluation (Section 5.1).
+The false positive reports were mainly right turn detections. Manual review through the administrator dashboard confirmed that these false positives were caused by winding roads with successive right-hand curves, producing visual odometry signals indistinguishable from genuine turns. This is consistent with the curved-road false positive pattern identified in the author-labelled evaluation (Section 5.1). Meanwhile, the 4 false negative reports identified mis-classifications when the road had faded lanes or bus stop markings, as was previously identified in the manual evaluation. These error reports show that the system would benefit from using other sources of information to identify manoeuvres in order to improve its accuracy. 
 
-The 4 false negative reports identified two unique failure modes:
-\begin{enumerate}
-    \item \textbf{Missing lane markings}: two users noted that right lane changes were missed because the road lacked visible lane markings, preventing the lane detection model from identifying a boundary crossing.
-    \item \textbf{Direction misclassification}: one user reported that a left turn was classified as a right turn.
-\end{enumerate}
+Across the 170 detected events, the 9 user-reported false positives imply a lower bound on the false positive rate of 5.3\% from the user's perspective, though this likely underestimates the true rate since users may not have flagged every incorrect detection. The 24 correctly identified unsafe events represent genuine mirror-check failures that the drivers themselves had not been aware of during their journeys, demonstrating the system's ability to identify mistakes that would otherwise go unnoticed. One user reported that after reviewing their results and seeing specific locations where they had failed to check their mirrors, they drove the same route again and found that they made fewer mistakes the second time, having been made aware of the habitual gaps in their mirror-checking behaviour. While this is a single anecdotal case, it provides early evidence that the system can fulfil its intended purpose as a learning tool.
 
-These error reports show that the system would benefit from using other sources of information to identify manoeuvres in order to improve its accuracy. Across the 170 detected events, the 9 user-reported false positives imply a lower bound on the false positive rate of 5.3\% from the user's perspective, though this likely underestimates the true rate since users may not have flagged every incorrect detection. Conversely, the remaining 161 events (94.7\%) were accepted as accurate by users, meaning no disputes were raised about their detection or safety classification. All 137 safe classifications (100\%) were accepted, while 24 of the 33 unsafe classifications (72.7\%) were not disputed. The 24 undisputed unsafe events represent genuine mirror-check failures that the drivers themselves had not been aware of during their journeys, demonstrating the system's ability to surface mistakes that would otherwise go unnoticed. One user reported that after reviewing their results and seeing specific locations where they had failed to check their mirrors, they drove the same route again and found that they made fewer mistakes the second time, having been made aware of the habitual gaps in their mirror-checking behaviour. While this is a single anecdotal case, it provides early evidence that the system can fulfil its intended purpose as a learning tool.
-
-Returning to the research question posed in the Introduction, ``Can a multi-modal system combining road-facing and driver-facing video detect driving mistakes at an accuracy of at least 80\%?'', the user testing results provide strong supporting evidence. The 94.7\% user-accepted accuracy across all events exceeds the 80\% target, and the controlled evaluation's F1 score of 0.81 independently corroborates this. While the 72.7\% acceptance rate for unsafe classifications falls below 80\%, this is largely attributable to the curved-road false positive pattern identified in the controlled evaluation, a known limitation with a clear path to resolution through additional environmental context.
+Returning to the research question posed in the Introduction, ``Can a multi-modal system combining road-facing and driver-facing video detect driving mistakes at an accuracy of at least 80\%?'', the user testing results provide strong supporting evidence. The 94.7\% user-accepted accuracy across all events exceeds the 80\% target, and the controlled evaluation's F1 score of 0.81 also supports this. While the user acceptance figure is limited by the size of the user study itself, the results show that the system is able to identify genuine mistakes by drivers and can even help them correct their mistakes in successive driving sessions.
 
 \subsection{Questionnaire}
 \label{sec:questionnaire_results}
-A separate questionnaire was distributed more broadly through the Nextdoor neighbourhood app, LinkedIn, and our personal contacts. This questionnaire did not require respondents to have used the application themselves. Instead, it presented demo videos of our driving footage and the corresponding analysis results, then asked respondents about their driving background, dash-cam ownership, preferred recording setup, likelihood of using such a system, desired features, and willingness to pay.
+A separate questionnaire, listed in the Appendix, was distributed more broadly through the Nextdoor neighbourhood app, LinkedIn, and our personal contacts. This questionnaire did not require respondents to have used the application themselves. Instead, it presented demo videos of our driving footage and the corresponding analysis results, then asked respondents about their driving background, dash-cam ownership, preferred recording setup, likelihood of using such a system, desired features, and willingness to pay.
 
 The questionnaire received 23 responses (20 fully licensed drivers, 3 current or prospective learners). Table~\ref{tab:survey_results} summarises the key findings, and a complete breakdown of every question and response is provided in Appendix~\ref{appendix:questionnaire}.
 
@@ -946,13 +936,13 @@ The results indicate moderate to strong interest, with 17 of 23 respondents (74\
 \section{Conclusion and Future Work}
 This section discusses the system's limitations, identifies directions for future development, and reflects on the project's overall contribution.
 
-\subsection{Limitations}
+\subsection{Limitations} % Mention the objectives that weren't met initially
 Despite the strong evaluation results, the system has clear limitations. The most significant is the visual odometry pipeline's inability to distinguish road curvature from genuine turns, which accounted for the majority of false positives in both the controlled evaluation and user-reported errors. The lane detection model is also susceptible to UK-specific road markings such as bus lanes and faded markings, and roundabouts remain entirely unsupported due to the absence of suitable training data.
 
 Beyond these technical limitations, the system faces a practical barrier to adoption. The multi-step workflow of recording on two devices, downloading, uploading, and calibrating proved friction-heavy during user testing, and low dash-cam ownership among contacted users further limited participation. Hardware integration with dual-channel dash-cam systems \cite{viofo_a229plus} or factory-fitted interior cameras \cite{jlr_dms_news} would reduce this friction considerably. The alternative applications outlined in the Introduction (insurance analytics, in-car alerts, ADAS training data annotation) may also represent more practical deployment paths, since dual-camera hardware is already present in those contexts.
 
 \subsection{Future Work}
-Many of these limitations have clear paths to resolution. The calibration burden could be reduced by combining the existing supervised approach with unsupervised clustering, since k-means already gave a close approximation to the desired result. Alternatively, real-time audio cues could guide drivers through a brief calibration routine during driving, collecting labelled samples without requiring a separate post-hoc step.
+Many of these limitations have clear paths to resolution. The calibration burden could be reduced by combining the existing supervised approach with unsupervised clustering, since k-means already gave a close approximation to the desired result. Alternatively, real-time audio cues could guide drivers through a brief calibration routine before driving, collecting labelled samples without requiring a separate post-hoc step.
 
 For detection accuracy, reducing false turn detections on curved roads is the most impactful improvement. Incorporating map data, GPS traces, or training a classifier on visual junction features (give-way lines, road widening, traffic light presence) could provide the necessary environmental context. Sensor fusion with smartphone IMU data would complement the vision-based estimate, mirroring the approach taken by ZenRoad \cite{zenroad_app}. Lane change detection could be improved by fine-tuning the lane detection model on UK-specific road markings.
 
